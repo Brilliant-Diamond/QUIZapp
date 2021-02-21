@@ -4,6 +4,7 @@
     <div>aaaaaa</div>
     <div>yes</div>
     <div>aaaaaa</div>
+    <div>I'm youic</div>
   </div>
 </template>
 <script>
