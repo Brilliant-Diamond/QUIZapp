@@ -5,6 +5,7 @@
     <div>yes</div>
     <div>aaaaaa</div>
     <div>I'm youic</div>
+    <div>tani</div>
   </div>
 </template>
 <script>
