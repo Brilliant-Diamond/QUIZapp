@@ -3,6 +3,7 @@
     <div>{{}}</div>
     <div>aaaaaa</div>
     <div>yes</div>
+    <div>aaaaaa</div>
   </div>
 </template>
 <script>
