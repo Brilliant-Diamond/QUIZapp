@@ -1,11 +1,6 @@
 <template>
   <div>
     <div>{{}}</div>
-    <div>aaaaaa</div>
-    <div>yes</div>
-    <div>aaaaaa</div>
-    <div>I'm youic</div>
-    <div>yoiuc</div>
   </div>
 </template>
 <script>
