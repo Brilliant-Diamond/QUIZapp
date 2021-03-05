@@ -1,12 +1,10 @@
 <template>
   <div id="app">
-    <div class="container">
-      <Quiz
-        v-for="(quiz, index) in quizs"
-        v-bind:key="index"
-        v-bind:quiz="quiz"
-      />
-    </div>
+    <Quiz
+      v-for="(quiz, index) in quizs"
+      v-bind:key="index"
+      v-bind:quiz="quiz"
+    />
   </div>
 </template>
 
@@ -45,24 +43,11 @@ export default {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
-  margin-top: 60px;
+  margin: 30px;
   display: flex;
-  align-items: flex-start;
-  justify-content: space-around;
-  flex-wrap: wrap;
-}
-.container {
-  padding: 10px;
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
-  width: 100%;
-}
-.choice-input {
-  margin: 10px;
 }
 </style>
