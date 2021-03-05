@@ -98,8 +98,6 @@ export default {
 <style scoped>
 .fa-times {
   position: absolute;
-  /* top: 12px;
-  right: 12px; */
   align-self: flex-end;
   color: rgba(128, 128, 128, 0.46);
   cursor: pointer;
@@ -115,17 +113,12 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* display: none;を追加してください */
 }
 .quiz-post {
-  /* top: 20%;
-  left: 34%; */
   background-color: #e6ecf0;
-  /* padding: 20px 0 40px; */
   border-radius: 10px;
   width: 600px;
   height: auto;
-  text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -143,5 +136,8 @@ input {
 }
 .change-choices {
   border-radius: 50%;
+}
+.choice-input {
+  margin: 10px;
 }
 </style>

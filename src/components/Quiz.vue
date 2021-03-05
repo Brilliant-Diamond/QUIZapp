@@ -38,7 +38,6 @@ export default {
   created() {
     this.quiz.choices.forEach((choice, index) => {
       this.bgColor.push("")
-      console.log(choice)
       if (this.quiz.rightIndex === index) {
         this.rightOrWrong.push("⭕")
       } else {
@@ -79,15 +78,14 @@ export default {
   color: blue;
 }
 .quiz-list {
-  display: flex;
-  flex-direction: column;
   padding: 10px;
   width: 80%;
   max-width: 600px;
   border: solid 1px;
-  padding: 10px;
   margin: 10px;
   border-radius: 10px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 button {
