@@ -3,7 +3,6 @@
     <div class="quiz-post">
       <i class="fa fa-2x fa-times" v-on:click="hidePost"></i>
       <div>クイズ作成</div>
-      <div>問題文</div>
       <textarea
         cols="30"
         rows="2"

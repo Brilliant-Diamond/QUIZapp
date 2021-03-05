@@ -83,6 +83,7 @@ export default {
   flex-direction: column;
   padding: 10px;
   width: 80%;
+  max-width: 600px;
   border: solid 1px;
   padding: 10px;
   margin: 10px;
@@ -92,7 +93,5 @@ export default {
 button {
   margin: 5px;
   width: 70%;
-}
-.quiz-text {
 }
 </style>

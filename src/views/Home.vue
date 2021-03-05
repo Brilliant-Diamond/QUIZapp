@@ -60,6 +60,7 @@ export default {
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
+  width: 100%;
 }
 .choice-input {
   margin: 10px;

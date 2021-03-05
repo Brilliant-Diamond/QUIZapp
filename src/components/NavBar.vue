@@ -3,6 +3,12 @@
     <router-link to="/" class="nav__logo nav__link">QUIZapp</router-link>
     <div class="nav__items">
       <router-link to="/about" class="nav__item nav__link">About</router-link>
+      <router-link to="/signup" class="nav__item nav__link"
+        >ユーザー登録</router-link
+      >
+      <router-link to="/signin" class="nav__item nav__link"
+        >サインイン</router-link
+      >
       <button class="nav__item nav__link" v-on:click="displayPost">投稿</button>
     </div>
   </div>
