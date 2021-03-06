@@ -1,12 +1,27 @@
 <template>
   <div class="quiz-post-wrapper">
     <div class="quiz-post">
-      <i class="fa fa-2x fa-times" v-on:click="hidePost"></i>
-      <div>パッケージ作成</div>
+      <h2>パッケージ作成</h2>
+
       <label>
         タイトル
         <input type="text" v-model="title_text" />
       </label>
+
+      <vue-tags-input
+        v-model="tag"
+        :tags="tags"
+        @tags-changed="(newTags) => (tags = newTags)"
+      />
+      <!-- <select v-model="selected">
+        <option
+          v-for="(option, index) in options"
+          :key="index"
+          :value="option.value"
+        >
+          {{ option.text }}
+        </option>
+      </select> -->
 
       <div
         class="quiz-box"
@@ -57,17 +72,26 @@
         ></textarea>
       </div>
 
-      <button @click="addQuiz">クイズを追加</button>
-      <button v-on:click="CreateQuiz">作成！</button>
+      <div class="button-box">
+        <button @click="addQuiz">追加</button>
+        <button @click="deleteQuiz">削除</button>
+      </div>
+
+      <button v-on:click="CreateQuiz">投稿</button>
     </div>
   </div>
 </template>
 
 <script>
 import firebase from "firebase"
+import VueTagsInput from "@johmun/vue-tags-input"
 export default {
+  components: { VueTagsInput },
   data() {
     return {
+      tag: "",
+      tags: [],
+      quiz_size: 1,
       title_text: "",
       quizs: [
         {
@@ -77,12 +101,15 @@ export default {
           feedback: "",
         },
       ],
+      // selected: "1",
+      // options: [
+      //   { text: "1", value: "A" },
+      //   { text: "2", value: "B" },
+      //   { text: "3", value: "C" },
+      // ],
     }
   },
   methods: {
-    hidePost() {
-      this.$emit("hide-post")
-    },
     addChoice(index) {
       this.quizs[index].choices.push({ text: "" })
     },
@@ -91,64 +118,83 @@ export default {
         this.quizs[index].choices.pop()
       }
     },
+    // addQuizSelected(val) {
+    //   this.quizs = []
+    //   for (let i = 0; i < val; i++) {
+    //     this.addQuiz()
+    //   }
+    // },
     addQuiz() {
-      console.log(this.quizs)
-      this.quizs.push({
-        quizText: "",
-        rightIndex: null,
-        choices: [{ text: "" }, { text: "" }],
-        feedback: "",
-      })
+      if (this.quizs.length < 10) {
+        this.quizs.push({
+          quizText: "",
+          rightIndex: null,
+          choices: [{ text: "" }, { text: "" }],
+          feedback: "",
+        })
+      } else {
+        alert("これ以上増やせません")
+      }
+    },
+    deleteQuiz() {
+      if (this.quizs.length > 1) {
+        this.quizs.pop()
+      } else {
+        alert("これ以上減らせません")
+      }
     },
     CreateQuiz() {
       const packages = {
         title: this.title_text,
+        tag: this.tags,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         quizs: this.quizs,
       }
       firebase
         .firestore()
         .collection("packages")
         .add(packages)
+
+      this.title_text = ""
+      this.tag = ""
+      this.tags = []
+      this.quizs = [
+        {
+          quizText: "",
+          rightIndex: null,
+          choices: [{ text: "" }, { text: "" }],
+          feedback: "",
+        },
+      ]
     },
   },
+  // computed: {
+  //   makeQuizBox() {
+  //     return this.addQuizSelected(this.selected)
+  //   },
+  // },
 }
 </script>
 
 <style scoped>
-.quiz-box {
-  background-color: rgba(255, 0, 0, 0.609);
-  margin-bottom: 10px;
-}
-
-.fa-times {
-  position: absolute;
-  align-self: flex-end;
-  color: rgba(128, 128, 128, 0.46);
-  cursor: pointer;
-}
 .quiz-post-wrapper {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
   background-color: rgba(0, 0, 0, 0.6);
-  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .quiz-post {
   background-color: #e6ecf0;
-  border-radius: 10px;
   width: 600px;
   height: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-button {
-  margin: 10px;
+.quiz-box {
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  margin-bottom: 10px;
 }
 textarea {
   width: 80%;
