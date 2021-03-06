@@ -47,7 +47,7 @@
             v-model="quiz.rightIndex"
           />
           <label v-bind:for="index">選択肢{{ index + 1 }} </label>
-          <input type="text" v-model="choice.text" />
+          <input type="text" v-model="quiz.choices[index]" />
         </div>
         <div>
           <button v-on:click="addChoice(quiz_index)" class="change-choices">
@@ -91,13 +91,12 @@ export default {
     return {
       tag: "",
       tags: [],
-      quiz_size: 1,
       title_text: "",
       quizs: [
         {
           quizText: "",
           rightIndex: null,
-          choices: [{ text: "" }, { text: "" }],
+          choices: ["", ""],
           feedback: "",
         },
       ],
@@ -111,7 +110,7 @@ export default {
   },
   methods: {
     addChoice(index) {
-      this.quizs[index].choices.push({ text: "" })
+      this.quizs[index].choices.push("")
     },
     deleteChoice(index) {
       if (this.quizs[index].choices.length > 2) {
@@ -129,7 +128,7 @@ export default {
         this.quizs.push({
           quizText: "",
           rightIndex: null,
-          choices: [{ text: "" }, { text: "" }],
+          choices: ["", ""],
           feedback: "",
         })
       } else {
@@ -162,7 +161,7 @@ export default {
         {
           quizText: "",
           rightIndex: null,
-          choices: [{ text: "" }, { text: "" }],
+          choices: ["", ""],
           feedback: "",
         },
       ]
