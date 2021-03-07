@@ -143,7 +143,7 @@ export default {
       }
     },
     CreateQuiz() {
-      const packages = {
+      const collections = {
         title: this.title_text,
         tag: this.tags,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -151,8 +151,8 @@ export default {
       }
       firebase
         .firestore()
-        .collection("packages")
-        .add(packages)
+        .collection("collections")
+        .add(collections)
 
       this.title_text = ""
       this.tag = ""
