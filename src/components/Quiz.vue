@@ -11,7 +11,7 @@
       <label for="index" v-if="choiceingIndex !== null">{{
         rightOrWrong[index]
       }}</label>
-      {{ choice.text }}
+      {{ choice }}
     </button>
     <div v-if="choiceingIndex === quiz.rightIndex" class="right">正解！</div>
     <div v-else-if="choiceingIndex !== null" class="wrong">不正解！</div>
