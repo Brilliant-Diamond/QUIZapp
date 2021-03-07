@@ -9,7 +9,7 @@ const firebaseConfig = {
   storageBucket: "quiz-app-9e784.appspot.com",
   messagingSenderId: "550883593802",
   appId: "1:550883593802:web:d7e7db44ef0faeaa04a0b3",
-  measurementId: "G-TB15VDZ6FD"
-};
+  measurementId: "G-TB15VDZ6FD",
+}
 
 firebase.initializeApp(firebaseConfig)
