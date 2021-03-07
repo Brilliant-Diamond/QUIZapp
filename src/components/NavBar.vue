@@ -11,7 +11,6 @@
       <router-link to="/about" class="nav__item nav__link"
         >マイページ</router-link
       >
-      <!-- <button class="nav__item nav__link" v-on:click="displayPost">投稿</button> -->
       <router-link to="/quizpost" class="nav__item nav__link">投稿</router-link>
     </div>
   </div>
