@@ -1,5 +1,6 @@
 <template>
   <div class="quiz-list">
+    <div>{{ quizIndex + 1 }}問目</div>
     <h4 class="quiz-text">{{ quiz.quizText }}</h4>
     <button
       v-for="(choice, index) in quiz.choices"
@@ -32,6 +33,10 @@ export default {
   props: {
     quiz: {
       type: Object,
+      require: true,
+    },
+    quizIndex: {
+      type: Number,
       require: true,
     },
   },
