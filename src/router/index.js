@@ -4,6 +4,7 @@ import Home from "../views/Home.vue"
 import Signup from "../views/Signup.vue"
 import Signin from "../views/Signin.vue"
 import QuizPost from "../views/QuizPost.vue"
+import ChallengeQuiz from "../views/ChallengeQuiz.vue"
 import firebase from "firebase"
 
 Vue.use(VueRouter)
@@ -28,6 +29,11 @@ const routes = [
     path: "/quizpost",
     name: "QuizPost",
     component: QuizPost,
+  },
+  {
+    path: "/challengequiz",
+    name: "ChallengeQuiz",
+    component: ChallengeQuiz,
   },
   {
     path: "/about",

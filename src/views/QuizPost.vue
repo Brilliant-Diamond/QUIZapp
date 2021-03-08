@@ -13,16 +13,6 @@
         :tags="tags"
         @tags-changed="(newTags) => (tags = newTags)"
       />
-      <!-- <select v-model="selected">
-        <option
-          v-for="(option, index) in options"
-          :key="index"
-          :value="option.value"
-        >
-          {{ option.text }}
-        </option>
-      </select> -->
-
       <div
         class="quiz-box"
         v-for="(quiz, quiz_index) in quizs"
@@ -100,12 +90,6 @@ export default {
           feedback: "",
         },
       ],
-      // selected: "1",
-      // options: [
-      //   { text: "1", value: "A" },
-      //   { text: "2", value: "B" },
-      //   { text: "3", value: "C" },
-      // ],
     }
   },
   methods: {
@@ -117,12 +101,6 @@ export default {
         this.quizs[index].choices.pop()
       }
     },
-    // addQuizSelected(val) {
-    //   this.quizs = []
-    //   for (let i = 0; i < val; i++) {
-    //     this.addQuiz()
-    //   }
-    // },
     addQuiz() {
       if (this.quizs.length < 10) {
         this.quizs.push({
@@ -143,35 +121,36 @@ export default {
       }
     },
     CreateQuiz() {
-      const collections = {
-        title: this.title_text,
-        tag: this.tags,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        quizs: this.quizs,
-      }
-      firebase
-        .firestore()
-        .collection("collections")
-        .add(collections)
+      let currentUser = firebase.auth().currentUser.email
+      if (!currentUser) {
+        this.$router.push("/siginin")
+      } else {
+        const collections = {
+          title: this.title_text,
+          tag: this.tags,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          createdBy: currentUser,
+          quizs: this.quizs,
+        }
+        firebase
+          .firestore()
+          .collection("collections")
+          .add(collections)
 
-      this.title_text = ""
-      this.tag = ""
-      this.tags = []
-      this.quizs = [
-        {
-          quizText: "",
-          rightIndex: null,
-          choices: ["", ""],
-          feedback: "",
-        },
-      ]
+        this.title_text = ""
+        this.tag = ""
+        this.tags = []
+        this.quizs = [
+          {
+            quizText: "",
+            rightIndex: null,
+            choices: ["", ""],
+            feedback: "",
+          },
+        ]
+      }
     },
   },
-  // computed: {
-  //   makeQuizBox() {
-  //     return this.addQuizSelected(this.selected)
-  //   },
-  // },
 }
 </script>
 

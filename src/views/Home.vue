@@ -1,64 +1,29 @@
 <template>
   <div id="app">
-    <quiz
-      v-for="(quiz, index) in quizs"
-      v-bind:key="index"
-      v-bind:quiz="quiz"
-    />
-    <collection
-      v-for="(collection, index) in collections"
-      v-bind:key="index"
-      v-bind:collection="collection"
-    />
+    <h1>Hello {{ name }}!!</h1>
+    <button @click="signOut">Sign out</button>
   </div>
 </template>
 
 <script>
-import Quiz from "@/components/Quiz.vue"
-import Collection from "@/components/Collection.vue"
 import firebase from "firebase"
 
 export default {
   name: "App",
-  components: {
-    Quiz,
-    Collection,
-  },
   data() {
     return {
-      collections: [],
-      quizs: [],
-      unsubscribe1: null,
-      unsubscribe2: null,
+      name: firebase.auth().currentUser.email,
     }
   },
-  methods: {},
-  created() {
-    const ref1 = firebase
-      .firestore()
-      .collection("quizs")
-      .orderBy("createdAt")
-
-    this.unsubscribe1 = ref1.onSnapshot((snapshot) => {
-      let quizs = []
-      snapshot.forEach((doc) => {
-        quizs.push(doc.data())
-      })
-      this.quizs = quizs
-    })
-
-    const ref2 = firebase
-      .firestore()
-      .collection("collections")
-      .orderBy("createdAt")
-
-    this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
-      let collections = []
-      snapshot.forEach((doc) => {
-        collections.push(doc.data())
-      })
-      this.collections = collections
-    })
+  methods: {
+    signOut: function() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$router.push("/signin")
+        })
+    },
   },
 }
 </script>
