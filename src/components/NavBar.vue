@@ -2,6 +2,11 @@
   <div class="nav__bar">
     <router-link to="/" class="nav__logo nav__link">QUIZapp</router-link>
     <div class="nav__items">
+      <!-- <input type="text" v-model="search" /> -->
+      <router-link to="/challengequiz" class="nav__logo nav__link"
+        >ChallengeQuiz</router-link
+      >
+      <router-link to="/quizpost" class="nav__item nav__link">投稿</router-link>
       <router-link to="/signup" class="nav__item nav__link"
         >ユーザー登録</router-link
       >
@@ -11,7 +16,6 @@
       <router-link to="/about" class="nav__item nav__link"
         >マイページ</router-link
       >
-      <router-link to="/quizpost" class="nav__item nav__link">投稿</router-link>
     </div>
   </div>
 </template>
