@@ -1,28 +1,36 @@
 <template>
   <div>
-    <NavBar v-on:display-post="displayPost" />
-    <router-view />
+    <NavBar :SignsInOrOut="SignsInOrOut" @signout="signOut" />
+    <router-view @signin="signIn" />
   </div>
 </template>
 
 <script>
+import firebase from "firebase"
 import NavBar from "@/components/NavBar.vue"
 export default {
   data() {
     return {
-      isPostHiding: true,
+      SignsInOrOut: false,
     }
   },
   components: {
     NavBar,
   },
   methods: {
-    displayPost() {
-      this.isPostHiding = false
+    signIn() {
+      this.SignsInOrOut = true
     },
-    hidePost() {
-      this.isPostHiding = true
+    signOut() {
+      this.SignsInOrOut = false
     },
+  },
+  created() {
+    if (firebase.auth().currentUser) {
+      this.SignsInOrOut = true
+    } else {
+      this.SignsInOrOut = false
+    }
   },
 }
 </script>

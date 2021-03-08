@@ -35,10 +35,13 @@ export default {
       e_intro_text: "",
       unsubscribe2: null,
       collections: [],
-      currentUser: firebase.auth().currentUser.email,
+      currentUser: "",
     }
   },
   created() {
+    if (firebase.auth().currentUser) {
+      this.currentUser = firebase.auth().currentUser.email
+    }
     const ref2 = firebase
       .firestore()
       .collection("collections")

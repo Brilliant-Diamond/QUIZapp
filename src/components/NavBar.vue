@@ -2,17 +2,21 @@
   <div class="nav__bar">
     <router-link to="/" class="nav__logo nav__link">QUIZapp</router-link>
     <div class="nav__items">
-      <!-- <input type="text" v-model="search" /> -->
-      <router-link to="/challengequiz" class="nav__logo nav__link"
-        >ChallengeQuiz</router-link
+      <router-link to="/challengequiz" class="nav__item nav__link"
+        >クイズに挑戦</router-link
       >
       <router-link to="/quizpost" class="nav__item nav__link">投稿</router-link>
-      <router-link to="/signup" class="nav__item nav__link"
-        >ユーザー登録</router-link
-      >
-      <router-link to="/signin" class="nav__item nav__link"
-        >サインイン</router-link
-      >
+      <div v-if="SignsInOrOut" class="nav__items">
+        <button class="nav__item nav__link" @click="signOut">
+          サインアウト
+        </button>
+      </div>
+      <div v-else class="nav__items">
+        <router-link to="/signin" class="nav__item nav__link"
+          >サインイン</router-link
+        >
+      </div>
+
       <router-link to="/about" class="nav__item nav__link"
         >マイページ</router-link
       >
@@ -21,10 +25,23 @@
 </template>
 
 <script>
+import firebase from "firebase"
 export default {
+  props: ["SignsInOrOut"],
+  data() {
+    return {
+      // SignsInOrOut: false,
+    }
+  },
   methods: {
-    displayPost() {
-      this.$emit("display-post")
+    signOut() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$router.push("/signin")
+          this.$emit("signout")
+        })
     },
   },
 }

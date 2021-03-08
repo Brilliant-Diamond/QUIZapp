@@ -1,18 +1,16 @@
 <template>
   <div id="app">
-    <h1>Hello {{ name }}!!</h1>
-    <button @click="signOut">Sign out</button>
+    <h2>このサイトの紹介</h2>
   </div>
 </template>
 
 <script>
 import firebase from "firebase"
-
 export default {
   name: "App",
   data() {
     return {
-      name: firebase.auth().currentUser.email,
+      name: "",
     }
   },
   methods: {
@@ -24,6 +22,11 @@ export default {
           this.$router.push("/signin")
         })
     },
+  },
+  created() {
+    if (firebase.auth().currentUser) {
+      this.name = firebase.auth().currentUser.email
+    }
   },
 }
 </script>
