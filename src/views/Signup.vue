@@ -2,7 +2,7 @@
   <div class="signup">
     <h2>Sign up</h2>
     <input type="text" placeholder="email" v-model="email" />
-    <input type="text" placeholder="userName" v-model="userName" />
+    <!-- <input type="text" placeholder="userName" v-model="userName" /> -->
     <input type="password" placeholder="Password" v-model="password" />
     <button @click="signUp">Register</button>
     <p>
@@ -20,7 +20,7 @@ export default {
     return {
       email: "",
       password: "",
-      userName: "",
+      // userName: "",
     }
   },
   methods: {
@@ -33,6 +33,7 @@ export default {
           user.updateProfile({
             displayName: this,
           })
+          // this.$router.push("/signin")
         })
         .catch((error) => {
           alert(error.message)

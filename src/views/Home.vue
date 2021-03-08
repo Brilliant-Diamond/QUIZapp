@@ -1,13 +1,11 @@
 <template>
   <div id="app">
-    <h1>Hello {{ name }}!!</h1>
-    <button @click="signOut">Sign out</button>
+    <h2>このサイトの紹介</h2>
   </div>
 </template>
 
 <script>
 import firebase from "firebase"
-
 export default {
   name: "App",
   data() {

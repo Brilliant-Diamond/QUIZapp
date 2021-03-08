@@ -1,7 +1,7 @@
 <template>
   <div class="signin">
     <h2>Sign in</h2>
-    <input type="text" placeholder="email" v-model="username" />
+    <input type="text" placeholder="email" v-model="email" />
     <!-- ユーザーネームだけどメルアドだね -->
     <input type="password" placeholder="Password" v-model="password" />
     <button @click="signIn">Signin</button>
@@ -18,7 +18,7 @@ export default {
   name: "Signin",
   data() {
     return {
-      username: "",
+      email: "",
       password: "",
     }
   },
@@ -26,12 +26,13 @@ export default {
     signIn: function() {
       firebase
         .auth()
-        .signInWithEmailAndPassword(this.username, this.password)
+        .signInWithEmailAndPassword(this.email, this.password)
         .then(
           (user) => {
             alert("Success!")
             console.log(user)
             this.$router.push("/")
+            this.$emit("signin")
           },
           (err) => {
             alert(err.message)
