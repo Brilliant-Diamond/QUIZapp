@@ -121,34 +121,43 @@ export default {
       }
     },
     CreateQuiz() {
-      let currentUser = firebase.auth().currentUser.email
-      if (!currentUser) {
-        this.$router.push("/siginin")
-      } else {
+      if (firebase.auth().currentUser) {
         const collections = {
           title: this.title_text,
           tag: this.tags,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          createdBy: currentUser,
+          createdBy: firebase.auth().currentUser.email,
           quizs: this.quizs,
         }
         firebase
           .firestore()
           .collection("collections")
           .add(collections)
-
-        this.title_text = ""
-        this.tag = ""
-        this.tags = []
-        this.quizs = [
-          {
-            quizText: "",
-            rightIndex: null,
-            choices: ["", ""],
-            feedback: "",
-          },
-        ]
+      } else {
+        // 匿名の投稿ができる
+        const collections = {
+          title: this.title_text,
+          tag: this.tags,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          createdBy: "unknown",
+          quizs: this.quizs,
+        }
+        firebase
+          .firestore()
+          .collection("collections")
+          .add(collections)
       }
+      this.title_text = ""
+      this.tag = ""
+      this.tags = []
+      this.quizs = [
+        {
+          quizText: "",
+          rightIndex: null,
+          choices: ["", ""],
+          feedback: "",
+        },
+      ]
     },
   },
 }

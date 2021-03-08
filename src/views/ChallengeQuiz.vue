@@ -24,10 +24,9 @@ export default {
     Quiz,
     Collection,
   },
-  props: ["search"],
   data() {
     return {
-      name: firebase.auth().currentUser.email,
+      name: "",
       collections: [],
       quizs: [],
       unsubscribe1: null,
@@ -45,6 +44,9 @@ export default {
     },
   },
   created() {
+    if (firebase.auth().currentUser) {
+      this.ncurrentUserame = firebase.auth().currentUser.email
+    }
     const ref1 = firebase //ここはなぜ?
       .firestore()
       .collection("quizs")

@@ -12,7 +12,7 @@ export default {
   name: "App",
   data() {
     return {
-      name: firebase.auth().currentUser.email,
+      name: "",
     }
   },
   methods: {
@@ -24,6 +24,11 @@ export default {
           this.$router.push("/signin")
         })
     },
+  },
+  created() {
+    if (firebase.auth().currentUser) {
+      this.name = firebase.auth().currentUser.email
+    }
   },
 }
 </script>
