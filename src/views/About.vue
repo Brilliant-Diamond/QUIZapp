@@ -1,7 +1,7 @@
 <template>
   <div class="my-page">
     <h1>{{ currentUser }}</h1>
-
+    <!-- ↑ページ更新のときに表示されなくなる -->
     <div class="introduce">
       ここで自己紹介
       {{ e_intro_text }}
@@ -31,30 +31,35 @@ export default {
   },
   data() {
     return {
-      intro_text: "hh",
+      intro_text: "",
       e_intro_text: "",
       unsubscribe2: null,
       collections: [],
-      currentUser: "",
+      currentUser: "ログインしてください",
     }
   },
+  // .where("createdBy", "==", [this.currentUser])
   created() {
-    if (firebase.auth().currentUser) {
-      this.currentUser = firebase.auth().currentUser.email
-    }
-    const ref2 = firebase
-      .firestore()
-      .collection("collections")
-      .orderBy("createdAt")
-
-    this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
-      let collections = []
-      snapshot.forEach((doc) => {
-        if (doc.data().createdBy === this.currentUser) {
-          collections.push(doc.data())
-        }
-      })
-      this.collections = collections
+    let self = this
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        self.currentUser = firebase.auth().currentUser.email
+        const ref2 = firebase
+          .firestore()
+          .collection("collections")
+          .orderBy("createdAt")
+        self.unsubscribe2 = ref2.onSnapshot((snapshot) => {
+          let collections = []
+          snapshot.forEach((doc) => {
+            if (doc.data().createdBy === self.currentUser) {
+              collections.push(doc.data())
+            }
+          })
+          self.collections = collections
+        })
+      } else {
+        self.currentUser = "ログインしてください"
+      }
     })
   },
 }

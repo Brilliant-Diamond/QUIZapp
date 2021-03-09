@@ -9,9 +9,7 @@ import firebase from "firebase"
 export default {
   name: "App",
   data() {
-    return {
-      name: "",
-    }
+    return {}
   },
   methods: {
     signOut: function() {
@@ -23,11 +21,7 @@ export default {
         })
     },
   },
-  created() {
-    if (firebase.auth().currentUser) {
-      this.name = firebase.auth().currentUser.email
-    }
-  },
+  created() {},
 }
 </script>
 

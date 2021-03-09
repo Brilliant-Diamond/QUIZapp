@@ -159,6 +159,48 @@ export default {
         },
       ]
     },
+    // CreateQuiz() {
+    //   let self = this
+    //   firebase.auth().onAuthStateChanged(function(user) {
+    //     if (user) {
+    //       const collections = {
+    //         title: self.title_text,
+    //         tag: self.tags,
+    //         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    //         createdBy: firebase.auth().currentUser.email,
+    //         quizs: self.quizs,
+    //       }
+    //       firebase
+    //         .firestore()
+    //         .collection("collections")
+    //         .add(collections)
+    //     } else {
+    //       // 匿名の投稿ができる
+    //       const collections = {
+    //         title: self.title_text,
+    //         tag: self.tags,
+    //         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    //         createdBy: "unknown",
+    //         quizs: self.quizs,
+    //       }
+    //       firebase
+    //         .firestore()
+    //         .collection("collections")
+    //         .add(collections)
+    //     }
+    //   })
+    //   self.title_text = ""
+    //   self.tag = ""
+    //   self.tags = []
+    //   self.quizs = [
+    //     {
+    //       quizText: "",
+    //       rightIndex: null,
+    //       choices: ["", ""],
+    //       feedback: "",
+    //     },
+    //   ]
+    // },
   },
 }
 </script>
