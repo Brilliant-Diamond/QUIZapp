@@ -27,11 +27,16 @@
 <script>
 import firebase from "firebase"
 export default {
-  props: ["SignsInOrOut"],
+  // props: ["SignsInOrOut"],
   data() {
     return {
       // SignsInOrOut: false,
     }
+  },
+  computed: {
+    SignsInOrOut() {
+      return this.$store.getters.SignsInOrOut
+    },
   },
   methods: {
     signOut() {
@@ -40,7 +45,8 @@ export default {
         .signOut()
         .then(() => {
           this.$router.push("/signin")
-          this.$emit("signout")
+          // this.$emit("signout")
+          this.$store.commit("setSigns", false)
         })
     },
   },
