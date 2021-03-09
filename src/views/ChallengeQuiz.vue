@@ -26,7 +26,6 @@ export default {
   },
   data() {
     return {
-      name: "",
       collections: [],
       quizs: [],
       unsubscribe1: null,
@@ -44,9 +43,6 @@ export default {
     },
   },
   created() {
-    if (firebase.auth().currentUser) {
-      this.ncurrentUserame = firebase.auth().currentUser.email
-    }
     const ref1 = firebase //ここはなぜ?
       .firestore()
       .collection("quizs")

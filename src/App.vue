@@ -11,7 +11,7 @@ import NavBar from "@/components/NavBar.vue"
 export default {
   data() {
     return {
-      SignsInOrOut: false,
+      SignsInOrOut: null,
     }
   },
   components: {
@@ -26,11 +26,17 @@ export default {
     },
   },
   created() {
-    if (firebase.auth().currentUser) {
-      this.SignsInOrOut = true
-    } else {
-      this.SignsInOrOut = false
-    }
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // console.log("true")
+        this.SignsInOrOut = true
+        console.log(this.SignsInOrOut)
+      } else {
+        // console.log("false")
+        this.SignsInOrOut = false
+        console.log(this.SignsInOrOut)
+      }
+    })
   },
 }
 </script>
