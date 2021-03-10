@@ -2,8 +2,6 @@
   <div>
     <NavBar />
     <router-view />
-    <!-- <NavBar :SignsInOrOut="SignsInOrOut" @signout="signOut" />
-    <router-view @signin="signIn" /> -->
   </div>
 </template>
 
@@ -18,34 +16,26 @@ export default {
   },
   computed: {
     SignsInOrOut() {
-      return this.$store.getters.SignsInOrOut
+      return this.$store.state.SignsInOrOut
     },
   },
   components: {
     NavBar,
   },
   methods: {
-    // signIn() {
-    //   // this.SignsInOrOut = true
-    //   this.$store.commit("setSigns", true)
-    // },
-    // signOut() {
-    //   // this.SignsInOrOut = false
-    //   this.$store.commit("setSigns", false)
-    // },
+    signin() {
+      this.$store.dispatch("signin")
+    },
+    signout() {
+      this.$store.dispatch("signout")
+    },
   },
   created() {
-    firebase.auth().onAuthStateChanged(function(user) {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        // console.log("true")
-        // this.SignsInOrOut = true
-        // console.log(this.SignsInOrOut)
-        this.$store.commit("setSigns", true)
+        this.signin()
       } else {
-        // console.log("false")
-        // this.SignsInOrOut = false
-        // console.log(this.SignsInOrOut)
-        this.$store.commit("setSigns", false)
+        this.signout()
       }
     })
   },

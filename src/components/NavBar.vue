@@ -35,18 +35,20 @@ export default {
   },
   computed: {
     SignsInOrOut() {
-      return this.$store.getters.SignsInOrOut
+      return this.$store.state.SignsInOrOut
     },
   },
   methods: {
+    signout() {
+      this.$store.dispatch("signout")
+    },
     signOut() {
       firebase
         .auth()
         .signOut()
         .then(() => {
           this.$router.push("/signin")
-          // this.$emit("signout")
-          this.$store.commit("setSigns", false)
+          this.$store.dispatch("signout")
         })
     },
   },

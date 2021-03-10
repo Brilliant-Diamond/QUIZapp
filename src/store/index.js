@@ -12,4 +12,13 @@ export default new Vuex.Store({
       state.SignsInOrOut = sign
     },
   },
+  actions: {
+    signin(context) {
+      context.commit("setSigns", true)
+    },
+    signout(context) {
+      context.commit("setSigns", false)
+    },
+  },
+  modules: {},
 })

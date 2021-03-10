@@ -79,6 +79,7 @@ export default {
   components: { VueTagsInput },
   data() {
     return {
+      user_exist: false,
       tag: "",
       tags: [],
       title_text: "",
@@ -121,7 +122,7 @@ export default {
       }
     },
     CreateQuiz() {
-      if (firebase.auth().currentUser) {
+      if (this.user_exist) {
         const collections = {
           title: this.title_text,
           tag: this.tags,
@@ -159,48 +160,13 @@ export default {
         },
       ]
     },
-    // CreateQuiz() {
-    //   let self = this
-    //   firebase.auth().onAuthStateChanged(function(user) {
-    //     if (user) {
-    //       const collections = {
-    //         title: self.title_text,
-    //         tag: self.tags,
-    //         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    //         createdBy: firebase.auth().currentUser.email,
-    //         quizs: self.quizs,
-    //       }
-    //       firebase
-    //         .firestore()
-    //         .collection("collections")
-    //         .add(collections)
-    //     } else {
-    //       // 匿名の投稿ができる
-    //       const collections = {
-    //         title: self.title_text,
-    //         tag: self.tags,
-    //         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    //         createdBy: "unknown",
-    //         quizs: self.quizs,
-    //       }
-    //       firebase
-    //         .firestore()
-    //         .collection("collections")
-    //         .add(collections)
-    //     }
-    //   })
-    //   self.title_text = ""
-    //   self.tag = ""
-    //   self.tags = []
-    //   self.quizs = [
-    //     {
-    //       quizText: "",
-    //       rightIndex: null,
-    //       choices: ["", ""],
-    //       feedback: "",
-    //     },
-    //   ]
-    // },
+  },
+  created() {
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.user_exist = true
+      }
+    })
   },
 }
 </script>

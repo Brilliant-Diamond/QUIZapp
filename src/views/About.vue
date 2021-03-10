@@ -38,27 +38,25 @@ export default {
       currentUser: "ログインしてください",
     }
   },
-  // .where("createdBy", "==", [this.currentUser])
   created() {
-    let self = this
-    firebase.auth().onAuthStateChanged(function(user) {
+    firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        self.currentUser = firebase.auth().currentUser.email
+        this.currentUser = firebase.auth().currentUser.email
         const ref2 = firebase
           .firestore()
           .collection("collections")
           .orderBy("createdAt")
-        self.unsubscribe2 = ref2.onSnapshot((snapshot) => {
+        this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
           let collections = []
           snapshot.forEach((doc) => {
-            if (doc.data().createdBy === self.currentUser) {
+            if (doc.data().createdBy === this.currentUser) {
               collections.push(doc.data())
             }
           })
-          self.collections = collections
+          this.collections = collections
         })
       } else {
-        self.currentUser = "ログインしてください"
+        this.currentUser = "ログインしてください"
       }
     })
   },

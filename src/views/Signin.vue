@@ -24,10 +24,13 @@ export default {
   },
   computed: {
     SignsInOrOut() {
-      return this.$store.getters.SignsInOrOut
+      return this.$store.state.SignsInOrOut
     },
   },
   methods: {
+    signin() {
+      this.$store.dispatch("signin")
+    },
     signIn: function() {
       firebase
         .auth()
@@ -37,8 +40,7 @@ export default {
             alert("Success!")
             console.log(user)
             this.$router.push("/")
-            // this.$emit("signin")
-            this.$store.commit("setSigns", true)
+            this.$store.dispatch("signin")
           },
           (err) => {
             alert(err.message)
