@@ -27,11 +27,8 @@
 <script>
 import firebase from "firebase"
 export default {
-  // props: ["SignsInOrOut"],
   data() {
-    return {
-      // SignsInOrOut: false,
-    }
+    return {}
   },
   computed: {
     SignsInOrOut() {
@@ -39,9 +36,6 @@ export default {
     },
   },
   methods: {
-    signout() {
-      this.$store.dispatch("signout")
-    },
     signOut() {
       firebase
         .auth()

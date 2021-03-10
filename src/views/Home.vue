@@ -5,22 +5,13 @@
 </template>
 
 <script>
-import firebase from "firebase"
+// import firebase from "firebase"
 export default {
   name: "App",
   data() {
     return {}
   },
-  methods: {
-    signOut: function() {
-      firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          this.$router.push("/signin")
-        })
-    },
-  },
+  methods: {},
   created() {},
 }
 </script>
