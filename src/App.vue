@@ -1,7 +1,7 @@
 <template>
   <div>
-    <NavBar :SignsInOrOut="SignsInOrOut" @signout="signOut" />
-    <router-view @signin="signIn" />
+    <NavBar />
+    <router-view />
   </div>
 </template>
 
@@ -11,26 +11,33 @@ import NavBar from "@/components/NavBar.vue"
 export default {
   data() {
     return {
-      SignsInOrOut: false,
+      // SignsInOrOut: null,
     }
+  },
+  computed: {
+    SignsInOrOut() {
+      return this.$store.state.SignsInOrOut
+    },
   },
   components: {
     NavBar,
   },
   methods: {
-    signIn() {
-      this.SignsInOrOut = true
+    signin() {
+      this.$store.dispatch("signin")
     },
-    signOut() {
-      this.SignsInOrOut = false
+    signout() {
+      this.$store.dispatch("signout")
     },
   },
   created() {
-    if (firebase.auth().currentUser) {
-      this.SignsInOrOut = true
-    } else {
-      this.SignsInOrOut = false
-    }
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        this.signin()
+      } else {
+        this.signout()
+      }
+    })
   },
 }
 </script>
