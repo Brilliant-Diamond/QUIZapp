@@ -2,7 +2,6 @@
   <div class="signin">
     <h2>Sign in</h2>
     <input type="text" placeholder="email" v-model="email" />
-    <!-- ユーザーネームだけどメルアドだね -->
     <input type="password" placeholder="Password" v-model="password" />
     <button @click="signIn">Signin</button>
     <p>
@@ -28,9 +27,6 @@ export default {
     },
   },
   methods: {
-    signin() {
-      this.$store.dispatch("signin")
-    },
     signIn: function() {
       firebase
         .auth()

@@ -10,9 +10,7 @@ import firebase from "firebase"
 import NavBar from "@/components/NavBar.vue"
 export default {
   data() {
-    return {
-      // SignsInOrOut: null,
-    }
+    return {}
   },
   computed: {
     SignsInOrOut() {
@@ -22,20 +20,13 @@ export default {
   components: {
     NavBar,
   },
-  methods: {
-    signin() {
-      this.$store.dispatch("signin")
-    },
-    signout() {
-      this.$store.dispatch("signout")
-    },
-  },
+  methods: {},
   created() {
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        this.signin()
+        this.$store.dispatch("signin")
       } else {
-        this.signout()
+        this.$store.dispatch("signout")
       }
     })
   },

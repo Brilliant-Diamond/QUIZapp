@@ -5,7 +5,7 @@
       v-bind:key="index"
       v-bind:quiz="quiz"
     />
-    <!-- ↑ここは何であるの？ -->
+    <!-- ↑のちのち -->
     <collection
       v-for="(collection, index) in collections"
       v-bind:key="index"
@@ -43,7 +43,7 @@ export default {
     },
   },
   created() {
-    const ref1 = firebase //ここはなぜ?
+    const ref1 = firebase //のちのち
       .firestore()
       .collection("quizs")
       .orderBy("createdAt")

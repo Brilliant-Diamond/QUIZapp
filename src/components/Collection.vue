@@ -1,6 +1,7 @@
 <template>
   <div class="collection-container">
     <h4>{{ collection.title }}</h4>
+    <!-- <vue-star v-bind:heart="collection.heart"></vue-star> -->
     <quiz
       v-for="(quiz, index) in collection.quizs"
       v-bind:key="index"
@@ -15,9 +16,11 @@
 
 <script>
 import Quiz from "@/components/Quiz.vue"
+// import VueStar from "../components/VueStar.vue"
 export default {
   components: {
     Quiz,
+    // VueStar,
   },
   data() {
     return {

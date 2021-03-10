@@ -1,7 +1,6 @@
 <template>
   <div class="my-page">
     <h1>{{ currentUser }}</h1>
-    <!-- ↑ページ更新のときに表示されなくなる -->
     <div class="introduce">
       ここで自己紹介
       {{ e_intro_text }}
