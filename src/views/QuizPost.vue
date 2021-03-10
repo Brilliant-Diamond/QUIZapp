@@ -129,6 +129,7 @@ export default {
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           createdBy: firebase.auth().currentUser.email,
           quizs: this.quizs,
+          heart: 0,
         }
         firebase
           .firestore()
@@ -142,6 +143,7 @@ export default {
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           createdBy: "unknown",
           quizs: this.quizs,
+          heart: 0,
         }
         firebase
           .firestore()
