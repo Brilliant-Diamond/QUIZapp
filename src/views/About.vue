@@ -6,12 +6,13 @@
           {{ userName }}
         </h1>
         <div v-if="isSignedIn">
-          <img
+          <!-- <img
             src="../assets/edit_icon.png"
             alt="editmark"
             class="edit"
             @click="editNameDisplay"
-          />
+          /> -->
+          <button @click="editNameDisplay">edit</button>
         </div>
       </div>
       <div class="edit_name_display" :class="{ isNone: !edit_name_open }">
@@ -24,12 +25,13 @@
       <div class="introduce">
         {{ userIntroText }}
         <div v-if="isSignedIn">
-          <img
+          <!-- <img
             src="../assets/edit_icon.png"
             alt="editmark"
             class="edit"
             @click="editIntroDisplay"
-          />
+          /> -->
+          <button @click="editIntroDisplay">edit</button>
         </div>
       </div>
       <div class="edit_intro_display" :class="{ isNone: !edit_intro_open }">
