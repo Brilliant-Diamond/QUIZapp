@@ -16,7 +16,6 @@
           >サインイン</router-link
         >
       </div>
-
       <router-link to="/about" class="nav__item nav__link"
         >マイページ</router-link
       >
@@ -42,9 +41,11 @@ export default {
         .signOut()
         .then(() => {
           this.$router.push("/signin")
-          this.$store.dispatch("signout")
         })
     },
+  },
+  created() {
+    this.$store.dispatch("ConfirmLoginState")
   },
 }
 </script>

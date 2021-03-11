@@ -21,11 +21,7 @@ export default {
       password: "",
     }
   },
-  computed: {
-    SignsInOrOut() {
-      return this.$store.state.SignsInOrOut
-    },
-  },
+  computed: {},
   methods: {
     signIn: function() {
       firebase

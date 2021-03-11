@@ -37,7 +37,32 @@ export default {
       currentUser: "ログインしてください",
     }
   },
+  computed: {
+    SignsInOrOut() {
+      return this.$store.state.SignsInOrOut
+    },
+  },
   created() {
+    // // 更新がうまくいかない
+    // this.$store.dispatch("ConfirmLoginState")
+    // if (this.SignsInOrOut) {
+    //   this.currentUser = firebase.auth().currentUser.email
+    //   const ref2 = firebase
+    //     .firestore()
+    //     .collection("collections")
+    //     .orderBy("createdAt")
+    //   this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
+    //     let collections = []
+    //     snapshot.forEach((doc) => {
+    //       if (doc.data().createdBy === this.currentUser) {
+    //         collections.push(doc.data())
+    //       }
+    //     })
+    //     this.collections = collections
+    //   })
+    // }
+
+    // 更新はうまくいく
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         this.currentUser = firebase.auth().currentUser.email
@@ -54,8 +79,6 @@ export default {
           })
           this.collections = collections
         })
-      } else {
-        this.currentUser = "ログインしてください"
       }
     })
   },
