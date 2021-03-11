@@ -32,7 +32,6 @@ export default {
             alert("Success!")
             console.log(user)
             this.$router.push("/")
-            this.$store.dispatch("signin")
           },
           (err) => {
             alert(err.message)

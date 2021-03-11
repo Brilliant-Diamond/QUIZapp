@@ -93,8 +93,8 @@ export default {
     }
   },
   computed: {
-    SignsInOrOut() {
-      return this.$store.state.SignsInOrOut
+    isSignedIn() {
+      return this.$store.getters.isSignedIn
     },
   },
   methods: {
@@ -126,7 +126,7 @@ export default {
       }
     },
     CreateQuiz() {
-      if (this.SignsInOrOut) {
+      if (this.isSignedIn) {
         const collections = {
           title: this.title_text,
           tag: this.tags,
@@ -167,9 +167,7 @@ export default {
       ]
     },
   },
-  created() {
-    this.$store.dispatch("ConfirmLoginState")
-  },
+  created() {},
 }
 </script>
 
