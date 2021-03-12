@@ -6,7 +6,7 @@
         >クイズに挑戦</router-link
       >
       <router-link to="/quizpost" class="nav__item nav__link">投稿</router-link>
-      <div v-if="SignsInOrOut" class="nav__items">
+      <div v-if="isSignedIn" class="nav__items">
         <button class="nav__item nav__link" @click="signOut">
           サインアウト
         </button>
@@ -16,7 +16,6 @@
           >サインイン</router-link
         >
       </div>
-
       <router-link to="/about" class="nav__item nav__link"
         >マイページ</router-link
       >
@@ -31,8 +30,8 @@ export default {
     return {}
   },
   computed: {
-    SignsInOrOut() {
-      return this.$store.state.SignsInOrOut
+    isSignedIn() {
+      return this.$store.getters.isSignedIn
     },
   },
   methods: {
@@ -42,10 +41,10 @@ export default {
         .signOut()
         .then(() => {
           this.$router.push("/signin")
-          this.$store.dispatch("signout")
         })
     },
   },
+  created() {},
 }
 </script>
 
