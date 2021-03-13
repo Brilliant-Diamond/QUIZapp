@@ -8,6 +8,45 @@
         <input type="text" v-model="title_text" />
       </label>
 
+      <div class="category-box">
+        <input
+          type="checkbox"
+          name="category"
+          value="食べ物"
+          v-model="categoryBox"
+        />食べ物
+        <input
+          type="checkbox"
+          name="category"
+          value="動物"
+          v-model="categoryBox"
+        />動物
+        <input
+          type="checkbox"
+          name="category"
+          value="ゲーム"
+          v-model="categoryBox"
+        />ゲーム
+        <input
+          type="checkbox"
+          name="category"
+          value="アニメ"
+          v-model="categoryBox"
+        />アニメ
+        <input
+          type="checkbox"
+          name="category"
+          value="アイドル"
+          v-model="categoryBox"
+        />アイドル
+        <!-- <input type="checkbox" name="category" value="" />
+        <input type="checkbox" name="category" value="" />
+        <input type="checkbox" name="category" value="" />
+        <input type="checkbox" name="category" value="" />
+        <input type="checkbox" name="category" value="" />
+        <input type="checkbox" name="category" value="" /> -->
+        {{ categoryBox }}
+      </div>
       <vue-tags-input
         v-model="tag"
         :tags="tags"
@@ -81,6 +120,7 @@ export default {
     return {
       tag: "",
       tags: [],
+      categoryBox: [],
       title_text: "",
       quizs: [
         {
@@ -129,11 +169,11 @@ export default {
       if (this.isSignedIn) {
         const collections = {
           title: this.title_text,
+          category: this.categoryBox,
           tag: this.tags,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           createdBy: firebase.auth().currentUser.email,
           quizs: this.quizs,
-          heart: 0,
         }
         firebase
           .firestore()
@@ -143,11 +183,11 @@ export default {
         // 匿名の投稿ができる
         const collections = {
           title: this.title_text,
+          category: this.categoryBox,
           tag: this.tags,
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           createdBy: "unknown",
           quizs: this.quizs,
-          heart: 0,
         }
         firebase
           .firestore()
