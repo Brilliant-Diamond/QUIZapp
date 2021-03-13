@@ -30,10 +30,10 @@ export default {
         .createUserWithEmailAndPassword(this.email, this.password)
         .then((user) => {
           alert("Create account: ", user.email)
-          user.updateProfile({
-            displayName: this,
-          })
-          // this.$router.push("/signin")
+          // user.updateProfile({
+          //   displayName: this,
+          // })
+          this.$router.push("/")
         })
         .catch((error) => {
           alert(error.message)

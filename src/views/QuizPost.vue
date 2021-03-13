@@ -79,7 +79,6 @@ export default {
   components: { VueTagsInput },
   data() {
     return {
-      user_exist: false,
       tag: "",
       tags: [],
       title_text: "",
@@ -92,6 +91,11 @@ export default {
         },
       ],
     }
+  },
+  computed: {
+    isSignedIn() {
+      return this.$store.getters.isSignedIn
+    },
   },
   methods: {
     addChoice(index) {
@@ -122,7 +126,7 @@ export default {
       }
     },
     CreateQuiz() {
-      if (this.user_exist) {
+      if (this.isSignedIn) {
         const collections = {
           title: this.title_text,
           tag: this.tags,
@@ -163,13 +167,7 @@ export default {
       ]
     },
   },
-  created() {
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        this.user_exist = true
-      }
-    })
-  },
+  created() {},
 }
 </script>
 

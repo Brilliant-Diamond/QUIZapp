@@ -21,11 +21,7 @@ export default {
       password: "",
     }
   },
-  computed: {
-    SignsInOrOut() {
-      return this.$store.state.SignsInOrOut
-    },
-  },
+  computed: {},
   methods: {
     signIn: function() {
       firebase
@@ -36,7 +32,6 @@ export default {
             alert("Success!")
             console.log(user)
             this.$router.push("/")
-            this.$store.dispatch("signin")
           },
           (err) => {
             alert(err.message)
