@@ -39,13 +39,13 @@
         <button v-on:click="updateUserIntroText">自己紹介を更新</button>
       </div>
     </div>
-
+    <div>ここに過去の作品を表示</div>
     <div class="work-space" v-if="isSignedIn">
-      ここに過去の作品を表示
       <collection
         v-for="(collection, index) in collections"
         v-bind:key="index"
         v-bind:collection="collection"
+        v-bind:collectionId="collectionIds[index]"
       />
     </div>
   </div>
@@ -64,6 +64,7 @@ export default {
       inputIntroText: "",
       unsubscribe2: null,
       collections: [],
+      collectionIds: [],
       edit_name_open: false,
       edit_intro_open: false,
     }
@@ -123,23 +124,32 @@ export default {
     },
   },
   created() {
-    // 更新はうまくいかない、自分の作品のみ
-    if (this.isSignedIn) {
-      this.currentUser = firebase.auth().currentUser.email
-      const ref2 = firebase
-        .firestore()
-        .collection("collections")
-        .orderBy("createdAt")
-      this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
-        let collections = []
-        snapshot.forEach((doc) => {
-          if (doc.data().createdBy === this.currentUser) {
-            collections.push(doc.data())
-          }
-        })
-        this.collections = collections
-      })
-    }
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in.
+        firebase
+          .firestore()
+          .collection("collections")
+          .orderBy("createdAt")
+          .where("createdBy", "==", user.email)
+          .get()
+          .then((querySnapshot) => {
+            let collections = []
+            let collectionIds = []
+            querySnapshot.forEach((doc) => {
+              collections.push(doc.data())
+              collectionIds.push(doc.id)
+            })
+            this.collections = collections
+            this.collectionIds = collectionIds
+          })
+          .catch((error) => {
+            console.log("Error getting documents: ", error)
+          })
+      } else {
+        // No user is signed in.
+      }
+    })
   },
 }
 </script>
@@ -154,5 +164,9 @@ export default {
 }
 .isNone {
   display: none;
+}
+.work-space {
+  display: flex;
+  flex-direction: column-reverse;
 }
 </style>

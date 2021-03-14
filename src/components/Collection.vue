@@ -93,32 +93,32 @@ export default {
     },
   },
   created() {
-    const collectionId = this.collectionId
-    let userId = ""
-    const user = firebase.auth().currentUser
-    if (user) {
-      // User is signed in.
-      userId = user.uid
-    }
-    firebase
-      .firestore()
-      .collection("fav")
-      .where("from", "==", userId)
-      .where("to", "==", collectionId)
-      .get()
-      .then((querySnapshot) => {
-        let isFaved = false
-        let favId = ""
-        querySnapshot.forEach((doc) => {
-          isFaved = true
-          favId = doc.id
-        })
-        this.isFaved = isFaved
-        this.favId = favId
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error)
-      })
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in.
+        firebase
+          .firestore()
+          .collection("fav")
+          .where("from", "==", user.uid)
+          .where("to", "==", this.collectionId)
+          .get()
+          .then((querySnapshot) => {
+            let isFaved = false
+            let favId = ""
+            querySnapshot.forEach((doc) => {
+              isFaved = true
+              favId = doc.id
+            })
+            this.isFaved = isFaved
+            this.favId = favId
+          })
+          .catch((error) => {
+            console.log("Error getting documents: ", error)
+          })
+      } else {
+        // No user is signed in.
+      }
+    })
 
     firebase
       .firestore()
