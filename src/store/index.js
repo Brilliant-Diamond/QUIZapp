@@ -73,6 +73,9 @@ const getters = {
   isSignedIn(state) {
     return !!state.user
   },
+  userId(state, getters) {
+    return getters.user.id
+  },
 }
 
 const store = new Vuex.Store({

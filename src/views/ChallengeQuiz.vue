@@ -10,6 +10,7 @@
       v-for="(collection, index) in collections"
       v-bind:key="index"
       v-bind:collection="collection"
+      v-bind:collectionId="collectionIds[index]"
     />
   </div>
 </template>
@@ -27,6 +28,7 @@ export default {
   data() {
     return {
       collections: [],
+      collectionIds: [],
       quizs: [],
       unsubscribe1: null,
       unsubscribe2: null,
@@ -63,8 +65,10 @@ export default {
 
     this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
       let collections = []
+      let collectionIds = []
       snapshot.forEach((doc) => {
         collections.push(doc.data())
+        collectionIds.push(doc.id)
         // for (let i = 0; i < doc.data().tag.length; i++) {
         //   if (doc.data().tag[i].text === "pokemon") {
         //     collections.push(doc.data())
@@ -72,6 +76,7 @@ export default {
         // } 検索はこんな感じかな、効率悪いか
       })
       this.collections = collections
+      this.collectionIds = collectionIds
     })
   },
 }
