@@ -6,7 +6,7 @@
       v-for="(choice, index) in quiz.choices"
       v-bind:key="index"
       v-bind:class="bgColor[index]"
-      v-on:click="displayFeedback(index)"
+      v-on:click="solveQuiz(index)"
       v-bind:id="index"
     >
       <label for="index" v-if="choiceingIndex !== null">{{
@@ -52,14 +52,16 @@ export default {
   },
 
   methods: {
-    displayFeedback(index) {
+    solveQuiz(index) {
       if (this.choiceingIndex === null) {
         this.feedback = this.quiz.feedback
         this.bgColor[this.choiceingIndex] = ""
         if (this.quiz.rightIndex === index) {
           this.bgColor[index] = "red"
+          this.$emit("reportAns", 1)
         } else {
           this.bgColor[index] = "blue"
+          this.$emit("reportAns", 0)
         }
 
         this.choiceingIndex = index

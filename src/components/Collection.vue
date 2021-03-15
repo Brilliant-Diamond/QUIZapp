@@ -2,6 +2,8 @@
   <div class="collection-container">
     <div>{{ autherName }}</div>
     <h4>{{ collection.title }}</h4>
+    <div>正答率：{{ this.collectionRate * 100 }}%</div>
+    <div>回答件数：{{ this.collection.tryCount }}</div>
     <!-- <vue-star v-bind:heart="collection.heart"></vue-star> -->
 
     <div
@@ -26,7 +28,13 @@
       v-bind:quiz="quiz"
       v-bind:quizIndex="index"
       v-bind:class="{ hide: isQuizHiding }"
+      @reportAns="makeRate"
     ></quiz>
+    <div v-if="rate">
+      <div>正答数：{{ score }}/{{ collection.quizs.length }}</div>
+      <div>{{ feedback }}</div>
+    </div>
+
     <button v-if="isQuizHiding" v-on:click="displayQuiz">問題を解く</button>
     <button v-else v-on:click="hideQuiz">閉じる</button>
     <div>{{ howManyFaved }}</div>
@@ -51,6 +59,12 @@ export default {
       favId: "",
       howManyFaved: 0,
       autherName: "ゲスト",
+      howManySolved: 0,
+      score: 0,
+      feedback: "",
+      rate: null,
+      collectionRate: 0,
+      tryCount: 0,
     }
   },
   props: {
@@ -102,6 +116,52 @@ export default {
         })
       this.isFaved = false
       this.howManyFaved--
+    },
+    makeRate(value) {
+      this.howManySolved++
+      this.score += value
+      if (this.howManySolved == this.collection.quizs.length) {
+        console.log("solved!")
+        this.rate = this.score / this.collection.quizs.length
+        if (this.rate >= 0.5) {
+          this.feedback = "すごい！"
+        } else {
+          this.feedback = "いまいち"
+        }
+        //solvedコレクションを追加
+        const solved = {
+          from: this.userId,
+          to: this.collectionId,
+          rate: this.rate,
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        }
+        firebase
+          .firestore()
+          .collection("solved")
+          .add(solved)
+
+        //collectionのtryCountを１増やす
+        let tryCount = 1
+
+        if (this.collection.tryCount) {
+          console.log("tryCount is existing")
+          tryCount = this.collection.tryCount + 1
+        }
+
+        this.collection.tryCount = tryCount
+
+        firebase
+          .firestore()
+          .collection("collections")
+          .doc(this.collectionId)
+          .set(this.collection)
+          .then(function() {
+            console.log("Document successfully written!")
+          })
+          .catch(function(error) {
+            console.error("Error writing document: ", error)
+          })
+      }
     },
   },
 
@@ -165,6 +225,25 @@ export default {
         querySnapshot.forEach((doc) => {
           this.autherName = doc.data().name || "ゲスト"
         })
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error)
+      })
+
+    //正答率（collectionRate）の取得
+    firebase
+      .firestore()
+      .collection("solved")
+      .where("to", "==", this.collectionId)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          this.collectionRate += doc.data().rate
+          this.tryCount++
+        })
+        if (this.tryCount != 0) {
+          this.collectionRate = this.collectionRate / this.tryCount
+        }
       })
       .catch((error) => {
         console.log("Error getting documents: ", error)
