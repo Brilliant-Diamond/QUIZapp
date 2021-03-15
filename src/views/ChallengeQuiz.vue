@@ -72,11 +72,11 @@ export default {
   },
   data() {
     return {
-      chosen_categoryBox: ["ゲーム"],
+      chosen_categoryBox: [],
       collections: [],
       collectionIds: [],
-      quizs: [],
-      unsubscribe1: null,
+      // quizs: [],
+      // unsubscribe1: null,
       unsubscribe2: null,
     }
   },
@@ -95,7 +95,7 @@ export default {
         .firestore()
         .collection("collections")
         .orderBy("createdAt")
-      // this.unsubscribe2 = null
+
       this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
         let collections = []
         let collectionIds = []
