@@ -2,6 +2,15 @@
   <div class="collection-container">
     <h4>{{ collection.title }}</h4>
     <!-- <vue-star v-bind:heart="collection.heart"></vue-star> -->
+
+    <div
+      class="tag-box"
+      v-for="(tagItem, index) in collection.tag"
+      v-bind:key="index"
+    >
+      #{{ tagItem.text }}
+    </div>
+
     <quiz
       v-for="(quiz, index) in collection.quizs"
       v-bind:key="index"

@@ -45,7 +45,6 @@
         <input type="checkbox" name="category" value="" />
         <input type="checkbox" name="category" value="" />
         <input type="checkbox" name="category" value="" /> -->
-        {{ categoryBox }}
       </div>
       <vue-tags-input
         v-model="tag"
