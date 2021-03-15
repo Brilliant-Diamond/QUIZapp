@@ -3,6 +3,23 @@
     <div>{{ autherName }}</div>
     <h4>{{ collection.title }}</h4>
     <!-- <vue-star v-bind:heart="collection.heart"></vue-star> -->
+
+    <div
+      class="categorry-box"
+      v-for="(categoryItem, index) in collection.category"
+      v-bind:key="`first-${index}`"
+    >
+      カテゴリー：{{ categoryItem }}
+    </div>
+
+    <div
+      class="tag-box"
+      v-for="(tagItem, index) in collection.tag"
+      v-bind:key="`second-${index}`"
+    >
+      #{{ tagItem.text }}
+    </div>
+
     <quiz
       v-for="(quiz, index) in collection.quizs"
       v-bind:key="index"
