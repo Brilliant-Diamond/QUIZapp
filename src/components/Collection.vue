@@ -1,5 +1,6 @@
 <template>
   <div class="collection-container">
+    <div>{{ autherName }}</div>
     <h4>{{ collection.title }}</h4>
     <!-- <vue-star v-bind:heart="collection.heart"></vue-star> -->
     <quiz
@@ -32,6 +33,7 @@ export default {
       isFaved: false,
       favId: "",
       howManyFaved: 0,
+      autherName: "ゲスト",
     }
   },
   props: {
@@ -56,7 +58,6 @@ export default {
         from: this.userId,
         to: this.collectionId,
       }
-      console.log(fav)
       firebase
         .firestore()
         .collection("fav")
@@ -71,8 +72,6 @@ export default {
       this.howManyFaved++
     },
     disFav() {
-      console.log("disFav")
-      console.log(this.favId)
       firebase
         .firestore()
         .collection("fav")
@@ -93,6 +92,7 @@ export default {
     },
   },
   created() {
+    //ログインしているユーザーがこのcollectionをいいねしてるかを確認
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         // User is signed in.
@@ -120,6 +120,7 @@ export default {
       }
     })
 
+    //このcollectionが何人にいいねされているのかを探索
     firebase
       .firestore()
       .collection("fav")
@@ -127,6 +128,21 @@ export default {
       .get()
       .then((querySnapshot) => {
         this.howManyFaved = querySnapshot.size
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error)
+      })
+
+    //この投稿をしたユーザーの名前を取得
+    firebase
+      .firestore()
+      .collection("user_profiles")
+      .where("email", "==", this.collection.createdBy)
+      .get()
+      .then((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          this.autherName = doc.data().name || "ゲスト"
+        })
       })
       .catch((error) => {
         console.log("Error getting documents: ", error)
