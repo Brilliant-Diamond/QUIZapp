@@ -69,22 +69,24 @@ export default {
       this.isQuizHiding = true
     },
     fav() {
-      const fav = {
-        from: this.userId,
-        to: this.collectionId,
+      if (this.isSignedIn) {
+        const fav = {
+          from: this.userId,
+          to: this.collectionId,
+        }
+        firebase
+          .firestore()
+          .collection("fav")
+          .add(fav)
+          .then((docRef) => {
+            this.favId = docRef.id
+          })
+          .catch((error) => {
+            console.error("Error adding document: ", error)
+          })
+        this.isFaved = true
+        this.howManyFaved++
       }
-      firebase
-        .firestore()
-        .collection("fav")
-        .add(fav)
-        .then((docRef) => {
-          this.favId = docRef.id
-        })
-        .catch((error) => {
-          console.error("Error adding document: ", error)
-        })
-      this.isFaved = true
-      this.howManyFaved++
     },
     disFav() {
       firebase
@@ -104,6 +106,9 @@ export default {
   computed: {
     userId() {
       return this.$store.getters.userId
+    },
+    isSignedIn() {
+      return this.$store.getters.isSignedIn
     },
   },
   created() {
