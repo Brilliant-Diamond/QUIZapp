@@ -194,6 +194,7 @@ export default {
           .add(collections)
       }
       this.title_text = ""
+      this.categoryBox = []
       this.tag = ""
       this.tags = []
       this.quizs = [
