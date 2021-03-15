@@ -7,18 +7,18 @@
     <div
       class="categorry-box"
       v-for="(categoryItem, index) in collection.category"
-      v-bind:key="index"
+      v-bind:key="`first-${index}`"
     >
       カテゴリー：{{ categoryItem }}
     </div>
 
-    <!-- <div
+    <div
       class="tag-box"
       v-for="(tagItem, index) in collection.tag"
-      v-bind:key="index"
+      v-bind:key="`second-${index}`"
     >
       #{{ tagItem.text }}
-    </div> -->
+    </div>
 
     <quiz
       v-for="(quiz, index) in collection.quizs"

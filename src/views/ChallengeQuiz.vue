@@ -40,9 +40,9 @@
         <input type="checkbox" name="category" value="" /> -->
       </div>
 
-      <!-- <button class="search" @click="Search">
+      <button class="search" @click="Search">
         検索
-      </button> -->
+      </button>
     </div>
 
     <!-- <quiz
@@ -90,29 +90,29 @@ export default {
     //       this.$router.push("/signin")
     //     })
     // },
-    //   Search() {
-    //     const ref2 = firebase
-    //       .firestore()
-    //       .collection("collections")
-    //       .orderBy("createdAt")
-    //     // this.unsubscribe2 = null
-    //     this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
-    //       let collections = []
-    //       let collectionIds = []
-    //       snapshot.forEach((doc) => {
-    //         for (let i = 0; i < doc.data().category.length; i++) {
-    //           for (let j = 0; j < this.chosen_categoryBox.length; j++) {
-    //             if (doc.data().category[i] === this.chosen_categoryBox[j]) {
-    //               collections.push(doc.data())
-    //               collectionIds.push(doc.id)
-    //             }
-    //           }
-    //         } //検索はこんな感じかな、効率悪いか
-    //       })
-    //       this.collections = collections
-    //       this.collectionIds = collectionIds
-    //     })
-    //   },
+    Search() {
+      const ref2 = firebase
+        .firestore()
+        .collection("collections")
+        .orderBy("createdAt")
+      // this.unsubscribe2 = null
+      this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
+        let collections = []
+        let collectionIds = []
+        snapshot.forEach((doc) => {
+          for (let i = 0; i < doc.data().category.length; i++) {
+            for (let j = 0; j < this.chosen_categoryBox.length; j++) {
+              if (doc.data().category[i] === this.chosen_categoryBox[j]) {
+                collections.push(doc.data())
+                collectionIds.push(doc.id)
+              }
+            }
+          } //検索はこんな感じかな、効率悪いか
+        })
+        this.collections = collections
+        this.collectionIds = collectionIds
+      })
+    },
   },
   created() {
     // const ref1 = firebase //のちのち
