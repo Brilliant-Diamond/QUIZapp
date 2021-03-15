@@ -4,12 +4,20 @@
     <!-- <vue-star v-bind:heart="collection.heart"></vue-star> -->
 
     <div
+      class="categorry-box"
+      v-for="(categoryItem, index) in collection.category"
+      v-bind:key="index"
+    >
+      カテゴリー：{{ categoryItem }}
+    </div>
+
+    <!-- <div
       class="tag-box"
       v-for="(tagItem, index) in collection.tag"
       v-bind:key="index"
     >
       #{{ tagItem.text }}
-    </div>
+    </div> -->
 
     <quiz
       v-for="(quiz, index) in collection.quizs"
