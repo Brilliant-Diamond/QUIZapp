@@ -116,7 +116,7 @@ export default {
       }
     },
     editIntroDisplay() {
-      if (this.edit_name_open) {
+      if (this.edit_intro_open) {
         this.edit_intro_open = false
       } else {
         this.edit_intro_open = true
