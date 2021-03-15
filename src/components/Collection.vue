@@ -2,7 +2,6 @@
   <div class="collection-container">
     <div>{{ autherName }}</div>
     <h4>{{ collection.title }}</h4>
-    <!-- <vue-star v-bind:heart="collection.heart"></vue-star> -->
 
     <div
       class="categorry-box"
@@ -38,11 +37,10 @@
 <script>
 import Quiz from "@/components/Quiz.vue"
 import firebase from "firebase"
-// import VueStar from "../components/VueStar.vue"
+
 export default {
   components: {
     Quiz,
-    // VueStar,
   },
   data() {
     return {
