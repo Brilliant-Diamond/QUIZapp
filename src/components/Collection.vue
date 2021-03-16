@@ -2,7 +2,7 @@
   <div class="collection-container">
     <router-link
       v-if="autherId"
-      :to="{ name: 'Aboutothers', params: { id: autherId } }"
+      :to="{ name: 'Others', params: { id: autherId } }"
       >{{ autherName }}</router-link
     >
     <div v-else>{{ autherName }}</div>

@@ -16,7 +16,7 @@
           >サインイン</router-link
         >
       </div>
-      <router-link to="/about" class="nav__item nav__link"
+      <router-link to="/mypage" class="nav__item nav__link"
         >マイページ</router-link
       >
     </div>
