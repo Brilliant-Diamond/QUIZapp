@@ -1,6 +1,11 @@
 <template>
   <div class="collection-container">
-    <div>{{ autherName }}</div>
+    <router-link
+      v-if="autherId"
+      :to="{ name: 'Aboutothers', params: { id: autherId } }"
+      >{{ autherName }}</router-link
+    >
+    <div v-else>{{ autherName }}</div>
     <h4>{{ collection.title }}</h4>
 
     <div
@@ -49,6 +54,7 @@ export default {
       favId: "",
       howManyFaved: 0,
       autherName: "ゲスト",
+      autherId: "",
     }
   },
   props: {
@@ -110,6 +116,9 @@ export default {
     isSignedIn() {
       return this.$store.getters.isSignedIn
     },
+    // autherId() {
+    //   return this.$store.state.autherId
+    // },
   },
   created() {
     //ログインしているユーザーがこのcollectionをいいねしてるかを確認
@@ -162,6 +171,7 @@ export default {
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           this.autherName = doc.data().name || "ゲスト"
+          this.autherId = doc.data().id
         })
       })
       .catch((error) => {

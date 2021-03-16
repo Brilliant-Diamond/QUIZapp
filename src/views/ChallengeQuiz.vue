@@ -107,7 +107,7 @@ export default {
                 collectionIds.push(doc.id)
               }
             }
-          } //検索はこんな感じかな、効率悪いか
+          }
         })
         this.collections = collections
         this.collectionIds = collectionIds
