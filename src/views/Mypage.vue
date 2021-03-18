@@ -1,5 +1,39 @@
 <template>
   <div class="my-page">
+    <div>フォロワーの数：{{ howManyFollowed }}</div>
+    <h3>フォロワー</h3>
+    <div
+      class=""
+      v-for="(follower, index) in followedByList"
+      :key="`first-${index}`"
+    >
+      <router-link
+        v-if="followedByIdList[index]"
+        :to="{
+          name: 'Others',
+          params: { id: followedByIdList[index] },
+        }"
+        >{{ follower }}</router-link
+      >
+    </div>
+
+    <div>フォロー中の数：{{ howManyFollowing }}</div>
+    <h3>フォロー中</h3>
+    <div
+      class=""
+      v-for="(following, index) in followingByList"
+      :key="`second-${index}`"
+    >
+      <router-link
+        v-if="followingByIdList[index]"
+        :to="{
+          name: 'Others',
+          params: { id: followingByIdList[index] },
+        }"
+        >{{ following }}</router-link
+      >
+    </div>
+
     <div class="user_name_box">
       <div class="use_name">
         <h1>
@@ -67,6 +101,14 @@ export default {
       collectionIds: [],
       edit_name_open: false,
       edit_intro_open: false,
+      howManyFollowed: 0,
+      followedByIdList: [],
+      followedByList: [],
+      followedBy: "",
+      howManyFollowing: 0,
+      followingByIdList: [],
+      followingByList: [],
+      followingBy: "",
     }
   },
   computed: {
@@ -81,6 +123,9 @@ export default {
     },
     userIntroText() {
       return this.$store.getters.userIntroText
+    },
+    userId() {
+      return this.$store.getters.userId
     },
   },
   methods: {
@@ -124,6 +169,7 @@ export default {
     },
   },
   created() {
+    // 自分の作品のみを表示する
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         // User is signed in.
@@ -150,6 +196,74 @@ export default {
         // No user is signed in.
       }
     })
+    //この人が何人にフォローされているのかを探索
+    firebase
+      .firestore()
+      .collection("follow")
+      .where("to", "==", this.userId)
+      .get()
+      .then((querySnapshot) => {
+        this.howManyFollowed = querySnapshot.size
+        let followedByIdList = []
+        querySnapshot.forEach((doc) => {
+          followedByIdList.push(doc.data().from)
+        })
+        this.followedByIdList = followedByIdList
+        for (let i = 0; i < this.followedByIdList.length; i++) {
+          firebase
+            .firestore()
+            .collection("user_profiles")
+            .where("id", "==", this.followedByIdList[i])
+            .get()
+            .then((querySnapshot) => {
+              let followedBy = ""
+              querySnapshot.forEach((doc) => {
+                followedBy = doc.data().name
+              })
+              this.followedByList.push(followedBy)
+            })
+            .catch((error) => {
+              console.log("Error getting documents: ", error)
+            })
+        }
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error)
+      })
+    //この人が何人をフォローしているのかを探索
+    firebase
+      .firestore()
+      .collection("follow")
+      .where("from", "==", this.userId)
+      .get()
+      .then((querySnapshot) => {
+        this.howManyFollowing = querySnapshot.size
+        let followingByIdList = []
+        querySnapshot.forEach((doc) => {
+          followingByIdList.push(doc.data().to)
+        })
+        this.followingByIdList = followingByIdList
+        for (let i = 0; i < this.followingByIdList.length; i++) {
+          firebase
+            .firestore()
+            .collection("user_profiles")
+            .where("id", "==", this.followingByIdList[i])
+            .get()
+            .then((querySnapshot) => {
+              let followingBy = ""
+              querySnapshot.forEach((doc) => {
+                followingBy = doc.data().name
+              })
+              this.followingByList.push(followingBy)
+            })
+            .catch((error) => {
+              console.log("Error getting documents: ", error)
+            })
+        }
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error)
+      })
   },
 }
 </script>
