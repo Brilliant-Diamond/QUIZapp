@@ -1,7 +1,7 @@
 <template>
   <div class="collection-container">
     <router-link
-      v-if="autherId"
+      v-if="autherId && userId !== autherId"
       :to="{ name: 'Others', params: { id: autherId } }"
       >{{ autherName }}</router-link
     >
