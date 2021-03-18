@@ -229,8 +229,8 @@ export default {
                   id: followedByIdList[i],
                 }
               })
-              // this.followedByList.push(followedBy)
-              this.followedByList[i] = followedBy
+              this.followedByList.push(followedBy)
+              // this.followedByList[i] = followedBy
             })
             .catch((error) => {
               console.log("Error getting documents: ", error)
@@ -267,8 +267,8 @@ export default {
                   id: followingByIdList[i],
                 }
               })
-              // this.followingByList.push(followingBy)
-              this.followingByList[i] = followingBy
+              this.followingByList.push(followingBy)
+              // this.followingByList[i] = followingBy
             })
             .catch((error) => {
               console.log("Error getting documents: ", error)

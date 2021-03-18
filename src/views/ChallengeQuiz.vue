@@ -1,6 +1,24 @@
 <template>
   <div id="app">
     <div class="category-search">
+      <input
+        type="radio"
+        name="follow_range"
+        value="1"
+        v-model="follow_range"
+      />すべて
+      <input
+        type="radio"
+        name="follow_range"
+        value="2"
+        v-model="follow_range"
+      />フォロー中のみ
+      <input
+        type="radio"
+        name="follow_range"
+        value="3"
+        v-model="follow_range"
+      />フォロー外のみ
       <div class="category-search-box">
         <input
           type="checkbox"
@@ -72,46 +90,55 @@ export default {
   },
   data() {
     return {
-      chosen_categoryBox: [],
+      chosen_categoryBox: ["食べ物", "動物", "ゲーム", "アニメ", "アイドル"],
+      follow_range: "1",
       collections: [],
       collectionIds: [],
       // quizs: [],
       // unsubscribe1: null,
       unsubscribe2: null,
+      followingByIdList: [],
+      followingByList: [],
     }
   },
+  computed: {
+    userId() {
+      return this.$store.getters.userId
+    },
+  },
   methods: {
-    // 要らないよね？
-    // signOut: function() {
-    //   firebase
-    //     .auth()
-    //     .signOut()
-    //     .then(() => {
-    //       this.$router.push("/signin")
-    //     })
-    // },
     Search() {
-      const ref2 = firebase
-        .firestore()
-        .collection("collections")
-        .orderBy("createdAt")
+      if (this.follow_range === "1") {
+        //すべて
+      } else if (this.follow_range === "2") {
+        //フォロー中のみ
+        for (let i = 0; i < this.followingByList.length; i++) {
+          const ref2 = firebase
+            .firestore()
+            .collection("collections")
+            .where("createdBy", "==", this.followingByList[i].email)
+            .orderBy("createdAt")
 
-      this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
-        let collections = []
-        let collectionIds = []
-        snapshot.forEach((doc) => {
-          for (let i = 0; i < doc.data().category.length; i++) {
-            for (let j = 0; j < this.chosen_categoryBox.length; j++) {
-              if (doc.data().category[i] === this.chosen_categoryBox[j]) {
-                collections.push(doc.data())
-                collectionIds.push(doc.id)
+          this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
+            let collections = []
+            let collectionIds = []
+            snapshot.forEach((doc) => {
+              for (let i = 0; i < doc.data().category.length; i++) {
+                for (let j = 0; j < this.chosen_categoryBox.length; j++) {
+                  if (doc.data().category[i] === this.chosen_categoryBox[j]) {
+                    collections.push(doc.data())
+                    collectionIds.push(doc.id)
+                  }
+                }
               }
-            }
-          }
-        })
-        this.collections = collections
-        this.collectionIds = collectionIds
-      })
+            })
+            this.collections = collections
+            this.collectionIds = collectionIds
+          })
+        }
+      } else if (this.follow_range === "3") {
+        //フォロー外のみ
+      }
     },
   },
   created() {
@@ -143,6 +170,45 @@ export default {
       this.collections = collections
       this.collectionIds = collectionIds
     })
+
+    //この人が何人をフォローしているのかを探索
+    firebase
+      .firestore()
+      .collection("follow")
+      .where("from", "==", this.userId)
+      .get()
+      .then((querySnapshot) => {
+        let followingByIdList = []
+        querySnapshot.forEach((doc) => {
+          followingByIdList.push(doc.data().to)
+        })
+        this.followingByIdList = followingByIdList
+        for (let i = 0; i < this.followingByIdList.length; i++) {
+          firebase
+            .firestore()
+            .collection("user_profiles")
+            .where("id", "==", this.followingByIdList[i])
+            .get()
+            .then((querySnapshot) => {
+              let followingBy = ""
+              querySnapshot.forEach((doc) => {
+                followingBy = {
+                  email: doc.data().email,
+                  id: followingByIdList[i],
+                }
+              })
+              this.followingByList.push(followingBy)
+              console.log(this.followingByList)
+              // this.followingByList[i] = followingBy
+            })
+            .catch((error) => {
+              console.log("Error getting documents: ", error)
+            })
+        }
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error)
+      })
   },
 }
 </script>
