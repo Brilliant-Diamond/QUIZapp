@@ -44,9 +44,6 @@
       <div class="use_name">
         <h1>
           {{ userName }}
-
-        {{followingByIdList}}
-        {{followingByList}}
         </h1>
         <div v-if="isSignedIn">
           <!-- <img
@@ -229,7 +226,8 @@ export default {
               querySnapshot.forEach((doc) => {
                 followedBy = doc.data().name
               })
-              this.followedByList.push(followedBy)
+              // this.followedByList.push(followedBy)
+              this.followedByList[i] = followedBy
             })
             .catch((error) => {
               console.log("Error getting documents: ", error)
@@ -263,8 +261,8 @@ export default {
               querySnapshot.forEach((doc) => {
                 followingBy = doc.data().name
               })
-              this.followingByList.push(followingBy)
-              // this.followingByList[i] = followingBy
+              // this.followingByList.push(followingBy)
+              this.followingByList[i] = followingBy
             })
             .catch((error) => {
               console.log("Error getting documents: ", error)
