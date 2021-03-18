@@ -32,9 +32,9 @@
             v-if="followingByIdList[index]"
             :to="{
               name: 'Others',
-              params: { id: followingByIdList[index] },
+              params: { id: followingByList[index].id },
             }"
-            >{{ following }}</router-link
+            >{{ following.name }}</router-link
           >
         </div>
       </div>
@@ -45,8 +45,8 @@
         <h1>
           {{ userName }}
 
-        {{followingByIdList}}
-        {{followingByList}}
+          {{ followingByIdList }}
+          {{ followingByList }}
         </h1>
         <div v-if="isSignedIn">
           <!-- <img
@@ -261,7 +261,10 @@ export default {
             .then((querySnapshot) => {
               let followingBy = ""
               querySnapshot.forEach((doc) => {
-                followingBy = doc.data().name
+                followingBy = {
+                  name: doc.data().name,
+                  id: followingByIdList[i],
+                }
               })
               this.followingByList.push(followingBy)
               // this.followingByList[i] = followingBy
