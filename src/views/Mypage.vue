@@ -10,12 +10,12 @@
           :key="`first-${index}`"
         >
           <router-link
-            v-if="followedByIdList[index]"
+            v-if="follower.id"
             :to="{
               name: 'Others',
-              params: { id: followedByIdList[index] },
+              params: { id: follower.id },
             }"
-            >{{ follower }}</router-link
+            >{{ follower.name }}</router-link
           >
         </div>
       </div>
@@ -29,10 +29,10 @@
           :key="`second-${index}`"
         >
           <router-link
-            v-if="followingByIdList[index]"
+            v-if="following.id"
             :to="{
               name: 'Others',
-              params: { id: followingByList[index].id },
+              params: { id: following.id },
             }"
             >{{ following.name }}</router-link
           >
@@ -44,9 +44,6 @@
       <div class="use_name">
         <h1>
           {{ userName }}
-
-          {{ followingByIdList }}
-          {{ followingByList }}
         </h1>
         <div v-if="isSignedIn">
           <!-- <img
@@ -227,7 +224,10 @@ export default {
             .then((querySnapshot) => {
               let followedBy = ""
               querySnapshot.forEach((doc) => {
-                followedBy = doc.data().name
+                followedBy = {
+                  name: doc.data().name,
+                  id: followedByIdList[i],
+                }
               })
               this.followedByList.push(followedBy)
             })
