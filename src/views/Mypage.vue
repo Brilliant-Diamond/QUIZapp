@@ -1,37 +1,43 @@
 <template>
   <div class="my-page">
-    <div>フォロワーの数：{{ howManyFollowed }}</div>
-    <h3>フォロワー</h3>
-    <div
-      class=""
-      v-for="(follower, index) in followedByList"
-      :key="`first-${index}`"
-    >
-      <router-link
-        v-if="followedByIdList[index]"
-        :to="{
-          name: 'Others',
-          params: { id: followedByIdList[index] },
-        }"
-        >{{ follower }}</router-link
-      >
-    </div>
+    <div class="follower-display">
+      <div class="followed">
+        {{ howManyFollowed }}
+        <h3>フォロワー</h3>
+        <div
+          class=""
+          v-for="(follower, index) in followedByList"
+          :key="`first-${index}`"
+        >
+          <router-link
+            v-if="followedByIdList[index]"
+            :to="{
+              name: 'Others',
+              params: { id: followedByIdList[index] },
+            }"
+            >{{ follower }}</router-link
+          >
+        </div>
+      </div>
 
-    <div>フォロー中の数：{{ howManyFollowing }}</div>
-    <h3>フォロー中</h3>
-    <div
-      class=""
-      v-for="(following, index) in followingByList"
-      :key="`second-${index}`"
-    >
-      <router-link
-        v-if="followingByIdList[index]"
-        :to="{
-          name: 'Others',
-          params: { id: followingByIdList[index] },
-        }"
-        >{{ following }}</router-link
-      >
+      <div class="following">
+        {{ howManyFollowing }}
+        <h3>フォロー中</h3>
+        <div
+          class=""
+          v-for="(following, index) in followingByList"
+          :key="`second-${index}`"
+        >
+          <router-link
+            v-if="followingByIdList[index]"
+            :to="{
+              name: 'Others',
+              params: { id: followingByIdList[index] },
+            }"
+            >{{ following }}</router-link
+          >
+        </div>
+      </div>
     </div>
 
     <div class="user_name_box">
@@ -282,5 +288,11 @@ export default {
 .work-space {
   display: flex;
   flex-direction: column-reverse;
+}
+.follower-display {
+  display: flex;
+}
+.followed {
+  margin-right: 15px;
 }
 </style>
