@@ -44,6 +44,9 @@
       <div class="use_name">
         <h1>
           {{ userName }}
+
+        {{followingByIdList}}
+        {{followingByList}}
         </h1>
         <div v-if="isSignedIn">
           <!-- <img
@@ -261,6 +264,7 @@ export default {
                 followingBy = doc.data().name
               })
               this.followingByList.push(followingBy)
+              // this.followingByList[i] = followingBy
             })
             .catch((error) => {
               console.log("Error getting documents: ", error)
