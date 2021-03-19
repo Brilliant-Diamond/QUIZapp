@@ -1,6 +1,11 @@
 <template>
   <div class="collection-container">
-    <div>{{ autherName }}</div>
+    <router-link
+      v-if="autherId && userId !== autherId"
+      :to="{ name: 'Others', params: { id: autherId } }"
+      >{{ autherName }}</router-link
+    >
+    <div v-else>{{ autherName }}</div>
     <h4>{{ collection.title }}</h4>
     <div>正答率：{{ this.collectionRate * 100 }}%</div>
     <div>回答件数：{{ this.collection.tryCount }}</div>
@@ -46,11 +51,10 @@
 <script>
 import Quiz from "@/components/Quiz.vue"
 import firebase from "firebase"
-// import VueStar from "../components/VueStar.vue"
+
 export default {
   components: {
     Quiz,
-    // VueStar,
   },
   data() {
     return {
@@ -59,6 +63,7 @@ export default {
       favId: "",
       howManyFaved: 0,
       autherName: "ゲスト",
+      autherId: "",
       howManySolved: 0,
       score: 0,
       feedback: "",
@@ -172,6 +177,9 @@ export default {
     isSignedIn() {
       return this.$store.getters.isSignedIn
     },
+    // autherId() {
+    //   return this.$store.state.autherId
+    // },
   },
   created() {
     //ログインしているユーザーがこのcollectionをいいねしてるかを確認
@@ -224,6 +232,7 @@ export default {
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           this.autherName = doc.data().name || "ゲスト"
+          this.autherId = doc.data().id
         })
       })
       .catch((error) => {

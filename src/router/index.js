@@ -5,6 +5,7 @@ import Signup from "../views/Signup.vue"
 import Signin from "../views/Signin.vue"
 import QuizPost from "../views/QuizPost.vue"
 import ChallengeQuiz from "../views/ChallengeQuiz.vue"
+import Others from "../views/Others.vue"
 import firebase from "firebase"
 
 Vue.use(VueRouter)
@@ -36,13 +37,18 @@ const routes = [
     component: ChallengeQuiz,
   },
   {
-    path: "/about",
-    name: "About",
+    path: "/others/:id",
+    name: "Others",
+    component: Others,
+  },
+  {
+    path: "/mypage",
+    name: "Mypage",
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue"),
+      import(/* webpackChunkName: "about" */ "../views/Mypage.vue"),
   },
 ]
 
