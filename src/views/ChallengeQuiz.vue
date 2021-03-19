@@ -112,11 +112,11 @@ export default {
         //すべて
       } else if (this.follow_range === "2") {
         //フォロー中のみ
-        for (let i = 0; i < this.followingByList.length; i++) {
+        for (let k = 0; k < this.followingByList.length; k++) {
           const ref2 = firebase
             .firestore()
             .collection("collections")
-            .where("createdBy", "==", this.followingByList[i].email)
+            .where("createdBy", "==", this.followingByList[k].email)
             .orderBy("createdAt")
 
           this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
@@ -198,7 +198,6 @@ export default {
                 }
               })
               this.followingByList.push(followingBy)
-              console.log(this.followingByList)
               // this.followingByList[i] = followingBy
             })
             .catch((error) => {
@@ -209,6 +208,9 @@ export default {
       .catch((error) => {
         console.log("Error getting documents: ", error)
       })
+
+    console.log(this.followingByList)
+    console.log(this.followingByList[0].email)
   },
 }
 </script>
