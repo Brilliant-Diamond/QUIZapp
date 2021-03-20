@@ -1,58 +1,67 @@
 <template>
   <div id="app">
-    <div class="follower-search">
-      <input
-        type="radio"
-        name="follow_range"
-        value="1"
-        v-model="follow_range"
-      />すべて
-      <input
-        type="radio"
-        name="follow_range"
-        value="2"
-        v-model="follow_range"
-      />フォロー中のみ
-      <button @click="followerSearch">フォロワー検索</button>
-    </div>
-    <div class="category-search">
-      <input
-        type="checkbox"
-        name="category"
-        value="食べ物"
-        v-model="chosen_categoryBox"
-      />食べ物
-      <input
-        type="checkbox"
-        name="category"
-        value="動物"
-        v-model="chosen_categoryBox"
-      />動物
-      <input
-        type="checkbox"
-        name="category"
-        value="ゲーム"
-        v-model="chosen_categoryBox"
-      />ゲーム
-      <input
-        type="checkbox"
-        name="category"
-        value="アニメ"
-        v-model="chosen_categoryBox"
-      />アニメ
-      <input
-        type="checkbox"
-        name="category"
-        value="アイドル"
-        v-model="chosen_categoryBox"
-      />アイドル
-      <!-- <input type="checkbox" name="category" value="" />
+    <div class="search">
+      <button class="search" @click="Search">絞り込む</button>
+      <div class="follower-search">
+        <input
+          type="radio"
+          name="follow_range"
+          value="1"
+          v-model="follow_range"
+        />全員
+        <input
+          type="radio"
+          name="follow_range"
+          value="2"
+          v-model="follow_range"
+        />フォロー中のみ
+      </div>
+      <div class="category-search">
+        <input
+          type="checkbox"
+          name="category"
+          value="食べ物"
+          v-model="chosen_categoryBox"
+        />食べ物
+        <input
+          type="checkbox"
+          name="category"
+          value="動物"
+          v-model="chosen_categoryBox"
+        />動物
+        <input
+          type="checkbox"
+          name="category"
+          value="ゲーム"
+          v-model="chosen_categoryBox"
+        />ゲーム
+        <input
+          type="checkbox"
+          name="category"
+          value="アニメ"
+          v-model="chosen_categoryBox"
+        />アニメ
+        <input
+          type="checkbox"
+          name="category"
+          value="アイドル"
+          v-model="chosen_categoryBox"
+        />アイドル
+        <input
+          type="checkbox"
+          name="category"
+          value=""
+          v-model="chosen_categoryBox"
+        />カテゴリーなし
+        <!-- <input type="checkbox" name="category" value="" />
         <input type="checkbox" name="category" value="" />
         <input type="checkbox" name="category" value="" />
         <input type="checkbox" name="category" value="" />
         <input type="checkbox" name="category" value="" />
         <input type="checkbox" name="category" value="" /> -->
-      <button class="search" @click="Search">カテゴリー検索</button>
+        <button @click="Allcheck">☑</button>
+        <button @click="Removecheck">☐</button>
+      </div>
     </div>
 
     <!-- <quiz
@@ -82,7 +91,14 @@ export default {
   },
   data() {
     return {
-      chosen_categoryBox: ["食べ物", "動物", "ゲーム", "アニメ", "アイドル"],
+      chosen_categoryBox: [
+        "食べ物",
+        "動物",
+        "ゲーム",
+        "アニメ",
+        "アイドル",
+        "",
+      ],
       follow_range: "1",
       collections: [],
       collectionIds: [],
@@ -100,30 +116,9 @@ export default {
   },
   methods: {
     Search() {
-      const ref2 = firebase
-        .firestore()
-        .collection("collections")
-        .orderBy("createdAt")
-
-      this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
-        let collections = []
-        let collectionIds = []
-        snapshot.forEach((doc) => {
-          for (let i = 0; i < doc.data().category.length; i++) {
-            for (let j = 0; j < this.chosen_categoryBox.length; j++) {
-              if (doc.data().category[i] === this.chosen_categoryBox[j]) {
-                collections.push(doc.data())
-                collectionIds.push(doc.id)
-              }
-            }
-          }
-        })
-        this.collections = collections
-        this.collectionIds = collectionIds
-      })
-    },
-    followerSearch() {
       if (this.follow_range === "1") {
+        this.collections = []
+        this.collectionIds = []
         //すべて
         const ref2 = firebase
           .firestore()
@@ -131,14 +126,20 @@ export default {
           .orderBy("createdAt")
 
         this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
-          let collections = []
-          let collectionIds = []
+          // let collections = []
+          // let collectionIds = []
           snapshot.forEach((doc) => {
-            collections.push(doc.data())
-            collectionIds.push(doc.id)
+            for (let i = 0; i < doc.data().category.length; i++) {
+              for (let j = 0; j < this.chosen_categoryBox.length; j++) {
+                if (doc.data().category[i] === this.chosen_categoryBox[j]) {
+                  this.collections.push(doc.data())
+                  this.collectionIds.push(doc.id)
+                }
+              }
+            }
           })
-          this.collections = collections
-          this.collectionIds = collectionIds
+          // this.collections = collections
+          // this.collectionIds = collectionIds
         })
       } else if (this.follow_range === "2") {
         this.collections = []
@@ -155,14 +156,35 @@ export default {
             // let collections = []
             // let collectionIds = []
             snapshot.forEach((doc) => {
-              this.collections.push(doc.data())
-              this.collectionIds.push(doc.id)
+              // this.collections.push(doc.data())
+              // this.collectionIds.push(doc.id)
+              for (let i = 0; i < doc.data().category.length; i++) {
+                for (let j = 0; j < this.chosen_categoryBox.length; j++) {
+                  if (doc.data().category[i] === this.chosen_categoryBox[j]) {
+                    this.collections.push(doc.data())
+                    this.collectionIds.push(doc.id)
+                  }
+                }
+              }
             })
             // this.collections = collections
             // this.collectionIds = collectionIds
           })
         }
       }
+    },
+    Allcheck() {
+      this.chosen_categoryBox = [
+        "食べ物",
+        "動物",
+        "ゲーム",
+        "アニメ",
+        "アイドル",
+        "",
+      ]
+    },
+    Removecheck() {
+      this.chosen_categoryBox = []
     },
   },
   created() {
