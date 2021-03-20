@@ -40,6 +40,18 @@ export default {
       require: true,
     },
   },
+  watch: {
+    quiz(newquiz) {
+      newquiz.choices.forEach((choice, index) => {
+        this.bgColor.push("")
+        if (this.quiz.rightIndex === index) {
+          this.rightOrWrong.push("⭕")
+        } else {
+          this.rightOrWrong.push("✖")
+        }
+      })
+    },
+  },
   created() {
     this.quiz.choices.forEach((choice, index) => {
       this.bgColor.push("")

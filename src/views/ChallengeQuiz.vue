@@ -13,12 +13,6 @@
         value="2"
         v-model="follow_range"
       />フォロー中のみ
-      <input
-        type="radio"
-        name="follow_range"
-        value="3"
-        v-model="follow_range"
-      />フォロー外のみ
       <div class="category-search-box">
         <input
           type="checkbox"
@@ -61,6 +55,8 @@
       <button class="search" @click="Search">
         検索
       </button>
+
+      <button @click="followerSearch">フォロワー検索</button>
     </div>
 
     <!-- <quiz
@@ -98,7 +94,7 @@ export default {
       // unsubscribe1: null,
       unsubscribe2: null,
       followingByIdList: [],
-      followingByList: [],
+      followingByEmail: [],
     }
   },
   computed: {
@@ -108,36 +104,68 @@ export default {
   },
   methods: {
     Search() {
+      const ref2 = firebase
+        .firestore()
+        .collection("collections")
+        .orderBy("createdAt")
+
+      this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
+        let collections = []
+        let collectionIds = []
+        snapshot.forEach((doc) => {
+          for (let i = 0; i < doc.data().category.length; i++) {
+            for (let j = 0; j < this.chosen_categoryBox.length; j++) {
+              if (doc.data().category[i] === this.chosen_categoryBox[j]) {
+                collections.push(doc.data())
+                collectionIds.push(doc.id)
+              }
+            }
+          }
+        })
+        this.collections = collections
+        this.collectionIds = collectionIds
+      })
+    },
+    followerSearch() {
       if (this.follow_range === "1") {
         //すべて
+        const ref2 = firebase
+          .firestore()
+          .collection("collections")
+          .orderBy("createdAt")
+
+        this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
+          let collections = []
+          let collectionIds = []
+          snapshot.forEach((doc) => {
+            collections.push(doc.data())
+            collectionIds.push(doc.id)
+          })
+          this.collections = collections
+          this.collectionIds = collectionIds
+        })
       } else if (this.follow_range === "2") {
+        this.collections = []
+        this.collectionIds = []
         //フォロー中のみ
-        for (let k = 0; k < this.followingByList.length; k++) {
+        for (let k = 0; k < this.followingByEmail.length; k++) {
           const ref2 = firebase
             .firestore()
             .collection("collections")
-            .where("createdBy", "==", this.followingByList[k].email)
+            .where("createdBy", "==", this.followingByEmail[k].email)
             .orderBy("createdAt")
 
           this.unsubscribe2 = ref2.onSnapshot((snapshot) => {
-            let collections = []
-            let collectionIds = []
+            // let collections = []
+            // let collectionIds = []
             snapshot.forEach((doc) => {
-              for (let i = 0; i < doc.data().category.length; i++) {
-                for (let j = 0; j < this.chosen_categoryBox.length; j++) {
-                  if (doc.data().category[i] === this.chosen_categoryBox[j]) {
-                    collections.push(doc.data())
-                    collectionIds.push(doc.id)
-                  }
-                }
-              }
+              this.collections.push(doc.data())
+              this.collectionIds.push(doc.id)
             })
-            this.collections = collections
-            this.collectionIds = collectionIds
+            // this.collections = collections
+            // this.collectionIds = collectionIds
           })
         }
-      } else if (this.follow_range === "3") {
-        //フォロー外のみ
       }
     },
   },
@@ -197,8 +225,7 @@ export default {
                   id: followingByIdList[i],
                 }
               })
-              this.followingByList.push(followingBy)
-              // this.followingByList[i] = followingBy
+              this.followingByEmail.push(followingBy)
             })
             .catch((error) => {
               console.log("Error getting documents: ", error)
@@ -208,9 +235,6 @@ export default {
       .catch((error) => {
         console.log("Error getting documents: ", error)
       })
-
-    console.log(this.followingByList)
-    console.log(this.followingByList[0].email)
   },
 }
 </script>
