@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <div class="category-search">
+    <div class="follower-search">
       <input
         type="radio"
         name="follow_range"
@@ -13,50 +13,46 @@
         value="2"
         v-model="follow_range"
       />フォロー中のみ
-      <div class="category-search-box">
-        <input
-          type="checkbox"
-          name="category"
-          value="食べ物"
-          v-model="chosen_categoryBox"
-        />食べ物
-        <input
-          type="checkbox"
-          name="category"
-          value="動物"
-          v-model="chosen_categoryBox"
-        />動物
-        <input
-          type="checkbox"
-          name="category"
-          value="ゲーム"
-          v-model="chosen_categoryBox"
-        />ゲーム
-        <input
-          type="checkbox"
-          name="category"
-          value="アニメ"
-          v-model="chosen_categoryBox"
-        />アニメ
-        <input
-          type="checkbox"
-          name="category"
-          value="アイドル"
-          v-model="chosen_categoryBox"
-        />アイドル
-        <!-- <input type="checkbox" name="category" value="" />
+      <button @click="followerSearch">フォロワー検索</button>
+    </div>
+    <div class="category-search">
+      <input
+        type="checkbox"
+        name="category"
+        value="食べ物"
+        v-model="chosen_categoryBox"
+      />食べ物
+      <input
+        type="checkbox"
+        name="category"
+        value="動物"
+        v-model="chosen_categoryBox"
+      />動物
+      <input
+        type="checkbox"
+        name="category"
+        value="ゲーム"
+        v-model="chosen_categoryBox"
+      />ゲーム
+      <input
+        type="checkbox"
+        name="category"
+        value="アニメ"
+        v-model="chosen_categoryBox"
+      />アニメ
+      <input
+        type="checkbox"
+        name="category"
+        value="アイドル"
+        v-model="chosen_categoryBox"
+      />アイドル
+      <!-- <input type="checkbox" name="category" value="" />
         <input type="checkbox" name="category" value="" />
         <input type="checkbox" name="category" value="" />
         <input type="checkbox" name="category" value="" />
         <input type="checkbox" name="category" value="" />
         <input type="checkbox" name="category" value="" /> -->
-      </div>
-
-      <button class="search" @click="Search">
-        検索
-      </button>
-
-      <button @click="followerSearch">フォロワー検索</button>
+      <button class="search" @click="Search">カテゴリー検索</button>
     </div>
 
     <!-- <quiz

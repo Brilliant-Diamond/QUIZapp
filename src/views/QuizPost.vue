@@ -3,12 +3,13 @@
     <div class="quiz-post">
       <h2>パッケージ作成</h2>
 
-      <label>
-        タイトル
-        <input type="text" v-model="title_text" />
-      </label>
+      <div class="title-box">
+        <h4>タイトル</h4>
+        <input type="text" v-model="title_text" class="title_text" />
+      </div>
 
       <div class="category-box">
+        <h4>カテゴリー</h4>
         <input
           type="checkbox"
           name="category"
@@ -46,23 +47,31 @@
         <input type="checkbox" name="category" value="" />
         <input type="checkbox" name="category" value="" /> -->
       </div>
-      <vue-tags-input
-        v-model="tag"
-        :tags="tags"
-        @tags-changed="(newTags) => (tags = newTags)"
-      />
+
+      <div class="tag-box">
+        <h4>タグ</h4>
+        <vue-tags-input
+          class="tag"
+          v-model="tag"
+          :tags="tags"
+          @tags-changed="(newTags) => (tags = newTags)"
+        />
+      </div>
+
       <div
         class="quiz-box"
         v-for="(quiz, quiz_index) in quizs"
         :key="quiz_index"
       >
+        <h4>{{ quiz_index + 1 }}つ目のクイズ</h4>
         <textarea
+          class="quiz-text"
           cols="30"
           rows="2"
           v-model="quiz.quizText"
           placeholder="問題文"
         ></textarea>
-        <div>正解の選択肢にチェック</div>
+        <h4>正解の選択肢にチェック</h4>
         <div
           v-for="(choice, index) in quiz.choices"
           v-bind:key="index"
@@ -75,7 +84,8 @@
             v-model="quiz.rightIndex"
           />
           <label v-bind:for="index">選択肢{{ index + 1 }} </label>
-          <input type="text" v-model="quiz.choices[index]" />
+          <!-- <input type="text" v-model="quiz.choices[index]" /> -->
+          <textarea cols="30" rows="2" v-model="quiz.choices[index]"></textarea>
         </div>
         <div>
           <button v-on:click="addChoice(quiz_index)" class="change-choices">
@@ -90,8 +100,7 @@
           </button>
         </div>
         <textarea
-          name=""
-          id=""
+          class="feedback"
           cols="30"
           rows="3"
           v-model="quiz.feedback"
@@ -212,6 +221,31 @@ export default {
 </script>
 
 <style scoped>
+.title-box {
+  margin-bottom: 20px;
+}
+.title-box h4 {
+  margin: 0px;
+  margin-bottom: 10px;
+}
+.category-box {
+  margin-bottom: 20px;
+}
+.category-box h4 {
+  margin: 0px;
+  margin-bottom: 10px;
+}
+.tag-box {
+  margin-bottom: 20px;
+}
+.tag-box h4 {
+  margin: 0px;
+  margin-bottom: 10px;
+}
+.tag {
+  width: 200px;
+  height: 30px;
+}
 .quiz-post-wrapper {
   background-color: rgba(0, 0, 0, 0.6);
   display: flex;
@@ -230,6 +264,19 @@ export default {
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 10px;
   margin-bottom: 10px;
+  padding: 10px;
+}
+.title_text {
+  width: 200px;
+  height: 30px;
+}
+.quiz-text {
+  width: 400px;
+  height: 50px;
+}
+.feedback {
+  width: 450px;
+  height: 125px;
 }
 textarea {
   width: 80%;
