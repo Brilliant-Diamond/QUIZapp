@@ -20,45 +20,51 @@
         <input
           type="checkbox"
           name="category"
-          value="食べ物"
+          value="なんでも雑学"
           v-model="chosen_categoryBox"
-        />食べ物
+        />なんでも雑学
         <input
           type="checkbox"
           name="category"
-          value="動物"
+          value="ライフスタイル"
           v-model="chosen_categoryBox"
-        />動物
+        />ライフスタイル
         <input
           type="checkbox"
           name="category"
-          value="ゲーム"
+          value="スポーツ"
           v-model="chosen_categoryBox"
-        />ゲーム
+        />スポーツ
         <input
           type="checkbox"
           name="category"
-          value="アニメ"
+          value="アニメ＆ゲーム"
           v-model="chosen_categoryBox"
-        />アニメ
+        />アニメ＆ゲーム
         <input
           type="checkbox"
           name="category"
-          value="アイドル"
+          value="芸能"
           v-model="chosen_categoryBox"
-        />アイドル
+        />芸能
+        <input
+          type="checkbox"
+          name="category"
+          value="文系学問"
+          v-model="chosen_categoryBox"
+        />文系学問
+        <input
+          type="checkbox"
+          name="category"
+          value="理系学問"
+          v-model="chosen_categoryBox"
+        />理系学問
         <input
           type="checkbox"
           name="category"
           value=""
           v-model="chosen_categoryBox"
         />カテゴリーなし
-        <!-- <input type="checkbox" name="category" value="" />
-        <input type="checkbox" name="category" value="" />
-        <input type="checkbox" name="category" value="" />
-        <input type="checkbox" name="category" value="" />
-        <input type="checkbox" name="category" value="" />
-        <input type="checkbox" name="category" value="" /> -->
         <button @click="Allcheck">☑</button>
         <button @click="Removecheck">☐</button>
       </div>
@@ -91,14 +97,7 @@ export default {
   },
   data() {
     return {
-      chosen_categoryBox: [
-        "食べ物",
-        "動物",
-        "ゲーム",
-        "アニメ",
-        "アイドル",
-        "",
-      ],
+      chosen_categoryBox: [],
       follow_range: "1",
       collections: [],
       collectionIds: [],
@@ -175,11 +174,13 @@ export default {
     },
     Allcheck() {
       this.chosen_categoryBox = [
-        "食べ物",
-        "動物",
-        "ゲーム",
-        "アニメ",
-        "アイドル",
+        "なんでも雑学",
+        "ライフスタイル",
+        "スポーツ",
+        "アニメ＆ゲーム",
+        "芸能",
+        "文系学問",
+        "理系学問",
         "",
       ]
     },

@@ -10,42 +10,50 @@
 
       <div class="category-box">
         <h4 class="heading">カテゴリー</h4>
-        <input
-          type="checkbox"
-          name="category"
-          value="食べ物"
-          v-model="categoryBox"
-        />食べ物
-        <input
-          type="checkbox"
-          name="category"
-          value="動物"
-          v-model="categoryBox"
-        />動物
-        <input
-          type="checkbox"
-          name="category"
-          value="ゲーム"
-          v-model="categoryBox"
-        />ゲーム
-        <input
-          type="checkbox"
-          name="category"
-          value="アニメ"
-          v-model="categoryBox"
-        />アニメ
-        <input
-          type="checkbox"
-          name="category"
-          value="アイドル"
-          v-model="categoryBox"
-        />アイドル
-        <!-- <input type="checkbox" name="category" value="" />
-        <input type="checkbox" name="category" value="" />
-        <input type="checkbox" name="category" value="" />
-        <input type="checkbox" name="category" value="" />
-        <input type="checkbox" name="category" value="" />
-        <input type="checkbox" name="category" value="" /> -->
+        <div class="category-input">
+          <input
+            type="checkbox"
+            name="category"
+            value="なんでも雑学"
+            v-model="categoryBox"
+          />なんでも雑学
+          <input
+            type="checkbox"
+            name="category"
+            value="ライフスタイル"
+            v-model="categoryBox"
+          />ライフスタイル
+          <input
+            type="checkbox"
+            name="category"
+            value="スポーツ"
+            v-model="categoryBox"
+          />スポーツ
+          <input
+            type="checkbox"
+            name="category"
+            value="アニメ＆ゲーム"
+            v-model="categoryBox"
+          />アニメ＆ゲーム
+          <input
+            type="checkbox"
+            name="category"
+            value="芸能"
+            v-model="categoryBox"
+          />芸能
+          <input
+            type="checkbox"
+            name="category"
+            value="文系学問"
+            v-model="categoryBox"
+          />文系学問
+          <input
+            type="checkbox"
+            name="category"
+            value="理系学問"
+            v-model="categoryBox"
+          />理系学問
+        </div>
       </div>
 
       <div class="tag-box">
@@ -231,7 +239,12 @@ export default {
   margin-bottom: 10px;
 }
 .category-box {
+  width: 80%;
+}
+.category-input {
   margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
 }
 .category-box h4 {
   margin: 0px;
