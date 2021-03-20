@@ -54,22 +54,22 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: stretch;
-  background-color: black;
+  background-color: #094067;
 }
 .nav__link {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100%;
-  color: #eee;
+  color: #fffffe;
   text-decoration: none;
 }
 .nav__link:visited {
-  color: #eee;
+  color: #fffffe;
 }
 .nav__link:hover {
   font-weight: bold;
-  color: #fff;
+  color: #3da9fc;
 }
 .nav__logo {
   width: 130px;
@@ -79,9 +79,9 @@ export default {
 }
 .nav__item {
   width: 100px;
-  border-left: 1px solid #eee;
+  border-left: 1px solid #fffffe;
 }
 button {
-  background-color: black;
+  background-color: #094067;
 }
 </style>

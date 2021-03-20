@@ -1,15 +1,15 @@
 <template>
   <div class="quiz-post-wrapper">
     <div class="quiz-post">
-      <h2>パッケージ作成</h2>
+      <h2 class="heading">パッケージ作成</h2>
 
       <div class="title-box">
-        <h4>タイトル</h4>
+        <h4 class="heading">タイトル</h4>
         <input type="text" v-model="title_text" class="title_text" />
       </div>
 
       <div class="category-box">
-        <h4>カテゴリー</h4>
+        <h4 class="heading">カテゴリー</h4>
         <input
           type="checkbox"
           name="category"
@@ -49,7 +49,7 @@
       </div>
 
       <div class="tag-box">
-        <h4>タグ</h4>
+        <h4 class="heading">タグ</h4>
         <vue-tags-input
           class="tag"
           v-model="tag"
@@ -63,7 +63,7 @@
         v-for="(quiz, quiz_index) in quizs"
         :key="quiz_index"
       >
-        <h4>{{ quiz_index + 1 }}つ目のクイズ</h4>
+        <h4 class="heading">{{ quiz_index + 1 }}つ目のクイズ</h4>
         <textarea
           class="quiz-text"
           cols="30"
@@ -71,7 +71,7 @@
           v-model="quiz.quizText"
           placeholder="問題文"
         ></textarea>
-        <h4>正解の選択肢にチェック</h4>
+        <h4 class="heading">正解の選択肢にチェック</h4>
         <div
           v-for="(choice, index) in quiz.choices"
           v-bind:key="index"
@@ -83,7 +83,9 @@
             v-bind:id="index"
             v-model="quiz.rightIndex"
           />
-          <label v-bind:for="index">選択肢{{ index + 1 }} </label>
+          <label class="heading" v-bind:for="index"
+            >選択肢{{ index + 1 }}
+          </label>
           <!-- <input type="text" v-model="quiz.choices[index]" /> -->
           <textarea cols="30" rows="2" v-model="quiz.choices[index]"></textarea>
         </div>
@@ -247,13 +249,13 @@ export default {
   height: 30px;
 }
 .quiz-post-wrapper {
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: #90b4ce;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .quiz-post {
-  background-color: #e6ecf0;
+  background-color: #fffffe;
   width: 600px;
   height: auto;
   display: flex;
@@ -261,7 +263,7 @@ export default {
   align-items: center;
 }
 .quiz-box {
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: #90b4ce;
   border-radius: 10px;
   margin-bottom: 10px;
   padding: 10px;
@@ -291,5 +293,15 @@ input {
 }
 .choice-input {
   margin: 10px;
+}
+button {
+  color: #fffffe;
+  background-color: #3da9fc;
+}
+.button-box {
+  margin-bottom: 10px;
+}
+.heading {
+  color: #094067;
 }
 </style>

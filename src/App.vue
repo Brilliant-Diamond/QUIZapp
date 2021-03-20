@@ -24,6 +24,7 @@ export default {
 <style scoped>
 * {
   box-sizing: border-box;
+  background-color: #fffffe;
 }
 body {
   margin: 0;
