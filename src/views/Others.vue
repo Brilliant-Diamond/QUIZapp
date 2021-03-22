@@ -9,8 +9,6 @@
     </div>
 
     <div class="follow-box">
-      <!-- <botton class="follow" @click="Follow">フォローする</botton>
-      <botton class="unfollow" @click="unFollow">フォローやめる</botton> -->
       <span v-if="isFollowed" v-on:click="unFollow" class="fa fa-heart red"
         >フォロー中</span
       >

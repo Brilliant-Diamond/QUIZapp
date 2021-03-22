@@ -1,11 +1,151 @@
 <template>
   <div class="my-page">
-    <div class="follower-display">
-      <div class="followed">
-        {{ howManyFollowed }}
-        <h3>フォロワー</h3>
+    <div v-if="isSignedIn">
+      <div class="my-page-main">
+        <div class="follow-list" :class="{ isNone: !followListOpen }">
+          <div class="follow-list-close">
+            <i class="fas fa-times" @click="DisplayNone"></i>
+          </div>
+          <div class="follow-top">
+            <h4
+              class="follower-title"
+              @click="followedOpen"
+              :class="{ Onfollower: followedMemOpen }"
+            >
+              フォロワー
+            </h4>
+            <h4
+              @click="followingOpen"
+              :class="{ Onfollower: followingMemOpen }"
+            >
+              フォロー中
+            </h4>
+          </div>
+          <div
+            class="follow-mem"
+            :class="{ isNone: !followedMemOpen }"
+            v-for="(follower, index) in followedByList"
+            :key="`first-${index}`"
+          >
+            <router-link
+              v-if="follower.id"
+              :to="{
+                name: 'Others',
+                params: { id: follower.id },
+              }"
+              >{{ follower.name }}</router-link
+            >
+            <i class="fas fa-trash-alt"></i>
+          </div>
+          <div
+            class="follow-mem"
+            :class="{ isNone: !followingMemOpen }"
+            v-for="(following, index) in followingByList"
+            :key="`second-${index}`"
+          >
+            <router-link
+              v-if="following.id"
+              :to="{
+                name: 'Others',
+                params: { id: following.id },
+              }"
+              >{{ following.name }}</router-link
+            >
+            <i class="fas fa-trash-alt" @click="unFollow(following.id)"></i>
+          </div>
+        </div>
+        <div class="user-box">
+          <div class="user_name_box">
+            <div class="user_name">
+              <h1>
+                {{ userName }}
+              </h1>
+              <span
+                v-if="!edit_name_open"
+                class="fas fa-edit"
+                @click="editNameDisplay"
+              ></span>
+              <span
+                v-else
+                class="fas fa-edit red"
+                @click="editNameDisplay"
+              ></span>
+            </div>
+            <div class="edit_name_display" :class="{ isNone: !edit_name_open }">
+              <input type="text" v-model="inputName" />
+              <button v-on:click="updateUserName">名前を更新</button>
+            </div>
+          </div>
+
+          <div class="introduce_box">
+            <div class="introduce">
+              {{ userIntroText }}
+              <span
+                v-if="!edit_intro_open"
+                class="fas fa-edit"
+                @click="editIntroDisplay"
+              ></span>
+              <span
+                v-else
+                class="fas fa-edit red"
+                @click="editIntroDisplay"
+              ></span>
+            </div>
+            <div
+              class="edit_intro_display"
+              :class="{ isNone: !edit_intro_open }"
+            >
+              <textarea cols="30" rows="10" v-model="inputIntroText"></textarea>
+              <button v-on:click="updateUserIntroText">自己紹介を更新</button>
+            </div>
+          </div>
+        </div>
+        <div class="follower-box">
+          <div class="followed">
+            {{ howManyFollowed }}
+            <h3>フォロワー</h3>
+            <button @click="followedListClick">
+              <i class="fas fa-chevron-down"></i>
+            </button>
+          </div>
+
+          <div class="following">
+            {{ howManyFollowing }}
+            <h3>フォロー中</h3>
+            <button @click="followingListClick">
+              <i class="fas fa-chevron-down"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="work-space">
+        <collection
+          v-for="(collection, index) in collections"
+          v-bind:key="index"
+          v-bind:collection="collection"
+          v-bind:collectionId="collectionIds[index]"
+        />
+      </div>
+
+      <!-- <div class="follow-list" :class="{ isNone: !followListOpen }">
+        <div class="follow-list-close">
+          <i class="fas fa-times" @click="DisplayNone"></i>
+        </div>
+        <div class="follow-top">
+          <h4
+            class="follower-title"
+            @click="followedOpen"
+            :class="{ Onfollower: followedMemOpen }"
+          >
+            フォロワー
+          </h4>
+          <h4 @click="followingOpen" :class="{ Onfollower: followingMemOpen }">
+            フォロー中
+          </h4>
+        </div>
         <div
-          class=""
+          class="follow-mem"
+          :class="{ isNone: !followedMemOpen }"
           v-for="(follower, index) in followedByList"
           :key="`first-${index}`"
         >
@@ -17,14 +157,11 @@
             }"
             >{{ follower.name }}</router-link
           >
+          <i class="fas fa-trash-alt"></i>
         </div>
-      </div>
-
-      <div class="following">
-        {{ howManyFollowing }}
-        <h3>フォロー中</h3>
         <div
-          class=""
+          class="follow-mem"
+          :class="{ isNone: !followingMemOpen }"
           v-for="(following, index) in followingByList"
           :key="`second-${index}`"
         >
@@ -36,55 +173,13 @@
             }"
             >{{ following.name }}</router-link
           >
+          <i class="fas fa-trash-alt" @click="unFollow(following.id)"></i>
         </div>
-      </div>
+      </div> -->
     </div>
 
-    <div class="user_name_box">
-      <div class="use_name">
-        <h1>
-          {{ userName }}
-        </h1>
-        <div v-if="isSignedIn">
-          <span
-            v-if="!edit_name_open"
-            class="fas fa-edit"
-            @click="editNameDisplay"
-          ></span>
-          <span v-else class="fas fa-edit red" @click="editNameDisplay"></span>
-        </div>
-      </div>
-      <div class="edit_name_display" :class="{ isNone: !edit_name_open }">
-        <input type="text" v-model="inputName" />
-        <button v-on:click="updateUserName">名前を更新</button>
-      </div>
-    </div>
-
-    <div class="introduce_box">
-      <div class="introduce">
-        {{ userIntroText }}
-        <div v-if="isSignedIn">
-          <span
-            v-if="!edit_intro_open"
-            class="fas fa-edit"
-            @click="editIntroDisplay"
-          ></span>
-          <span v-else class="fas fa-edit red" @click="editIntroDisplay"></span>
-        </div>
-      </div>
-      <div class="edit_intro_display" :class="{ isNone: !edit_intro_open }">
-        <textarea cols="30" rows="10" v-model="inputIntroText"></textarea>
-        <button v-on:click="updateUserIntroText">自己紹介を更新</button>
-      </div>
-    </div>
-    <div>ここに過去の作品を表示</div>
-    <div class="work-space" v-if="isSignedIn">
-      <collection
-        v-for="(collection, index) in collections"
-        v-bind:key="index"
-        v-bind:collection="collection"
-        v-bind:collectionId="collectionIds[index]"
-      />
+    <div v-else class="nouser">
+      <h2>サインインしていません！サインインをしてマイページを作成しよう！</h2>
     </div>
   </div>
 </template>
@@ -113,6 +208,9 @@ export default {
       followingByIdList: [],
       followingByList: [],
       followingBy: "",
+      followListOpen: false,
+      followedMemOpen: false,
+      followingMemOpen: false,
     }
   },
   computed: {
@@ -170,6 +268,54 @@ export default {
       } else {
         this.edit_intro_open = true
       }
+    },
+    followedListClick() {
+      if (!this.followListOpen) {
+        this.followListOpen = true
+        this.followedMemOpen = true
+      }
+    },
+    followingListClick() {
+      if (!this.followListOpen) {
+        this.followListOpen = true
+        this.followingMemOpen = true
+      }
+    },
+    followedOpen() {
+      if (this.followedMemOpen) {
+        this.followedMemOpen = false
+        this.followingMemOpen = true
+      } else {
+        this.followedMemOpen = true
+        this.followingMemOpen = false
+      }
+    },
+    followingOpen() {
+      if (this.followingMemOpen) {
+        this.followingMemOpen = false
+        this.followedMemOpen = true
+      } else {
+        this.followingMemOpen = true
+        this.followedMemOpen = false
+      }
+    },
+    DisplayNone() {
+      this.followListOpen = false
+      this.followingMemOpen = false
+      this.followedMemOpen = false
+    },
+    unFollow(followingId) {
+      firebase
+        .firestore()
+        .collection("follow")
+        .where("from", "==", this.userId)
+        .where("to", "==", followingId)
+        // .doc()
+        // .delete()
+        .then(() => {})
+        .catch((error) => {
+          console.error("Error removing document: ", error)
+        })
     },
   },
   created() {
@@ -281,21 +427,30 @@ export default {
 </script>
 
 <style scoped>
-.use_name {
+.my-page {
+  /* text-align: center; */
+  /* margin: 0 auto; */
+}
+.my-page-main {
   display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+.user-box {
+  width: 50%;
+}
+.user_name {
+  display: flex;
+}
+.introduce {
+  display: flex;
+  width: 50%;
 }
 .edit {
   width: 20px;
   height: 20px;
 }
-.isNone {
-  display: none;
-}
-.work-space {
-  display: flex;
-  flex-direction: column-reverse;
-}
-.follower-display {
+.follower-box {
   display: flex;
 }
 .followed {
@@ -303,5 +458,57 @@ export default {
 }
 .red {
   color: red;
+}
+.work-space {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  margin-top: 100px;
+}
+.follow-list {
+  /* display: flex; */
+  background-color: #90b4ce;
+  height: auto;
+  width: 300px;
+  border-radius: 4px;
+  padding: 10px;
+  position: absolute;
+  /* top: 50px;
+  right: 50px; */
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+.follow-list-close {
+  display: flex;
+  flex-direction: row-reverse;
+  cursor: pointer;
+}
+.follow-top {
+  border-bottom: solid;
+  display: flex;
+  justify-content: center;
+}
+.follow-top h4 {
+  cursor: pointer;
+}
+.follower-title {
+  margin-right: 15px;
+}
+.Onfollower {
+  color: #ef4565;
+}
+.follow-mem {
+  background-color: #fffffe;
+  border-radius: 4px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.isNone {
+  display: none;
+}
+.nouser {
+  text-align: center;
 }
 </style>
