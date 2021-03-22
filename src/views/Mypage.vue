@@ -445,6 +445,7 @@ export default {
 .introduce {
   display: flex;
   width: 50%;
+  white-space: pre-wrap;
 }
 .edit {
   width: 20px;
