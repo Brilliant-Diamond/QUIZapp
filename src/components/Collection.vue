@@ -6,9 +6,12 @@
       >{{ autherName }}</router-link
     >
     <div v-else>{{ autherName }}</div>
-    <h4>{{ collection.title }}</h4>
-    <div>正答率：{{ this.collectionRate * 100 }}%</div>
-    <div>回答件数：{{ this.collection.tryCount }}</div>
+    <h4 class="head">{{ collection.title }}</h4>
+    <div>
+      <i class="fas fa-check"></i> {{ this.collectionRate * 100 }}%
+      <i class="fas fa-eye"></i> {{ this.collection.tryCount }}
+    </div>
+    <div></div>
     <!-- <vue-star v-bind:heart="collection.heart"></vue-star> -->
 
     <div
@@ -26,6 +29,12 @@
     >
       #{{ tagItem.text }}
     </div>
+    <button v-if="isQuizHiding" v-on:click="displayQuiz">
+      問題を解く
+    </button>
+    <button v-else v-on:click="hideQuiz">
+      閉じる
+    </button>
 
     <quiz
       v-for="(quiz, index) in collection.quizs"
@@ -36,15 +45,16 @@
       @reportAns="makeRate"
     ></quiz>
     <div v-if="rate">
-      <div>正答数：{{ score }}/{{ collection.quizs.length }}</div>
+      <div>
+        <i class="fas fa-check"></i>{{ score }}/{{ collection.quizs.length }}
+      </div>
       <div>{{ feedback }}</div>
     </div>
-
-    <button v-if="isQuizHiding" v-on:click="displayQuiz">問題を解く</button>
-    <button v-else v-on:click="hideQuiz">閉じる</button>
-    <div>{{ howManyFaved }}</div>
-    <span v-if="isFaved" v-on:click="disFav" class="fa fa-heart red"></span>
-    <span v-else v-on:click="fav" class="fa fa-heart"></span>
+    <div>
+      <span v-if="isFaved" v-on:click="disFav" class="fa fa-heart red"></span>
+      <span v-else v-on:click="fav" class="fa fa-heart"></span>
+      <span> {{ howManyFaved }}</span>
+    </div>
   </div>
 </template>
 
@@ -242,12 +252,14 @@ export default {
         .then((querySnapshot) => {
           this.tryCount = 0
           this.collectionRate = 0
+          let rateAverage = 0
           querySnapshot.forEach((doc) => {
-            this.collectionRate += doc.data().rate
+            rateAverage += doc.data().rate
             this.tryCount++
           })
           if (this.tryCount != 0) {
-            this.collectionRate = this.collectionRate / this.tryCount
+            rateAverage = rateAverage / this.tryCount
+            this.collectionRate = Math.floor(rateAverage * 100) / 100
           }
         })
         .catch((error) => {
@@ -317,12 +329,14 @@ export default {
       .where("to", "==", this.collectionId)
       .get()
       .then((querySnapshot) => {
+        let rateAverage = 0
         querySnapshot.forEach((doc) => {
-          this.collectionRate += doc.data().rate
+          rateAverage += doc.data().rate
           this.tryCount++
         })
         if (this.tryCount != 0) {
-          this.collectionRate = this.collectionRate / this.tryCount
+          rateAverage = rateAverage / this.tryCount
+          this.collectionRate = Math.floor(rateAverage * 100) / 100
         }
       })
       .catch((error) => {
@@ -343,11 +357,63 @@ export default {
   border: solid 1px;
   border-radius: 10px;
   margin: 10px;
+  color: #5f6c7b;
 }
 .hide {
   display: none;
 }
 .red {
   color: red;
+}
+.btn,
+a.btn,
+button.btn {
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1;
+  position: relative;
+  display: inline-block;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  text-align: center;
+  vertical-align: middle;
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  color: #fffffe;
+  border-radius: 0.5rem;
+  background-color: #3da9fc;
+}
+button.btn--red.btn--cubic {
+  border-bottom: 4px solid #9f000c;
+}
+
+button.btn--red.btn--cubic:hover {
+  margin-top: 2px;
+  border-bottom: 2px solid #9f000c;
+}
+
+button.btn--radius {
+  border-radius: 100vh;
+}
+
+.fa-position-right {
+  position: absolute;
+  top: calc(50% - 0.5em);
+  right: 1rem;
+}
+.head {
+  color: #094067;
+}
+button {
+  background-color: #3da9fc;
+  color: #fffffe;
+  border-radius: 0.5rem;
+  padding: 8px;
 }
 </style>
