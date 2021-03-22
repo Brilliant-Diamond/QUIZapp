@@ -45,15 +45,15 @@
         <h1>
           {{ userName }}
         </h1>
-        <div v-if="isSignedIn">
-          <!-- <img
-            src="../assets/edit_icon.png"
-            alt="editmark"
-            class="edit"
-            @click="editNameDisplay"
-          /> -->
+        <span
+          v-if="isSignedIn"
+          class="fas fa-edit"
+          @click="editNameDisplay"
+        ></span>
+        <!-- <div v-if="isSignedIn">
+          <i class="fas fa-edit" @click="editNameDisplay"></i>
           <button @click="editNameDisplay">edit</button>
-        </div>
+        </div> -->
       </div>
       <div class="edit_name_display" :class="{ isNone: !edit_name_open }">
         <input type="text" v-model="inputName" />

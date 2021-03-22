@@ -199,21 +199,6 @@ export default {
   display: flex;
   flex-direction: column-reverse;
 }
-
-.collection-container {
-  display: flex;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 80%;
-  max-width: 800px;
-  border: solid 1px;
-  border-radius: 10px;
-  margin: 10px;
-}
-.hide {
-  display: none;
-}
 .red {
   color: red;
 }

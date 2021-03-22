@@ -76,12 +76,14 @@
       v-bind:quiz="quiz"
     />
     ↑のちのち -->
-    <collection
-      v-for="(collection, index) in collections"
-      v-bind:key="index"
-      v-bind:collection="collection"
-      v-bind:collectionId="collectionIds[index]"
-    />
+    <div class="collection">
+      <collection
+        v-for="(collection, index) in collections"
+        v-bind:key="index"
+        v-bind:collection="collection"
+        v-bind:collectionId="collectionIds[index]"
+      />
+    </div>
   </div>
 </template>
 
@@ -263,8 +265,12 @@ export default {
   color: #2c3e50;
   margin: 30px;
   display: flex;
+  /* flex-direction: column-reverse; */
+  align-items: center;
+}
+.collection {
   display: flex;
   flex-direction: column-reverse;
-  align-items: center;
+  width: 50%;
 }
 </style>
