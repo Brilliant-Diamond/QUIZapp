@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <div class="search">
-      <button class="search" @click="Search">絞り込む</button>
+      <button class="search" @click="Search">
+        絞り込む<i class="fas fa-search"></i>
+      </button>
       <div class="follower-search">
         <input
           type="radio"
@@ -65,8 +67,12 @@
           value=""
           v-model="chosen_categoryBox"
         />カテゴリーなし
-        <button @click="Allcheck">☑</button>
-        <button @click="Removecheck">☐</button>
+        <button @click="Allcheck">
+          <i class="far fa-check-square"></i>
+        </button>
+        <button @click="Removecheck">
+          <i class="far fa-square"></i>
+        </button>
       </div>
     </div>
 
@@ -268,9 +274,13 @@ export default {
   /* flex-direction: column-reverse; */
   align-items: center;
 }
+.search button i {
+  margin-left: 3px;
+}
 .collection {
   display: flex;
   flex-direction: column-reverse;
-  width: 50%;
+  width: 100%;
+  align-items: center;
 }
 </style>

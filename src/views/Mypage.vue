@@ -45,15 +45,14 @@
         <h1>
           {{ userName }}
         </h1>
-        <span
-          v-if="isSignedIn"
-          class="fas fa-edit"
-          @click="editNameDisplay"
-        ></span>
-        <!-- <div v-if="isSignedIn">
-          <i class="fas fa-edit" @click="editNameDisplay"></i>
-          <button @click="editNameDisplay">edit</button>
-        </div> -->
+        <div v-if="isSignedIn">
+          <span
+            v-if="!edit_name_open"
+            class="fas fa-edit"
+            @click="editNameDisplay"
+          ></span>
+          <span v-else class="fas fa-edit red" @click="editNameDisplay"></span>
+        </div>
       </div>
       <div class="edit_name_display" :class="{ isNone: !edit_name_open }">
         <input type="text" v-model="inputName" />
@@ -65,13 +64,12 @@
       <div class="introduce">
         {{ userIntroText }}
         <div v-if="isSignedIn">
-          <!-- <img
-            src="../assets/edit_icon.png"
-            alt="editmark"
-            class="edit"
+          <span
+            v-if="!edit_intro_open"
+            class="fas fa-edit"
             @click="editIntroDisplay"
-          /> -->
-          <button @click="editIntroDisplay">edit</button>
+          ></span>
+          <span v-else class="fas fa-edit red" @click="editIntroDisplay"></span>
         </div>
       </div>
       <div class="edit_intro_display" :class="{ isNone: !edit_intro_open }">
@@ -302,5 +300,8 @@ export default {
 }
 .followed {
   margin-right: 15px;
+}
+.red {
+  color: red;
 }
 </style>

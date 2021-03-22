@@ -5,12 +5,16 @@
       <div>
         このサイトはクイズを気軽に投稿できたり、誰かが作ったクイズに挑戦できるサイトです。サインインしなくても投稿や挑戦はできますがサインインして利用するといいねを押せたりフォローをしてその人のクイズを捜しやすくなったりとこのサイトを最大限に利用することができます。さあ、あなたも今すぐにクイズに挑戦･投稿してみましょう！
       </div>
-      <router-link to="/challengequiz" class="nav__item nav__link"
-        >すぐにクイズに挑戦</router-link
-      >
-      <router-link to="/signin" class="nav__item nav__link"
-        >サインインして利用する！</router-link
-      >
+      <div>
+        <router-link to="/challengequiz" class="nav__item nav__link"
+          >すぐにクイズに挑戦</router-link
+        >
+      </div>
+      <div>
+        <router-link to="/signin" class="nav__item nav__link"
+          >サインインして利用する！</router-link
+        >
+      </div>
     </div>
     <div class="description">
       <div class="challenge-quiz">
