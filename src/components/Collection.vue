@@ -181,6 +181,80 @@ export default {
     //   return this.$store.state.autherId
     // },
   },
+  watch: {
+    collection(new_collection) {
+      //この投稿をしたユーザーの名前を取得
+      firebase
+        .firestore()
+        .collection("user_profiles")
+        .where("email", "==", new_collection.createdBy)
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            this.autherName = doc.data().name || "ゲスト"
+            this.autherId = doc.data().id
+          })
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error)
+        })
+    },
+    collectionId(new_collectionId) {
+      //ログインしているユーザーがこのcollectionをいいねしてるかを確認
+      firebase
+        .firestore()
+        .collection("fav")
+        .where("from", "==", this.userId)
+        .where("to", "==", new_collectionId)
+        .get()
+        .then((querySnapshot) => {
+          let isFaved = false
+          let favId = ""
+          querySnapshot.forEach((doc) => {
+            isFaved = true
+            favId = doc.id
+          })
+          this.isFaved = isFaved
+          this.favId = favId
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error)
+        })
+      //このcollectionが何人にいいねされているのかを探索
+      firebase
+        .firestore()
+        .collection("fav")
+        .where("to", "==", new_collectionId)
+        .get()
+        .then((querySnapshot) => {
+          this.howManyFaved = querySnapshot.size
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error)
+        })
+
+      //正答率（collectionRate）の取得
+      firebase
+        .firestore()
+        .collection("solved")
+        .where("to", "==", new_collectionId)
+        .get()
+        .then((querySnapshot) => {
+          this.tryCount = 0
+          this.collectionRate = 0
+          querySnapshot.forEach((doc) => {
+            this.collectionRate += doc.data().rate
+            this.tryCount++
+          })
+          if (this.tryCount != 0) {
+            this.collectionRate = this.collectionRate / this.tryCount
+          }
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error)
+        })
+    },
+  },
   created() {
     //ログインしているユーザーがこのcollectionをいいねしてるかを確認
     firebase.auth().onAuthStateChanged((user) => {
@@ -209,7 +283,6 @@ export default {
         // No user is signed in.
       }
     })
-
     //このcollectionが何人にいいねされているのかを探索
     firebase
       .firestore()
@@ -222,7 +295,6 @@ export default {
       .catch((error) => {
         console.log("Error getting documents: ", error)
       })
-
     //この投稿をしたユーザーの名前を取得
     firebase
       .firestore()
@@ -238,7 +310,6 @@ export default {
       .catch((error) => {
         console.log("Error getting documents: ", error)
       })
-
     //正答率（collectionRate）の取得
     firebase
       .firestore()

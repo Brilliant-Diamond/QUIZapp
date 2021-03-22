@@ -1,68 +1,85 @@
 <template>
   <div class="quiz-post-wrapper">
     <div class="quiz-post">
-      <h2>パッケージ作成</h2>
+      <h2 class="heading">パッケージ作成</h2>
 
-      <label>
-        タイトル
-        <input type="text" v-model="title_text" />
-      </label>
+      <div class="title-box">
+        <h4 class="heading">タイトル</h4>
+        <input type="text" v-model="title_text" class="title_text" />
+      </div>
 
       <div class="category-box">
-        <input
-          type="checkbox"
-          name="category"
-          value="食べ物"
-          v-model="categoryBox"
-        />食べ物
-        <input
-          type="checkbox"
-          name="category"
-          value="動物"
-          v-model="categoryBox"
-        />動物
-        <input
-          type="checkbox"
-          name="category"
-          value="ゲーム"
-          v-model="categoryBox"
-        />ゲーム
-        <input
-          type="checkbox"
-          name="category"
-          value="アニメ"
-          v-model="categoryBox"
-        />アニメ
-        <input
-          type="checkbox"
-          name="category"
-          value="アイドル"
-          v-model="categoryBox"
-        />アイドル
-        <!-- <input type="checkbox" name="category" value="" />
-        <input type="checkbox" name="category" value="" />
-        <input type="checkbox" name="category" value="" />
-        <input type="checkbox" name="category" value="" />
-        <input type="checkbox" name="category" value="" />
-        <input type="checkbox" name="category" value="" /> -->
+        <h4 class="heading">カテゴリー</h4>
+        <div class="category-input">
+          <input
+            type="checkbox"
+            name="category"
+            value="なんでも雑学"
+            v-model="categoryBox"
+          />なんでも雑学
+          <input
+            type="checkbox"
+            name="category"
+            value="ライフスタイル"
+            v-model="categoryBox"
+          />ライフスタイル
+          <input
+            type="checkbox"
+            name="category"
+            value="スポーツ"
+            v-model="categoryBox"
+          />スポーツ
+          <input
+            type="checkbox"
+            name="category"
+            value="アニメ＆ゲーム"
+            v-model="categoryBox"
+          />アニメ＆ゲーム
+          <input
+            type="checkbox"
+            name="category"
+            value="芸能"
+            v-model="categoryBox"
+          />芸能
+          <input
+            type="checkbox"
+            name="category"
+            value="文系学問"
+            v-model="categoryBox"
+          />文系学問
+          <input
+            type="checkbox"
+            name="category"
+            value="理系学問"
+            v-model="categoryBox"
+          />理系学問
+        </div>
       </div>
-      <vue-tags-input
-        v-model="tag"
-        :tags="tags"
-        @tags-changed="(newTags) => (tags = newTags)"
-      />
+
+      <div class="tag-box">
+        <h4 class="heading">タグ</h4>
+        <vue-tags-input
+          class="tag"
+          v-model="tag"
+          :tags="tags"
+          @tags-changed="(newTags) => (tags = newTags)"
+        />
+      </div>
+
       <div
         class="quiz-box"
         v-for="(quiz, quiz_index) in quizs"
         :key="quiz_index"
       >
+        <h4 class="heading">{{ quiz_index + 1 }}つ目のクイズ</h4>
         <textarea
+          class="quiz-text"
           cols="30"
           rows="2"
           v-model="quiz.quizText"
           placeholder="問題文"
         ></textarea>
-        <div>正解の選択肢にチェック</div>
+        <h4 class="heading">正解の選択肢にチェック</h4>
         <div
           v-for="(choice, index) in quiz.choices"
           v-bind:key="index"
@@ -74,8 +91,11 @@
             v-bind:id="index"
             v-model="quiz.rightIndex"
           />
-          <label v-bind:for="index">選択肢{{ index + 1 }} </label>
-          <input type="text" v-model="quiz.choices[index]" />
+          <label class="heading" v-bind:for="index"
+            >選択肢{{ index + 1 }}
+          </label>
+          <!-- <input type="text" v-model="quiz.choices[index]" /> -->
+          <textarea cols="30" rows="2" v-model="quiz.choices[index]"></textarea>
         </div>
         <div>
           <button v-on:click="addChoice(quiz_index)" class="change-choices">
@@ -90,8 +110,7 @@
           </button>
         </div>
         <textarea
-          name=""
-          id=""
+          class="feedback"
           cols="30"
           rows="3"
           v-model="quiz.feedback"
@@ -212,14 +231,44 @@ export default {
 </script>
 
 <style scoped>
+.title-box {
+  margin-bottom: 20px;
+}
+.title-box h4 {
+  margin: 0px;
+  margin-bottom: 10px;
+}
+.category-box {
+  width: 80%;
+}
+.category-input {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.category-box h4 {
+  margin: 0px;
+  margin-bottom: 10px;
+}
+.tag-box {
+  margin-bottom: 20px;
+}
+.tag-box h4 {
+  margin: 0px;
+  margin-bottom: 10px;
+}
+.tag {
+  width: 200px;
+  height: 30px;
+}
 .quiz-post-wrapper {
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: #90b4ce;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .quiz-post {
-  background-color: #e6ecf0;
+  background-color: #fffffe;
   width: 600px;
   height: auto;
   display: flex;
@@ -227,9 +276,22 @@ export default {
   align-items: center;
 }
 .quiz-box {
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: #90b4ce;
   border-radius: 10px;
   margin-bottom: 10px;
+  padding: 10px;
+}
+.title_text {
+  width: 200px;
+  height: 30px;
+}
+.quiz-text {
+  width: 400px;
+  height: 50px;
+}
+.feedback {
+  width: 450px;
+  height: 125px;
 }
 textarea {
   width: 80%;
@@ -244,5 +306,15 @@ input {
 }
 .choice-input {
   margin: 10px;
+}
+button {
+  color: #fffffe;
+  background-color: #3da9fc;
+}
+.button-box {
+  margin-bottom: 10px;
+}
+.heading {
+  color: #094067;
 }
 </style>
