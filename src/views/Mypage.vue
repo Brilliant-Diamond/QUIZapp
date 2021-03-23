@@ -98,7 +98,10 @@
                 }"
                 >{{ follower.name }}</router-link
               >
-              <i class="fas fa-trash-alt"></i>
+              <i
+                class="fas fa-trash-alt"
+                @click="delFollower(follower.id, index)"
+              ></i>
             </div>
             <div
               class="follow-mem"
@@ -114,7 +117,10 @@
                 }"
                 >{{ following.name }}</router-link
               >
-              <i class="fas fa-trash-alt" @click="unFollow(following.id)"></i>
+              <i
+                class="fas fa-trash-alt"
+                @click="unFollow(following.id, index)"
+              ></i>
             </div>
           </div>
         </div>
@@ -162,6 +168,7 @@ export default {
       followListOpen: false,
       followedMemOpen: false,
       followingMemOpen: false,
+      // isFollowed: true,
     }
   },
   computed: {
@@ -255,15 +262,36 @@ export default {
       this.followingMemOpen = false
       this.followedMemOpen = false
     },
-    unFollow(followingId) {
+    unFollow(followingId, index) {
+      this.followingByList.splice(index, 1)
       firebase
         .firestore()
         .collection("follow")
         .where("from", "==", this.userId)
         .where("to", "==", followingId)
-        .doc()
-        .delete()
-        .then(() => {})
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            doc.ref.delete()
+          })
+        })
+        .catch((error) => {
+          console.error("Error removing document: ", error)
+        })
+    },
+    delFollower(followerId, index) {
+      this.followedByList.splice(index, 1)
+      firebase
+        .firestore()
+        .collection("follow")
+        .where("from", "==", followerId)
+        .where("to", "==", this.userId)
+        .get()
+        .then((querySnapshot) => {
+          querySnapshot.forEach((doc) => {
+            doc.ref.delete()
+          })
+        })
         .catch((error) => {
           console.error("Error removing document: ", error)
         })
