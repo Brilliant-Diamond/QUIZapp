@@ -2,7 +2,7 @@
   <div class="my-page">
     <div v-if="isSignedIn">
       <div class="my-page-main">
-        <div class="follow-list" :class="{ isNone: !followListOpen }">
+        <!-- <div class="follow-list" :class="{ isNone: !followListOpen }">
           <div class="follow-list-close">
             <i class="fas fa-times" @click="DisplayNone"></i>
           </div>
@@ -53,7 +53,7 @@
             >
             <i class="fas fa-trash-alt" @click="unFollow(following.id)"></i>
           </div>
-        </div>
+        </div> -->
         <div class="user-box">
           <div class="user_name_box">
             <div class="user_name">
@@ -115,6 +115,59 @@
             <button @click="followingListClick">
               <i class="fas fa-chevron-down"></i>
             </button>
+          </div>
+
+          <div class="follow-list" :class="{ isNone: !followListOpen }">
+            <div class="follow-list-close">
+              <i class="fas fa-times" @click="DisplayNone"></i>
+            </div>
+            <div class="follow-top">
+              <h4
+                class="follower-title"
+                @click="followedOpen"
+                :class="{ Onfollower: followedMemOpen }"
+              >
+                フォロワー
+              </h4>
+              <h4
+                @click="followingOpen"
+                :class="{ Onfollower: followingMemOpen }"
+              >
+                フォロー中
+              </h4>
+            </div>
+            <div
+              class="follow-mem"
+              :class="{ isNone: !followedMemOpen }"
+              v-for="(follower, index) in followedByList"
+              :key="`first-${index}`"
+            >
+              <router-link
+                v-if="follower.id"
+                :to="{
+                  name: 'Others',
+                  params: { id: follower.id },
+                }"
+                >{{ follower.name }}</router-link
+              >
+              <i class="fas fa-trash-alt"></i>
+            </div>
+            <div
+              class="follow-mem"
+              :class="{ isNone: !followingMemOpen }"
+              v-for="(following, index) in followingByList"
+              :key="`second-${index}`"
+            >
+              <router-link
+                v-if="following.id"
+                :to="{
+                  name: 'Others',
+                  params: { id: following.id },
+                }"
+                >{{ following.name }}</router-link
+              >
+              <i class="fas fa-trash-alt" @click="unFollow(following.id)"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -470,15 +523,12 @@ export default {
   /* display: flex; */
   background-color: #90b4ce;
   height: auto;
-  width: 300px;
+  width: 200px;
   border-radius: 4px;
   padding: 10px;
+  /* position: fixed; */
   position: absolute;
-  /* top: 50px;
-  right: 50px; */
-  left: 0;
-  right: 0;
-  margin: auto;
+  top: 250px;
 }
 .follow-list-close {
   display: flex;
