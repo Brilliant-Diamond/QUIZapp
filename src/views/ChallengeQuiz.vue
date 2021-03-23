@@ -66,7 +66,7 @@
           name="category"
           value=""
           v-model="chosen_categoryBox"
-        />カテゴリーなし
+        />カテゴリー無し
         <button @click="Allcheck">
           <i class="far fa-check-square"></i>
         </button>

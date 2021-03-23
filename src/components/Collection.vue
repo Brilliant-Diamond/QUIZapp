@@ -19,7 +19,8 @@
       v-for="(categoryItem, index) in collection.category"
       v-bind:key="`first-${index}`"
     >
-      カテゴリー：{{ categoryItem }}
+      <div v-if="categoryItem">カテゴリー：{{ categoryItem }}</div>
+      <div v-else>カテゴリー：無し</div>
     </div>
 
     <div
