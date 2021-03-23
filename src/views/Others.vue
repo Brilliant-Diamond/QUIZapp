@@ -153,7 +153,150 @@ export default {
       return this.$store.getters.userId
     },
   },
+  watch: {
+    $route() {
+      this.createdMethod()
+    },
+  },
   methods: {
+    createdMethod() {
+      this.autherId = this.$route.params.id
+      firebase
+        .firestore()
+        .collection("user_profiles")
+        .where("id", "==", this.autherId)
+        .get()
+        .then((Snapshot) => {
+          Snapshot.forEach((doc) => {
+            this.autherName = doc.data().name
+            this.autherEmail = doc.data().email
+            this.autherIntroText = doc.data().introduce_text
+            firebase
+              .firestore()
+              .collection("collections")
+              .orderBy("createdAt")
+              .where("createdBy", "==", this.autherEmail)
+              .get()
+              .then((querySnapshot) => {
+                let collections = []
+                let collectionIds = []
+                querySnapshot.forEach((doc) => {
+                  collections.push(doc.data())
+                  collectionIds.push(doc.id)
+                })
+                this.collections = collections
+                this.collectionIds = collectionIds
+              })
+              .catch((error) => {
+                console.log("Error getting documents: ", error)
+              })
+          })
+        })
+      //ログインしているユーザーがこのcollectionをいいねしてるかを確認
+      firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+          // User is signed in.
+          firebase
+            .firestore()
+            .collection("follow")
+            .where("from", "==", user.uid)
+            .where("to", "==", this.autherId)
+            .get()
+            .then((querySnapshot) => {
+              let isFollowed = false
+              let followId = ""
+              querySnapshot.forEach((doc) => {
+                isFollowed = true
+                followId = doc.id
+              })
+              this.isFollowed = isFollowed
+              this.followId = followId
+            })
+            .catch((error) => {
+              console.log("Error getting documents: ", error)
+            })
+        } else {
+          // No user is signed in.
+        }
+      })
+      //この人が何人にフォローされているのかを探索
+      firebase
+        .firestore()
+        .collection("follow")
+        .where("to", "==", this.autherId)
+        .get()
+        .then((querySnapshot) => {
+          this.howManyFollowed = querySnapshot.size
+          let followedByIdList = []
+          querySnapshot.forEach((doc) => {
+            followedByIdList.push(doc.data().from)
+          })
+          this.followedByIdList = followedByIdList
+          for (let i = 0; i < this.followedByIdList.length; i++) {
+            firebase
+              .firestore()
+              .collection("user_profiles")
+              .where("id", "==", this.followedByIdList[i])
+              .get()
+              .then((querySnapshot) => {
+                let followedBy = ""
+                querySnapshot.forEach((doc) => {
+                  followedBy = {
+                    name: doc.data().name,
+                    id: followedByIdList[i],
+                  }
+                })
+                this.followedByList.push(followedBy)
+                // this.followedByList[i] = followedBy
+              })
+              .catch((error) => {
+                console.log("Error getting documents: ", error)
+              })
+          }
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error)
+        })
+
+      //この人が何人をフォローしているのかを探索
+      firebase
+        .firestore()
+        .collection("follow")
+        .where("from", "==", this.autherId)
+        .get()
+        .then((querySnapshot) => {
+          this.howManyFollowing = querySnapshot.size
+          let followingByIdList = []
+          querySnapshot.forEach((doc) => {
+            followingByIdList.push(doc.data().to)
+          })
+          this.followingByIdList = followingByIdList
+          for (let i = 0; i < this.followingByIdList.length; i++) {
+            firebase
+              .firestore()
+              .collection("user_profiles")
+              .where("id", "==", this.followingByIdList[i])
+              .get()
+              .then((querySnapshot) => {
+                let followingBy = ""
+                querySnapshot.forEach((doc) => {
+                  followingBy = {
+                    name: doc.data().name,
+                    id: followingByIdList[i],
+                  }
+                })
+                this.followingByList.push(followingBy)
+                // this.followingByList[i] = followingBy
+              })
+              .catch((error) => {
+                console.log("Error getting documents: ", error)
+              })
+          }
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error)
+        })
+    },
     Follow() {
       if (this.isSignedIn) {
         const follow = {
@@ -224,142 +367,7 @@ export default {
     },
   },
   created() {
-    this.autherId = this.$route.params.id
-    firebase
-      .firestore()
-      .collection("user_profiles")
-      .where("id", "==", this.autherId)
-      .get()
-      .then((Snapshot) => {
-        Snapshot.forEach((doc) => {
-          this.autherName = doc.data().name
-          this.autherEmail = doc.data().email
-          this.autherIntroText = doc.data().introduce_text
-          firebase
-            .firestore()
-            .collection("collections")
-            .orderBy("createdAt")
-            .where("createdBy", "==", this.autherEmail)
-            .get()
-            .then((querySnapshot) => {
-              let collections = []
-              let collectionIds = []
-              querySnapshot.forEach((doc) => {
-                collections.push(doc.data())
-                collectionIds.push(doc.id)
-              })
-              this.collections = collections
-              this.collectionIds = collectionIds
-            })
-            .catch((error) => {
-              console.log("Error getting documents: ", error)
-            })
-        })
-      })
-    //ログインしているユーザーがこのcollectionをいいねしてるかを確認
-    firebase.auth().onAuthStateChanged((user) => {
-      if (user) {
-        // User is signed in.
-        firebase
-          .firestore()
-          .collection("follow")
-          .where("from", "==", user.uid)
-          .where("to", "==", this.autherId)
-          .get()
-          .then((querySnapshot) => {
-            let isFollowed = false
-            let followId = ""
-            querySnapshot.forEach((doc) => {
-              isFollowed = true
-              followId = doc.id
-            })
-            this.isFollowed = isFollowed
-            this.followId = followId
-          })
-          .catch((error) => {
-            console.log("Error getting documents: ", error)
-          })
-      } else {
-        // No user is signed in.
-      }
-    })
-    //この人が何人にフォローされているのかを探索
-    firebase
-      .firestore()
-      .collection("follow")
-      .where("to", "==", this.autherId)
-      .get()
-      .then((querySnapshot) => {
-        this.howManyFollowed = querySnapshot.size
-        let followedByIdList = []
-        querySnapshot.forEach((doc) => {
-          followedByIdList.push(doc.data().from)
-        })
-        this.followedByIdList = followedByIdList
-        for (let i = 0; i < this.followedByIdList.length; i++) {
-          firebase
-            .firestore()
-            .collection("user_profiles")
-            .where("id", "==", this.followedByIdList[i])
-            .get()
-            .then((querySnapshot) => {
-              let followedBy = ""
-              querySnapshot.forEach((doc) => {
-                followedBy = {
-                  name: doc.data().name,
-                  id: followedByIdList[i],
-                }
-              })
-              this.followedByList.push(followedBy)
-              // this.followedByList[i] = followedBy
-            })
-            .catch((error) => {
-              console.log("Error getting documents: ", error)
-            })
-        }
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error)
-      })
-
-    //この人が何人をフォローしているのかを探索
-    firebase
-      .firestore()
-      .collection("follow")
-      .where("from", "==", this.autherId)
-      .get()
-      .then((querySnapshot) => {
-        this.howManyFollowing = querySnapshot.size
-        let followingByIdList = []
-        querySnapshot.forEach((doc) => {
-          followingByIdList.push(doc.data().to)
-        })
-        this.followingByIdList = followingByIdList
-        for (let i = 0; i < this.followingByIdList.length; i++) {
-          firebase
-            .firestore()
-            .collection("user_profiles")
-            .where("id", "==", this.followingByIdList[i])
-            .get()
-            .then((querySnapshot) => {
-              let followingBy = ""
-              querySnapshot.forEach((doc) => {
-                followingBy = {
-                  name: doc.data().name,
-                  id: followingByIdList[i],
-                }
-              })
-              this.followingByList.push(followingBy)
-              // this.followingByList[i] = followingBy
-            })
-            .catch((error) => {
-              console.log("Error getting documents: ", error)
-            })
-        }
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error)
-      })
+    this.createdMethod()
   },
 }
 </script>
