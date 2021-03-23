@@ -157,7 +157,11 @@ export default {
   },
   watch: {
     $route() {
-      this.createdMethod()
+      ;(this.followingByIdList = []),
+        (this.followingByList = []),
+        (this.followedByIdList = []),
+        (this.followedByList = []),
+        this.createdMethod()
     },
   },
   methods: {
