@@ -68,13 +68,14 @@
             :key="`first-${index}`"
           >
             <router-link
-              v-if="follower.id"
+              v-if="follower.id && follower.id !== userId"
               :to="{
                 name: 'Others',
                 params: { id: follower.id },
               }"
               >{{ follower.name }}</router-link
             >
+            <div v-else>{{ follower.name }}</div>
           </div>
           <div
             class="follow-mem"
@@ -83,13 +84,14 @@
             :key="`second-${index}`"
           >
             <router-link
-              v-if="following.id"
+              v-if="following.id && following.id !== userId"
               :to="{
                 name: 'Others',
                 params: { id: following.id },
               }"
               >{{ following.name }}</router-link
             >
+            <div v-else>{{ following.name }}</div>
           </div>
         </div>
       </div>
