@@ -241,8 +241,7 @@ export default {
     },
     followedOpen() {
       if (this.followedMemOpen) {
-        this.followedMemOpen = false
-        this.followingMemOpen = true
+        //
       } else {
         this.followedMemOpen = true
         this.followingMemOpen = false
@@ -250,8 +249,7 @@ export default {
     },
     followingOpen() {
       if (this.followingMemOpen) {
-        this.followingMemOpen = false
-        this.followedMemOpen = true
+        //
       } else {
         this.followingMemOpen = true
         this.followedMemOpen = false
