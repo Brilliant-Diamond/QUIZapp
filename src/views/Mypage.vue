@@ -2,58 +2,6 @@
   <div class="my-page">
     <div v-if="isSignedIn">
       <div class="my-page-main">
-        <!-- <div class="follow-list" :class="{ isNone: !followListOpen }">
-          <div class="follow-list-close">
-            <i class="fas fa-times" @click="DisplayNone"></i>
-          </div>
-          <div class="follow-top">
-            <h4
-              class="follower-title"
-              @click="followedOpen"
-              :class="{ Onfollower: followedMemOpen }"
-            >
-              フォロワー
-            </h4>
-            <h4
-              @click="followingOpen"
-              :class="{ Onfollower: followingMemOpen }"
-            >
-              フォロー中
-            </h4>
-          </div>
-          <div
-            class="follow-mem"
-            :class="{ isNone: !followedMemOpen }"
-            v-for="(follower, index) in followedByList"
-            :key="`first-${index}`"
-          >
-            <router-link
-              v-if="follower.id"
-              :to="{
-                name: 'Others',
-                params: { id: follower.id },
-              }"
-              >{{ follower.name }}</router-link
-            >
-            <i class="fas fa-trash-alt"></i>
-          </div>
-          <div
-            class="follow-mem"
-            :class="{ isNone: !followingMemOpen }"
-            v-for="(following, index) in followingByList"
-            :key="`second-${index}`"
-          >
-            <router-link
-              v-if="following.id"
-              :to="{
-                name: 'Others',
-                params: { id: following.id },
-              }"
-              >{{ following.name }}</router-link
-            >
-            <i class="fas fa-trash-alt" @click="unFollow(following.id)"></i>
-          </div>
-        </div> -->
         <div class="user-box">
           <div class="user_name_box">
             <div class="user_name">
@@ -179,56 +127,6 @@
           v-bind:collectionId="collectionIds[index]"
         />
       </div>
-
-      <!-- <div class="follow-list" :class="{ isNone: !followListOpen }">
-        <div class="follow-list-close">
-          <i class="fas fa-times" @click="DisplayNone"></i>
-        </div>
-        <div class="follow-top">
-          <h4
-            class="follower-title"
-            @click="followedOpen"
-            :class="{ Onfollower: followedMemOpen }"
-          >
-            フォロワー
-          </h4>
-          <h4 @click="followingOpen" :class="{ Onfollower: followingMemOpen }">
-            フォロー中
-          </h4>
-        </div>
-        <div
-          class="follow-mem"
-          :class="{ isNone: !followedMemOpen }"
-          v-for="(follower, index) in followedByList"
-          :key="`first-${index}`"
-        >
-          <router-link
-            v-if="follower.id"
-            :to="{
-              name: 'Others',
-              params: { id: follower.id },
-            }"
-            >{{ follower.name }}</router-link
-          >
-          <i class="fas fa-trash-alt"></i>
-        </div>
-        <div
-          class="follow-mem"
-          :class="{ isNone: !followingMemOpen }"
-          v-for="(following, index) in followingByList"
-          :key="`second-${index}`"
-        >
-          <router-link
-            v-if="following.id"
-            :to="{
-              name: 'Others',
-              params: { id: following.id },
-            }"
-            >{{ following.name }}</router-link
-          >
-          <i class="fas fa-trash-alt" @click="unFollow(following.id)"></i>
-        </div>
-      </div> -->
     </div>
 
     <div v-else class="nouser">
@@ -363,8 +261,8 @@ export default {
         .collection("follow")
         .where("from", "==", this.userId)
         .where("to", "==", followingId)
-        // .doc()
-        // .delete()
+        .doc()
+        .delete()
         .then(() => {})
         .catch((error) => {
           console.error("Error removing document: ", error)

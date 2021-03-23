@@ -1,27 +1,99 @@
 <template>
   <div class="my-page">
-    <div class="user_name_box">
-      <div class="use_name">
-        <h1>
-          {{ autherName }}
-        </h1>
+    <div class="my-page-main">
+      <div class="user-box">
+        <div class="user_name_box">
+          <div class="user_name">
+            <h1>
+              {{ autherName }}
+            </h1>
+            <span
+              v-if="isFollowed"
+              v-on:click="unFollow"
+              class="fa fa-heart red"
+              >フォロー中</span
+            >
+            <span v-else v-on:click="Follow" class="fa fa-heart"
+              >フォローする</span
+            >
+            <div>{{ howManyFollowed }}</div>
+          </div>
+        </div>
+
+        <div class="introduce_box">
+          <div class="introduce">
+            {{ autherIntroText }}
+          </div>
+        </div>
+      </div>
+      <div class="follow-box">
+        <div class="followed">
+          {{ howManyFollowed }}
+          <h3>フォロワー</h3>
+          <button @click="followedListClick">
+            <i class="fas fa-chevron-down"></i>
+          </button>
+        </div>
+
+        <div class="following">
+          {{ howManyFollowing }}
+          <h3>フォロー中</h3>
+          <button @click="followingListClick">
+            <i class="fas fa-chevron-down"></i>
+          </button>
+        </div>
+        <div class="follow-list" :class="{ isNone: !followListOpen }">
+          <div class="follow-list-close">
+            <i class="fas fa-times" @click="DisplayNone"></i>
+          </div>
+          <div class="follow-top">
+            <h4
+              class="follower-title"
+              @click="followedOpen"
+              :class="{ Onfollower: followedMemOpen }"
+            >
+              フォロワー
+            </h4>
+            <h4
+              @click="followingOpen"
+              :class="{ Onfollower: followingMemOpen }"
+            >
+              フォロー中
+            </h4>
+          </div>
+          <div
+            class="follow-mem"
+            :class="{ isNone: !followedMemOpen }"
+            v-for="(follower, index) in followedByList"
+            :key="`first-${index}`"
+          >
+            <router-link
+              v-if="follower.id"
+              :to="{
+                name: 'Others',
+                params: { id: follower.id },
+              }"
+              >{{ follower.name }}</router-link
+            >
+          </div>
+          <div
+            class="follow-mem"
+            :class="{ isNone: !followingMemOpen }"
+            v-for="(following, index) in followingByList"
+            :key="`second-${index}`"
+          >
+            <router-link
+              v-if="following.id"
+              :to="{
+                name: 'Others',
+                params: { id: following.id },
+              }"
+              >{{ following.name }}</router-link
+            >
+          </div>
+        </div>
       </div>
     </div>
-
-    <div class="follow-box">
-      <span v-if="isFollowed" v-on:click="unFollow" class="fa fa-heart red"
-        >フォロー中</span
-      >
-      <span v-else v-on:click="Follow" class="fa fa-heart">フォローする</span>
-      <div>{{ howManyFollowed }}</div>
-    </div>
-
-    <div class="introduce_box">
-      <div class="introduce">
-        {{ autherIntroText }}
-      </div>
-    </div>
-    <div>ここに過去の作品を表示</div>
     <div class="work-space">
       <collection
         v-for="(collection, index) in collections"
@@ -52,6 +124,16 @@ export default {
       isFollowed: false,
       followId: "",
       howManyFollowed: 0,
+      followListOpen: false,
+      followedMemOpen: false,
+      followingMemOpen: false,
+      howManyFollowing: 0,
+      followingByIdList: [],
+      followingByList: [],
+      followingBy: "",
+      followedByIdList: [],
+      followedByList: [],
+      followedBy: "",
     }
   },
   computed: {
@@ -104,6 +186,41 @@ export default {
         })
       this.isFollowed = false
       this.howManyFollowed--
+    },
+    followedListClick() {
+      if (!this.followListOpen) {
+        this.followListOpen = true
+        this.followedMemOpen = true
+      }
+    },
+    followingListClick() {
+      if (!this.followListOpen) {
+        this.followListOpen = true
+        this.followingMemOpen = true
+      }
+    },
+    followedOpen() {
+      if (this.followedMemOpen) {
+        this.followedMemOpen = false
+        this.followingMemOpen = true
+      } else {
+        this.followedMemOpen = true
+        this.followingMemOpen = false
+      }
+    },
+    followingOpen() {
+      if (this.followingMemOpen) {
+        this.followingMemOpen = false
+        this.followedMemOpen = true
+      } else {
+        this.followingMemOpen = true
+        this.followedMemOpen = false
+      }
+    },
+    DisplayNone() {
+      this.followListOpen = false
+      this.followingMemOpen = false
+      this.followedMemOpen = false
     },
   },
   created() {
@@ -174,6 +291,71 @@ export default {
       .get()
       .then((querySnapshot) => {
         this.howManyFollowed = querySnapshot.size
+        let followedByIdList = []
+        querySnapshot.forEach((doc) => {
+          followedByIdList.push(doc.data().from)
+        })
+        this.followedByIdList = followedByIdList
+        for (let i = 0; i < this.followedByIdList.length; i++) {
+          firebase
+            .firestore()
+            .collection("user_profiles")
+            .where("id", "==", this.followedByIdList[i])
+            .get()
+            .then((querySnapshot) => {
+              let followedBy = ""
+              querySnapshot.forEach((doc) => {
+                followedBy = {
+                  name: doc.data().name,
+                  id: followedByIdList[i],
+                }
+              })
+              this.followedByList.push(followedBy)
+              // this.followedByList[i] = followedBy
+            })
+            .catch((error) => {
+              console.log("Error getting documents: ", error)
+            })
+        }
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error)
+      })
+
+    //この人が何人をフォローしているのかを探索
+    firebase
+      .firestore()
+      .collection("follow")
+      .where("from", "==", this.autherId)
+      .get()
+      .then((querySnapshot) => {
+        this.howManyFollowing = querySnapshot.size
+        let followingByIdList = []
+        querySnapshot.forEach((doc) => {
+          followingByIdList.push(doc.data().to)
+        })
+        this.followingByIdList = followingByIdList
+        for (let i = 0; i < this.followingByIdList.length; i++) {
+          firebase
+            .firestore()
+            .collection("user_profiles")
+            .where("id", "==", this.followingByIdList[i])
+            .get()
+            .then((querySnapshot) => {
+              let followingBy = ""
+              querySnapshot.forEach((doc) => {
+                followingBy = {
+                  name: doc.data().name,
+                  id: followingByIdList[i],
+                }
+              })
+              this.followingByList.push(followingBy)
+              // this.followingByList[i] = followingBy
+            })
+            .catch((error) => {
+              console.log("Error getting documents: ", error)
+            })
+        }
       })
       .catch((error) => {
         console.log("Error getting documents: ", error)
@@ -183,21 +365,78 @@ export default {
 </script>
 
 <style scoped>
-.use_name {
+.my-page {
+  /* text-align: center; */
+  /* margin: 0 auto; */
+}
+.my-page-main {
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+}
+.user-box {
+  width: 50%;
+}
+.user_name {
+}
+.introduce {
+  display: flex;
+  width: 50%;
+  white-space: pre-wrap;
+}
+.follow-box {
   display: flex;
 }
-.edit {
-  width: 20px;
-  height: 20px;
+.followed {
+  margin-right: 15px;
 }
-.isNone {
-  display: none;
+.red {
+  color: red;
 }
 .work-space {
   display: flex;
   flex-direction: column-reverse;
+  align-items: center;
+  margin-top: 100px;
 }
-.red {
-  color: red;
+.follow-list {
+  /* display: flex; */
+  background-color: #90b4ce;
+  height: auto;
+  width: 200px;
+  border-radius: 4px;
+  padding: 10px;
+  /* position: fixed; */
+  position: absolute;
+  top: 250px;
+}
+.follow-list-close {
+  display: flex;
+  flex-direction: row-reverse;
+  cursor: pointer;
+}
+.follow-top {
+  border-bottom: solid;
+  display: flex;
+  justify-content: center;
+}
+.follow-top h4 {
+  cursor: pointer;
+}
+.follower-title {
+  margin-right: 15px;
+}
+.Onfollower {
+  color: #ef4565;
+}
+.follow-mem {
+  background-color: #fffffe;
+  border-radius: 4px;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+.isNone {
+  display: none;
 }
 </style>
