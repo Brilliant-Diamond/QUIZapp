@@ -161,6 +161,9 @@ export default {
         (this.followingByList = []),
         (this.followedByIdList = []),
         (this.followedByList = []),
+        (this.followListOpen = false),
+        (this.followedMemOpen = false),
+        (this.followingMemOpen = false),
         this.createdMethod()
     },
   },
