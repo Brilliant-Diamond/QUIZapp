@@ -27,8 +27,12 @@
         </div>
       </div>
       <div class="follow-box">
+        <div class="post-number">
+          <h4>{{ collections.length }}</h4>
+          <h3>投稿</h3>
+        </div>
         <div class="followed">
-          {{ howManyFollowed }}
+          <h4>{{ howManyFollowed }}</h4>
           <h3>フォロワー</h3>
           <button @click="followedListClick">
             <i class="fas fa-chevron-down"></i>
@@ -36,7 +40,7 @@
         </div>
 
         <div class="following">
-          {{ howManyFollowing }}
+          <h4>{{ howManyFollowing }}</h4>
           <h3>フォロー中</h3>
           <button @click="followingListClick">
             <i class="fas fa-chevron-down"></i>
@@ -401,6 +405,9 @@ export default {
 }
 .follow-box {
   display: flex;
+}
+.post-number {
+  margin-right: 30px;
 }
 .followed {
   margin-right: 15px;
