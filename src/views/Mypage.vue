@@ -550,6 +550,9 @@ export default {
   justify-content: space-between;
   margin-top: 100px;
 }
+.change_collection i {
+  cursor: pointer;
+}
 .off {
   opacity: 60%;
 }
@@ -569,6 +572,9 @@ export default {
   /* position: fixed; */
   position: absolute;
   top: 250px;
+}
+.follow-list {
+  cursor: pointer;
 }
 .follow-list-close {
   display: flex;

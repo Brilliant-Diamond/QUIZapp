@@ -52,8 +52,12 @@
       <div>{{ feedback }}</div>
     </div>
     <div>
-      <span v-if="isFaved" v-on:click="disFav" class="fa fa-heart red"></span>
-      <span v-else v-on:click="fav" class="fa fa-heart"></span>
+      <span
+        v-if="isFaved"
+        v-on:click="disFav"
+        class="fa fa-heart red pointer"
+      ></span>
+      <span v-else v-on:click="fav" class="fa fa-heart pointer"></span>
       <span> {{ howManyFaved }}</span>
     </div>
   </div>
@@ -416,5 +420,8 @@ button {
   color: #fffffe;
   border-radius: 0.5rem;
   padding: 8px;
+}
+.pointer {
+  cursor: pointer;
 }
 </style>

@@ -10,10 +10,10 @@
             <span
               v-if="isFollowed"
               v-on:click="unFollow"
-              class="fa fa-heart red"
+              class="fa fa-heart red pointer"
               >フォロー中</span
             >
-            <span v-else v-on:click="Follow" class="fa fa-heart"
+            <span v-else v-on:click="Follow" class="fa fa-heart pointer"
               >フォローする</span
             >
             <div>{{ howManyFollowed }}</div>
@@ -460,5 +460,8 @@ export default {
 }
 .isNone {
   display: none;
+}
+.pointer {
+  cursor: pointer;
 }
 </style>
