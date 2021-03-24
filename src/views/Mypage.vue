@@ -266,38 +266,46 @@ export default {
       this.followedMemOpen = false
     },
     unFollow(followingId, index) {
-      this.followingByList.splice(index, 1)
-      firebase
-        .firestore()
-        .collection("follow")
-        .where("from", "==", this.userId)
-        .where("to", "==", followingId)
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            doc.ref.delete()
+      if (window.confirm("本当に削除してもいいですか？")) {
+        // OKが選択された時の処理
+        this.followingByList.splice(index, 1)
+        this.howManyFollowing--
+        firebase
+          .firestore()
+          .collection("follow")
+          .where("from", "==", this.userId)
+          .where("to", "==", followingId)
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              doc.ref.delete()
+            })
           })
-        })
-        .catch((error) => {
-          console.error("Error removing document: ", error)
-        })
+          .catch((error) => {
+            console.error("Error removing document: ", error)
+          })
+      }
     },
     delFollower(followerId, index) {
-      this.followedByList.splice(index, 1)
-      firebase
-        .firestore()
-        .collection("follow")
-        .where("from", "==", followerId)
-        .where("to", "==", this.userId)
-        .get()
-        .then((querySnapshot) => {
-          querySnapshot.forEach((doc) => {
-            doc.ref.delete()
+      if (window.confirm("本当に削除してもいいですか？")) {
+        // OKが選択された時の処理
+        this.howManyFollowed--
+        this.followedByList.splice(index, 1)
+        firebase
+          .firestore()
+          .collection("follow")
+          .where("from", "==", followerId)
+          .where("to", "==", this.userId)
+          .get()
+          .then((querySnapshot) => {
+            querySnapshot.forEach((doc) => {
+              doc.ref.delete()
+            })
           })
-        })
-        .catch((error) => {
-          console.error("Error removing document: ", error)
-        })
+          .catch((error) => {
+            console.error("Error removing document: ", error)
+          })
+      }
     },
   },
   created() {
