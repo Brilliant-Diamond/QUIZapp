@@ -26,6 +26,10 @@ export default {
   color: #2c3e50;
   box-sizing: border-box;
   background-color: #fffffe;
+  /* font-family: Arial, Helvetica, sans-serif; */
+  font-family: "Hiragino Kaku Gothic Pro", "ヒラギノ角ゴ Pro",
+    "Yu Gothic Medium", "游ゴシック Medium", YuGothic, "游ゴシック体",
+    "メイリオ", sans-serif;
 }
 body {
   margin: 0;
