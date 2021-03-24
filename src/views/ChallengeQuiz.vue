@@ -1,9 +1,6 @@
 <template>
   <div id="app">
     <div class="search">
-      <button class="search" @click="Search">
-        絞り込む<i class="fas fa-search"></i>
-      </button>
       <div class="follower-search">
         <input
           type="radio"
@@ -17,6 +14,7 @@
           value="2"
           v-model="follow_range"
         />フォロー中のみ
+        <button @click="Search">絞り込む<i class="fas fa-search"></i></button>
       </div>
       <div class="category-search">
         <input
@@ -270,9 +268,12 @@ export default {
 #app {
   color: #2c3e50;
   margin: 30px;
-  display: flex;
-  /* flex-direction: column-reverse; */
-  align-items: center;
+  /* display: flex;
+  flex-direction: column-reverse; */
+}
+.search {
+  text-align: center;
+  /* margin: 0 auto; */
 }
 .search button i {
   margin-left: 3px;

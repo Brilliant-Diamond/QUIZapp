@@ -1,6 +1,8 @@
 <template>
   <div class="nav__bar">
-    <router-link to="/" class="nav__logo nav__link">QUIZapp</router-link>
+    <router-link to="/" class="nav__logo nav__link"
+      ><i class="far fa-gem"></i>Blliant</router-link
+    >
     <div class="nav__items">
       <router-link to="/challengequiz" class="nav__item nav__link"
         >クイズに挑戦</router-link

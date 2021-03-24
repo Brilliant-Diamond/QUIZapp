@@ -23,6 +23,7 @@ export default {
 
 <style scoped>
 * {
+  color: #2c3e50;
   box-sizing: border-box;
   background-color: #fffffe;
 }

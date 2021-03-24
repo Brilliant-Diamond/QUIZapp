@@ -31,7 +31,7 @@ export default {
           (user) => {
             alert("Success!")
             console.log(user)
-            this.$router.push("/")
+            this.$router.push("/mypage")
           },
           (err) => {
             alert(err.message)
