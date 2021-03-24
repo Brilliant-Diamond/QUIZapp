@@ -50,7 +50,7 @@
         </div>
         <div class="follower-box">
           <div class="post-number">
-            <h4>{{ collections.length }}</h4>
+            <h4>{{ howManyPosting }}</h4>
             <h3>投稿</h3>
           </div>
 
@@ -130,6 +130,16 @@
           </div>
         </div>
       </div>
+      <div class="change_collection">
+        <i v-if="my_collectionOpen" class="fas fa-user-alt fa-2x"></i>
+        <i v-else class="fas fa-user-alt fa-2x off" @click="my_collection"></i>
+        <i
+          v-if="my_collectionOpen"
+          class="fa fa-heart fa-2x off"
+          @click="myfav_collection"
+        ></i>
+        <i v-else class="fa fa-heart fa-2x" @click="myfav_collection"></i>
+      </div>
       <div class="work-space">
         <collection
           v-for="(collection, index) in collections"
@@ -160,6 +170,9 @@ export default {
       unsubscribe2: null,
       collections: [],
       collectionIds: [],
+      howManyPosting: "",
+      myfav_collections: [],
+      myfav_collectionIds: [],
       edit_name_open: false,
       edit_intro_open: false,
       howManyFollowed: 0,
@@ -174,6 +187,7 @@ export default {
       followedMemOpen: false,
       followingMemOpen: false,
       // isFollowed: true,
+      my_collectionOpen: true,
     }
   },
   computed: {
@@ -307,6 +321,66 @@ export default {
           })
       }
     },
+    myfav_collection() {
+      this.my_collectionOpen = false
+      this.collections = []
+      this.collectionIds = this.myfav_collectionIds
+      // 自分のいいねした作品のidを取り出す
+      firebase
+        .firestore()
+        .collection("fav")
+        .where("from", "==", this.userId)
+        .get()
+        .then((querySnapshot) => {
+          let myfav_collectionIds = []
+          querySnapshot.forEach((doc) => {
+            myfav_collectionIds.push(doc.data().to)
+          })
+          this.myfav_collectionIds = myfav_collectionIds
+          for (let i = 0; i < this.myfav_collectionIds.length; i++) {
+            firebase
+              .firestore()
+              .collection("collections")
+              .doc(this.myfav_collectionIds[i])
+              .get()
+              .then((doc) => {
+                // let myfav_collections = []
+                this.collections.push(doc.data())
+                // this.myfav_collections = myfav_collections
+              })
+              .catch((error) => {
+                console.log("Error getting documents: ", error)
+              })
+          }
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error)
+        })
+    },
+    my_collection() {
+      this.my_collectionOpen = true
+      this.collections = []
+      this.collectionIds = []
+      firebase
+        .firestore()
+        .collection("collections")
+        .orderBy("createdAt")
+        .where("createdBy", "==", this.user.email)
+        .get()
+        .then((querySnapshot) => {
+          let collections = []
+          let collectionIds = []
+          querySnapshot.forEach((doc) => {
+            collections.push(doc.data())
+            collectionIds.push(doc.id)
+          })
+          this.collections = collections
+          this.collectionIds = collectionIds
+        })
+        .catch((error) => {
+          console.log("Error getting documents: ", error)
+        })
+    },
   },
   created() {
     // 自分の作品のみを表示する
@@ -328,6 +402,7 @@ export default {
             })
             this.collections = collections
             this.collectionIds = collectionIds
+            this.howManyPosting = this.collections.length
           })
           .catch((error) => {
             console.log("Error getting documents: ", error)
@@ -336,6 +411,23 @@ export default {
         // No user is signed in.
       }
     })
+    // 自分のいいねした作品のidを取り出す
+    firebase
+      .firestore()
+      .collection("fav")
+      .where("from", "==", this.userId)
+      .get()
+      .then((querySnapshot) => {
+        let myfav_collectionIds = []
+        querySnapshot.forEach((doc) => {
+          myfav_collectionIds.push(doc.data().to)
+        })
+        this.myfav_collectionIds = myfav_collectionIds
+      })
+      .catch((error) => {
+        console.log("Error getting documents: ", error)
+      })
+
     //この人が何人にフォローされているのかを探索
     firebase
       .firestore()
@@ -450,14 +542,22 @@ export default {
 .followed {
   margin-right: 15px;
 }
-.red {
-  color: red;
+.change_collection {
+  text-align: center;
+  margin: 0 auto;
+  width: 20%;
+  display: flex;
+  justify-content: space-between;
+  margin-top: 100px;
+}
+.off {
+  opacity: 60%;
 }
 .work-space {
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
-  margin-top: 100px;
+  /* margin-top: 100px; */
 }
 .follow-list {
   /* display: flex; */
