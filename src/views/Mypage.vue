@@ -601,5 +601,6 @@ export default {
 }
 .nouser {
   text-align: center;
+  color: #ef4565;
 }
 </style>

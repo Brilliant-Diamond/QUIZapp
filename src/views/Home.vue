@@ -1,12 +1,12 @@
 <template>
   <div id="app">
     <div class="first-page" :class="{ hide: descriptionOn }">
-      <h1><i class="far fa-gem"></i>Blliantな毎日に</h1>
+      <h1>Brilli<i class="far fa-gem fa-xs red"></i>ntな毎日に</h1>
       <h3>
-        Blliant（輝かしい）な毎日にクイズはいかがでしょうか？
+        Brilliant（輝かしい）な毎日にお気に入りのクイズを...
       </h3>
       <div>
-        クイズを簡単に投稿できて、挑戦することができるアプリです。Blliant（才気あふれる）な君の投稿を待っています！
+        クイズを簡単に投稿できて、挑戦することができるアプリです。Brilliant（才気あふれる）な君の投稿を待っています！
       </div>
       <div class="next-action">
         <div>
