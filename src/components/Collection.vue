@@ -60,6 +60,12 @@
       <span v-else v-on:click="fav" class="fa fa-heart pointer"></span>
       <span> {{ howManyFaved }}</span>
     </div>
+    <button
+      v-on:click="deleteCollection"
+      v-if="collection.createdBy == userEmail"
+    >
+      削除する
+    </button>
   </div>
 </template>
 
@@ -183,11 +189,26 @@ export default {
           })
       }
     },
+    deleteCollection() {
+      firebase
+        .firestore()
+        .collection("collections")
+        .doc(this.collectionId)
+        .delete()
+        .then(() => {})
+        .catch((error) => {
+          console.error("Error removing document: ", error)
+        })
+      console.log("this quiz is deleted")
+    },
   },
 
   computed: {
     userId() {
       return this.$store.getters.userId
+    },
+    userEmail() {
+      return this.$store.getters.userEmail
     },
     isSignedIn() {
       return this.$store.getters.isSignedIn
