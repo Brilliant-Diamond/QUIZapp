@@ -189,16 +189,18 @@ export default {
       }
     },
     deleteCollection() {
-      firebase
-        .firestore()
-        .collection("collections")
-        .doc(this.collectionId)
-        .delete()
-        .then(() => {})
-        .catch((error) => {
-          console.error("Error removing document: ", error)
-        })
-      console.log("this quiz is deleted")
+      if (window.confirm("投稿を削除しますか？")) {
+        firebase
+          .firestore()
+          .collection("collections")
+          .doc(this.collectionId)
+          .delete()
+          .then(() => {})
+          .catch((error) => {
+            console.error("Error removing document: ", error)
+          })
+        console.log("this quiz is deleted")
+      }
     },
   },
 

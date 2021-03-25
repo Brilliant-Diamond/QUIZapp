@@ -193,6 +193,7 @@ export default {
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           createdBy: firebase.auth().currentUser.email,
           quizs: this.quizs,
+          tryCount: 0,
         }
         firebase
           .firestore()
