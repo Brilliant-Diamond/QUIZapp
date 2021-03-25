@@ -153,6 +153,9 @@
     <div v-else class="nouser">
       <h2>サインインしていません！サインインをしてマイページを作成しよう！</h2>
     </div>
+    <router-link to="/quizpost" class="fix-link"
+      ><i class="fas fa-pen"></i
+    ></router-link>
   </div>
 </template>
 
@@ -707,5 +710,29 @@ export default {
 .nouser {
   text-align: center;
   color: #ef4565;
+}
+.fix-link {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+  display: inline-block;
+  background-color: #3da9fc;
+  color: #fffffe;
+  border-radius: 50%;
+  /* padding: 30px; */
+  border: none;
+  /* margin: 10px; */
+  cursor: pointer !important;
+  text-decoration: none;
+  /* font-size: 20px; */
+  /* max-width: 300px; */
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  font-size: 25px;
+}
+.fix-link:hover {
+  background-color: #0990f7;
 }
 </style>

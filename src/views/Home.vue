@@ -154,6 +154,7 @@ export default {
   font-size: 20px;
   max-width: 300px;
   width: 90%;
+  text-align: center;
 }
 .next-page-btn {
   background-color: #3da9fc;

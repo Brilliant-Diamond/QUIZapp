@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h2 class="heading">クイズに挑戦</h2>
     <div class="search">
       <div class="follower-search">
         <input
@@ -90,6 +91,9 @@
         v-bind:collectionId="collectionIds[index]"
       />
     </div>
+    <router-link to="/quizpost" class="fix-link"
+      ><i class="fas fa-pen"></i
+    ></router-link>
   </div>
 </template>
 
@@ -316,12 +320,20 @@ export default {
 #app {
   color: #2c3e50;
   margin: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   /* display: flex;
   flex-direction: column-reverse; */
 }
+.heading {
+  color: #094067;
+}
 .search {
-  text-align: center;
-  /* margin: 0 auto; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
 }
 .search button i {
   margin-left: 3px;
@@ -331,14 +343,39 @@ export default {
   flex-direction: column-reverse;
   width: 100%;
   align-items: center;
+  margin: 30px;
 }
 .search-btn {
-  background-color: #3da9fc;
+  background-color: #ef4565;
   color: #fffffe;
   border-radius: 0.5rem;
   padding: 8px;
   border: none;
   cursor: pointer;
   margin: 5px;
+}
+.fix-link {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+  display: inline-block;
+  background-color: #3da9fc;
+  color: #fffffe;
+  border-radius: 50%;
+  /* padding: 30px; */
+  border: none;
+  /* margin: 10px; */
+  cursor: pointer !important;
+  text-decoration: none;
+  /* font-size: 20px; */
+  /* max-width: 300px; */
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  font-size: 25px;
+}
+.fix-link:hover {
+  background-color: #0990f7;
 }
 </style>
