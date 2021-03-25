@@ -407,112 +407,211 @@ export default {
           .catch((error) => {
             console.log("Error getting documents: ", error)
           })
+
+        // 自分のいいねした作品のidを取り出す
+        firebase
+          .firestore()
+          .collection("fav")
+          .where("from", "==", user.uid)
+          .get()
+          .then((querySnapshot) => {
+            let myfav_collectionIds = []
+            querySnapshot.forEach((doc) => {
+              myfav_collectionIds.push(doc.data().to)
+            })
+            this.myfav_collectionIds = myfav_collectionIds
+          })
+          .catch((error) => {
+            console.log("Error getting documents: ", error)
+          })
+
+        //この人が何人にフォローされているのかを探索
+        firebase
+          .firestore()
+          .collection("follow")
+          .where("to", "==", user.uid)
+          .get()
+          .then((querySnapshot) => {
+            this.howManyFollowed = querySnapshot.size
+            let followedByIdList = []
+            querySnapshot.forEach((doc) => {
+              followedByIdList.push(doc.data().from)
+            })
+            this.followedByIdList = followedByIdList
+            for (let i = 0; i < this.followedByIdList.length; i++) {
+              firebase
+                .firestore()
+                .collection("user_profiles")
+                .where("id", "==", this.followedByIdList[i])
+                .get()
+                .then((querySnapshot) => {
+                  let followedBy = ""
+                  querySnapshot.forEach((doc) => {
+                    followedBy = {
+                      name: doc.data().name,
+                      id: followedByIdList[i],
+                    }
+                  })
+                  this.followedByList.push(followedBy)
+                  // this.followedByList[i] = followedBy
+                })
+                .catch((error) => {
+                  console.log("Error getting documents: ", error)
+                })
+            }
+          })
+          .catch((error) => {
+            console.log("Error getting documents: ", error)
+          })
+
+        //この人が何人をフォローしているのかを探索
+        firebase
+          .firestore()
+          .collection("follow")
+          .where("from", "==", user.uid)
+          .get()
+          .then((querySnapshot) => {
+            this.howManyFollowing = querySnapshot.size
+            let followingByIdList = []
+            querySnapshot.forEach((doc) => {
+              followingByIdList.push(doc.data().to)
+            })
+            this.followingByIdList = followingByIdList
+            for (let i = 0; i < this.followingByIdList.length; i++) {
+              firebase
+                .firestore()
+                .collection("user_profiles")
+                .where("id", "==", this.followingByIdList[i])
+                .get()
+                .then((querySnapshot) => {
+                  let followingBy = ""
+                  querySnapshot.forEach((doc) => {
+                    followingBy = {
+                      name: doc.data().name,
+                      id: followingByIdList[i],
+                    }
+                  })
+                  this.followingByList.push(followingBy)
+                  // this.followingByList[i] = followingBy
+                })
+                .catch((error) => {
+                  console.log("Error getting documents: ", error)
+                })
+            }
+          })
+          .catch((error) => {
+            console.log("Error getting documents: ", error)
+          })
       } else {
         // No user is signed in.
       }
     })
     // 自分のいいねした作品のidを取り出す
-    firebase
-      .firestore()
-      .collection("fav")
-      .where("from", "==", this.userId)
-      .get()
-      .then((querySnapshot) => {
-        let myfav_collectionIds = []
-        querySnapshot.forEach((doc) => {
-          myfav_collectionIds.push(doc.data().to)
-        })
-        this.myfav_collectionIds = myfav_collectionIds
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error)
-      })
+    // firebase
+    //   .firestore()
+    //   .collection("fav")
+    //   .where("from", "==", this.userId)
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     let myfav_collectionIds = []
+    //     querySnapshot.forEach((doc) => {
+    //       myfav_collectionIds.push(doc.data().to)
+    //     })
+    //     this.myfav_collectionIds = myfav_collectionIds
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error getting documents: ", error)
+    //   })
+
+    // firebase.auth().onAuthStateChanged((user) => {
+    //   if (user) {
+    //     // User is signed in.
+    //   } else {
+    //     // No user is signed in.
+    //   }
+    // })
 
     //この人が何人にフォローされているのかを探索
-    firebase
-      .firestore()
-      .collection("follow")
-      .where("to", "==", this.userId)
-      .get()
-      .then((querySnapshot) => {
-        this.howManyFollowed = querySnapshot.size
-        let followedByIdList = []
-        querySnapshot.forEach((doc) => {
-          followedByIdList.push(doc.data().from)
-        })
-        this.followedByIdList = followedByIdList
-        for (let i = 0; i < this.followedByIdList.length; i++) {
-          firebase
-            .firestore()
-            .collection("user_profiles")
-            .where("id", "==", this.followedByIdList[i])
-            .get()
-            .then((querySnapshot) => {
-              let followedBy = ""
-              querySnapshot.forEach((doc) => {
-                followedBy = {
-                  name: doc.data().name,
-                  id: followedByIdList[i],
-                }
-              })
-              this.followedByList.push(followedBy)
-              // this.followedByList[i] = followedBy
-            })
-            .catch((error) => {
-              console.log("Error getting documents: ", error)
-            })
-        }
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error)
-      })
-    //この人が何人をフォローしているのかを探索
-    firebase
-      .firestore()
-      .collection("follow")
-      .where("from", "==", this.userId)
-      .get()
-      .then((querySnapshot) => {
-        this.howManyFollowing = querySnapshot.size
-        let followingByIdList = []
-        querySnapshot.forEach((doc) => {
-          followingByIdList.push(doc.data().to)
-        })
-        this.followingByIdList = followingByIdList
-        for (let i = 0; i < this.followingByIdList.length; i++) {
-          firebase
-            .firestore()
-            .collection("user_profiles")
-            .where("id", "==", this.followingByIdList[i])
-            .get()
-            .then((querySnapshot) => {
-              let followingBy = ""
-              querySnapshot.forEach((doc) => {
-                followingBy = {
-                  name: doc.data().name,
-                  id: followingByIdList[i],
-                }
-              })
-              this.followingByList.push(followingBy)
-              // this.followingByList[i] = followingBy
-            })
-            .catch((error) => {
-              console.log("Error getting documents: ", error)
-            })
-        }
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error)
-      })
+    // firebase
+    //   .firestore()
+    //   .collection("follow")
+    //   .where("to", "==", this.userId)
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     this.howManyFollowed = querySnapshot.size
+    //     let followedByIdList = []
+    //     querySnapshot.forEach((doc) => {
+    //       followedByIdList.push(doc.data().from)
+    //     })
+    //     this.followedByIdList = followedByIdList
+    //     for (let i = 0; i < this.followedByIdList.length; i++) {
+    //       firebase
+    //         .firestore()
+    //         .collection("user_profiles")
+    //         .where("id", "==", this.followedByIdList[i])
+    //         .get()
+    //         .then((querySnapshot) => {
+    //           let followedBy = ""
+    //           querySnapshot.forEach((doc) => {
+    //             followedBy = {
+    //               name: doc.data().name,
+    //               id: followedByIdList[i],
+    //             }
+    //           })
+    //           this.followedByList.push(followedBy)
+    //           // this.followedByList[i] = followedBy
+    //         })
+    //         .catch((error) => {
+    //           console.log("Error getting documents: ", error)
+    //         })
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error getting documents: ", error)
+    //   })
+    // //この人が何人をフォローしているのかを探索
+    // firebase
+    //   .firestore()
+    //   .collection("follow")
+    //   .where("from", "==", this.userId)
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     this.howManyFollowing = querySnapshot.size
+    //     let followingByIdList = []
+    //     querySnapshot.forEach((doc) => {
+    //       followingByIdList.push(doc.data().to)
+    //     })
+    //     this.followingByIdList = followingByIdList
+    //     for (let i = 0; i < this.followingByIdList.length; i++) {
+    //       firebase
+    //         .firestore()
+    //         .collection("user_profiles")
+    //         .where("id", "==", this.followingByIdList[i])
+    //         .get()
+    //         .then((querySnapshot) => {
+    //           let followingBy = ""
+    //           querySnapshot.forEach((doc) => {
+    //             followingBy = {
+    //               name: doc.data().name,
+    //               id: followingByIdList[i],
+    //             }
+    //           })
+    //           this.followingByList.push(followingBy)
+    //           // this.followingByList[i] = followingBy
+    //         })
+    //         .catch((error) => {
+    //           console.log("Error getting documents: ", error)
+    //         })
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error getting documents: ", error)
+    //   })
   },
 }
 </script>
 
 <style scoped>
-.my-page {
-  /* text-align: center; */
-  /* margin: 0 auto; */
-}
 .my-page-main {
   display: flex;
   justify-content: center;

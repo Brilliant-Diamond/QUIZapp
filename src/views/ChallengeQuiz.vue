@@ -14,7 +14,9 @@
           value="2"
           v-model="follow_range"
         />フォロー中のみ
-        <button @click="Search">絞り込む<i class="fas fa-search"></i></button>
+        <button @click="Search" class="search-btn">
+          絞り込む<i class="fas fa-search"></i>
+        </button>
       </div>
       <div class="category-search">
         <input
@@ -222,44 +224,90 @@ export default {
       })
       this.collections = collections
       this.collectionIds = collectionIds
-    })
+    }) //
+
+    //createdでvuexのstoreを使うとstoreが生成される前に処理が行われるためエラーが出るので修正しましたby谷
 
     //この人が何人をフォローしているのかを探索
-    firebase
-      .firestore()
-      .collection("follow")
-      .where("from", "==", this.userId)
-      .get()
-      .then((querySnapshot) => {
-        let followingByIdList = []
-        querySnapshot.forEach((doc) => {
-          followingByIdList.push(doc.data().to)
-        })
-        this.followingByIdList = followingByIdList
-        for (let i = 0; i < this.followingByIdList.length; i++) {
-          firebase
-            .firestore()
-            .collection("user_profiles")
-            .where("id", "==", this.followingByIdList[i])
-            .get()
-            .then((querySnapshot) => {
-              let followingBy = ""
-              querySnapshot.forEach((doc) => {
-                followingBy = {
-                  email: doc.data().email,
-                  id: followingByIdList[i],
-                }
-              })
-              this.followingByEmail.push(followingBy)
+    // firebase
+    //   .firestore()
+    //   .collection("follow")
+    //   .where("from", "==", this.userId)
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     let followingByIdList = []
+    //     querySnapshot.forEach((doc) => {
+    //       followingByIdList.push(doc.data().to)
+    //     })
+    //     this.followingByIdList = followingByIdList
+    //     for (let i = 0; i < this.followingByIdList.length; i++) {
+    //       firebase
+    //         .firestore()
+    //         .collection("user_profiles")
+    //         .where("id", "==", this.followingByIdList[i])
+    //         .get()
+    //         .then((querySnapshot) => {
+    //           let followingBy = ""
+    //           querySnapshot.forEach((doc) => {
+    //             followingBy = {
+    //               email: doc.data().email,
+    //               id: followingByIdList[i],
+    //             }
+    //           })
+    //           this.followingByEmail.push(followingBy)
+    //         })
+    //         .catch((error) => {
+    //           console.log("Error getting documents: ", error)
+    //         })
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error getting documents: ", error)
+    //   })
+
+    //上の内容を修正しただけ。storeを使わずにuser情報をとってきている。
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in.
+        firebase
+          .firestore()
+          .collection("follow")
+          .where("from", "==", user.uid)
+          .get()
+          .then((querySnapshot) => {
+            let followingByIdList = []
+            querySnapshot.forEach((doc) => {
+              followingByIdList.push(doc.data().to)
             })
-            .catch((error) => {
-              console.log("Error getting documents: ", error)
-            })
-        }
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error)
-      })
+            this.followingByIdList = followingByIdList
+            for (let i = 0; i < this.followingByIdList.length; i++) {
+              firebase
+                .firestore()
+                .collection("user_profiles")
+                .where("id", "==", this.followingByIdList[i])
+                .get()
+                .then((querySnapshot) => {
+                  let followingBy = ""
+                  querySnapshot.forEach((doc) => {
+                    followingBy = {
+                      email: doc.data().email,
+                      id: followingByIdList[i],
+                    }
+                  })
+                  this.followingByEmail.push(followingBy)
+                })
+                .catch((error) => {
+                  console.log("Error getting documents: ", error)
+                })
+            }
+          })
+          .catch((error) => {
+            console.log("Error getting documents: ", error)
+          })
+      } else {
+        // No user is signed in.
+      }
+    })
   },
 }
 </script>
@@ -283,5 +331,14 @@ export default {
   flex-direction: column-reverse;
   width: 100%;
   align-items: center;
+}
+.search-btn {
+  background-color: #3da9fc;
+  color: #fffffe;
+  border-radius: 0.5rem;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
 }
 </style>

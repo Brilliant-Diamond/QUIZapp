@@ -153,39 +153,41 @@ export default {
         } else {
           this.feedback = "いまいち"
         }
-        //solvedコレクションを追加
-        const solved = {
-          from: this.userId,
-          to: this.collectionId,
-          rate: this.rate,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        if (this.isSignedIn) {
+          //solvedコレクションを追加
+          const solved = {
+            from: this.userId,
+            to: this.collectionId,
+            rate: this.rate,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          }
+          firebase
+            .firestore()
+            .collection("solved")
+            .add(solved)
+
+          //collectionのtryCountを１増やす
+          let tryCount = 1
+
+          if (this.collection.tryCount) {
+            console.log("tryCount is existing")
+            tryCount = this.collection.tryCount + 1
+          }
+
+          this.collection.tryCount = tryCount
+
+          firebase
+            .firestore()
+            .collection("collections")
+            .doc(this.collectionId)
+            .set(this.collection)
+            .then(function() {
+              console.log("Document successfully written!")
+            })
+            .catch(function(error) {
+              console.error("Error writing document: ", error)
+            })
         }
-        firebase
-          .firestore()
-          .collection("solved")
-          .add(solved)
-
-        //collectionのtryCountを１増やす
-        let tryCount = 1
-
-        if (this.collection.tryCount) {
-          console.log("tryCount is existing")
-          tryCount = this.collection.tryCount + 1
-        }
-
-        this.collection.tryCount = tryCount
-
-        firebase
-          .firestore()
-          .collection("collections")
-          .doc(this.collectionId)
-          .set(this.collection)
-          .then(function() {
-            console.log("Document successfully written!")
-          })
-          .catch(function(error) {
-            console.error("Error writing document: ", error)
-          })
       }
     },
     deleteCollection() {
