@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <div class="search">
-      <button class="search" @click="Search">絞り込む</button>
       <div class="follower-search">
         <input
           type="radio"
@@ -15,6 +14,7 @@
           value="2"
           v-model="follow_range"
         />フォロー中のみ
+        <button @click="Search">絞り込む<i class="fas fa-search"></i></button>
       </div>
       <div class="category-search">
         <input
@@ -64,9 +64,13 @@
           name="category"
           value=""
           v-model="chosen_categoryBox"
-        />カテゴリーなし
-        <button @click="Allcheck">☑</button>
-        <button @click="Removecheck">☐</button>
+        />カテゴリー無し
+        <button @click="Allcheck">
+          <i class="far fa-check-square"></i>
+        </button>
+        <button @click="Removecheck">
+          <i class="far fa-square"></i>
+        </button>
       </div>
     </div>
 
@@ -264,13 +268,20 @@ export default {
 #app {
   color: #2c3e50;
   margin: 30px;
-  display: flex;
-  /* flex-direction: column-reverse; */
-  align-items: center;
+  /* display: flex;
+  flex-direction: column-reverse; */
+}
+.search {
+  text-align: center;
+  /* margin: 0 auto; */
+}
+.search button i {
+  margin-left: 3px;
 }
 .collection {
   display: flex;
   flex-direction: column-reverse;
-  width: 50%;
+  width: 100%;
+  align-items: center;
 }
 </style>
