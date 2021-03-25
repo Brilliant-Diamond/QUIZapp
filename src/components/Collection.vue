@@ -60,12 +60,11 @@
       <span v-else v-on:click="fav" class="fa fa-heart pointer"></span>
       <span> {{ howManyFaved }}</span>
     </div>
-    <button
+    <i
+      class="fas fa-trash-alt pointer"
       v-on:click="deleteCollection"
       v-if="collection.createdBy == userEmail"
-    >
-      削除する
-    </button>
+    ></i>
   </div>
 </template>
 
@@ -391,48 +390,7 @@ export default {
 .red {
   color: red;
 }
-.btn,
-a.btn,
-button.btn {
-  font-size: 1.1rem;
-  font-weight: 500;
-  line-height: 1;
-  position: relative;
-  display: inline-block;
-  padding: 1rem 2rem;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-  text-align: center;
-  vertical-align: middle;
-  text-decoration: none;
-  letter-spacing: 0.1em;
-  color: #fffffe;
-  border-radius: 0.5rem;
-  background-color: #3da9fc;
-}
-button.btn--red.btn--cubic {
-  border-bottom: 4px solid #9f000c;
-}
 
-button.btn--red.btn--cubic:hover {
-  margin-top: 2px;
-  border-bottom: 2px solid #9f000c;
-}
-
-button.btn--radius {
-  border-radius: 100vh;
-}
-
-.fa-position-right {
-  position: absolute;
-  top: calc(50% - 0.5em);
-  right: 1rem;
-}
 .head {
   color: #094067;
 }
@@ -441,6 +399,8 @@ button {
   color: #fffffe;
   border-radius: 0.5rem;
   padding: 8px;
+  border: none;
+  cursor: pointer;
 }
 .pointer {
   cursor: pointer;

@@ -97,16 +97,17 @@
           <!-- <input type="text" v-model="quiz.choices[index]" /> -->
           <textarea cols="30" rows="2" v-model="quiz.choices[index]"></textarea>
         </div>
-        <div>
+        <div class="change-choices-container">
           <button v-on:click="addChoice(quiz_index)" class="change-choices">
-            ➕
+            <i class="fas fa-plus"></i>
           </button>
+
           <button
             v-on:click="deleteChoice(quiz_index)"
             class="change-choices"
             v-if="quiz.choices.length > 2"
           >
-            ➖
+            <i class="fas fa-minus"></i>
           </button>
         </div>
         <textarea
@@ -307,14 +308,24 @@ input {
 .choice-input {
   margin: 10px;
 }
-button {
-  color: #fffffe;
-  background-color: #3da9fc;
-}
 .button-box {
   margin-bottom: 10px;
 }
 .heading {
   color: #094067;
+}
+button {
+  background-color: #3da9fc;
+  color: #fffffe;
+  border-radius: 0.5rem;
+  padding: 8px;
+  margin: 0 10px;
+  border: none;
+  cursor: pointer;
+}
+
+.change-choices-container {
+  display: flex;
+  justify-content: center;
 }
 </style>
