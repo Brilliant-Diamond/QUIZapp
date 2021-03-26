@@ -328,7 +328,7 @@ export default {
     myfav_collection() {
       this.my_collectionOpen = false
       this.collections = []
-      this.collectionIds = this.myfav_collectionIds
+      this.collectionIds = []
       // 自分のいいねした作品のidを取り出す
       firebase
         .firestore()
@@ -348,9 +348,10 @@ export default {
               .doc(this.myfav_collectionIds[i])
               .get()
               .then((doc) => {
-                // let myfav_collections = []
-                this.collections.push(doc.data())
-                // this.myfav_collections = myfav_collections
+                if (doc.data()) {
+                  this.collections.push(doc.data())
+                  this.collectionIds.push(doc.id)
+                }
               })
               .catch((error) => {
                 console.log("Error getting documents: ", error)
