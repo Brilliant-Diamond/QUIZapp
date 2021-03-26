@@ -11,7 +11,7 @@
       >
       <router-link to="/quizpost" class="nav__item nav__link">投稿</router-link>
       <div v-if="isSignedIn" class="nav__items">
-        <button class="nav__item nav__link" @click="signOut">
+        <button class="nav__item nav__link nav-btn" @click="signOut">
           サインアウト
         </button>
       </div>
@@ -121,7 +121,7 @@ body {
   display: flex;
 }
 .nav__item {
-  width: 100px;
+  width: 110px;
   border-left: 1px solid #fffffe;
 }
 button {
@@ -157,8 +157,14 @@ button {
 .menu-btn {
   border: none;
   font-size: 16px;
+  cursor: pointer;
 }
-
+.nav-btn {
+  border: none;
+  border-left: 1px solid #fffffe;
+  font-size: 16px;
+  cursor: pointer;
+}
 @media all and (max-width: 670px) {
   .nav__items {
     display: none;
@@ -174,7 +180,7 @@ button {
     position: fixed;
     top: 0;
     right: 0;
-    width: 200px;
+    width: 150px;
     height: 100%;
     display: flex;
     flex-direction: column;
