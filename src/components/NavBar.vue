@@ -36,12 +36,12 @@
         >
         <router-link to="/quizpost" class="menu-item">投稿</router-link>
         <div v-if="isSignedIn" class="menu-item">
-          <button @click="signOut" class="menu-item">
+          <button @click="signOut" class="menu-item menu-btn">
             サインアウト
           </button>
         </div>
         <div v-else class="menu-item">
-          <router-link to="/signin">サインイン</router-link>
+          <router-link to="/signin" class="menu-item">サインイン</router-link>
         </div>
         <router-link to="/mypage" class="menu-item">マイページ</router-link>
       </div>
@@ -84,6 +84,9 @@ export default {
 </script>
 
 <style scoped>
+body {
+  margin: 0;
+}
 .nav__bar {
   height: 50px;
   display: flex;
@@ -148,6 +151,10 @@ button {
 .menu-item:hover {
   font-weight: bold;
   color: #3da9fc;
+}
+.menu-btn {
+  border: none;
+  font-size: 16px;
 }
 
 @media all and (max-width: 670px) {

@@ -340,6 +340,7 @@ export default {
           querySnapshot.forEach((doc) => {
             myfav_collectionIds.push(doc.data().to)
           })
+          console.log(this.collections)
           this.myfav_collectionIds = myfav_collectionIds
           for (let i = 0; i < this.myfav_collectionIds.length; i++) {
             firebase
@@ -356,6 +357,7 @@ export default {
                 console.log("Error getting documents: ", error)
               })
           }
+          console.log(this.collections)
         })
         .catch((error) => {
           console.log("Error getting documents: ", error)
