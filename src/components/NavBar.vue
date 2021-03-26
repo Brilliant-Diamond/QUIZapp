@@ -1,7 +1,9 @@
 <template>
   <div class="nav__bar">
     <router-link to="/" class="nav__logo nav__link"
-      >Brilli<i class="far fa-gem fa-xs red"></i>nt</router-link
+      >Brilli<i class="far fa-gem fa-xs red"></i>nt<span style="color:#3DA9FC;"
+        >Q</span
+      >uiz</router-link
     >
     <div class="nav__items">
       <router-link to="/challengequiz" class="nav__item nav__link"
