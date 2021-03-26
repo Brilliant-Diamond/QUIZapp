@@ -133,10 +133,14 @@
       </div>
       <div class="change_collection">
         <i v-if="my_collectionOpen" class="fas fa-user-alt fa-2x"></i>
-        <i v-else class="fas fa-user-alt fa-2x off" @click="my_collection"></i>
+        <i
+          v-else
+          class="fas fa-user-alt fa-2x lighter"
+          @click="my_collection"
+        ></i>
         <i
           v-if="my_collectionOpen"
-          class="fa fa-heart fa-2x off"
+          class="fa fa-heart fa-2x lighter"
           @click="myfav_collection"
         ></i>
         <i v-else class="fa fa-heart fa-2x" @click="myfav_collection"></i>
@@ -340,7 +344,6 @@ export default {
           querySnapshot.forEach((doc) => {
             myfav_collectionIds.push(doc.data().to)
           })
-          console.log(this.collections)
           this.myfav_collectionIds = myfav_collectionIds
           for (let i = 0; i < this.myfav_collectionIds.length; i++) {
             firebase
@@ -358,7 +361,6 @@ export default {
                 console.log("Error getting documents: ", error)
               })
           }
-          console.log(this.collections)
         })
         .catch((error) => {
           console.log("Error getting documents: ", error)
@@ -664,8 +666,9 @@ export default {
 .change_collection i {
   cursor: pointer;
 }
-.off {
-  opacity: 60%;
+.lighter {
+  opacity: 0.6;
+  /* color: red; */
 }
 .work-space {
   display: flex;

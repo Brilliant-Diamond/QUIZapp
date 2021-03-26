@@ -181,6 +181,7 @@ button {
     transition: 0.53s transform;
     -webkit-transition-timing-function: cubic-bezier(0.38, 0.52, 0.23, 0.99);
     transition-timing-function: cubic-bezier(0.38, 0.52, 0.23, 0.99);
+    z-index: 100;
   }
 }
 @media all and (min-width: 670px) {

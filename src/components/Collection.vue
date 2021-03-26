@@ -31,10 +31,8 @@
         </div>
       </div>
       <div class="rate-box">
-        <span
-          ><i class="fas fa-check"></i> {{ this.collectionRate * 100 }}%</span
-        >
-        <span><i class="fas fa-eye"></i> {{ this.collection.tryCount }}</span>
+        <span><i class="fas fa-check"></i> {{ collectionRate }}%</span>
+        <span><i class="fas fa-eye"></i> {{ collection.tryCount }}</span>
       </div>
       <quiz
         v-for="(quiz, index) in collection.quizs"
@@ -293,7 +291,7 @@ export default {
           })
           if (this.tryCount != 0) {
             rateAverage = rateAverage / this.tryCount
-            this.collectionRate = Math.floor(rateAverage * 100) / 100
+            this.collectionRate = Math.floor(rateAverage * 100)
           }
         })
         .catch((error) => {
@@ -370,7 +368,7 @@ export default {
         })
         if (this.tryCount != 0) {
           rateAverage = rateAverage / this.tryCount
-          this.collectionRate = Math.floor(rateAverage * 100) / 100
+          this.collectionRate = Math.floor(rateAverage * 100)
         }
       })
       .catch((error) => {
