@@ -85,30 +85,40 @@ export default {
 
 <style scoped>
 .red {
-  background-color: #ff938b;
+  background-color: #ef4565;
 }
 .blue {
-  background-color: #d174fc;
+  background-color: #0775c9;
 }
 .right {
-  color: red;
+  color: #ef4565;
 }
 .wrong {
-  color: blue;
+  color: #0775c9;
 }
 .quiz-list {
   padding: 10px;
   width: 80%;
   max-width: 600px;
-  border: solid 1px;
+  border: solid 1px rgba(83, 122, 120, 0.425);
   margin: 10px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  /* background-color: #fffffe; */
+  /* background-color: #d8eefe; */
+  color: #2b2c34;
+  /* border: none; */
 }
 button {
   margin: 5px;
   width: 70%;
+  background-color: #1b2525c9;
+  color: #fffffe;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  min-height: 30px;
 }
 </style>

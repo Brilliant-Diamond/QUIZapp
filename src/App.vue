@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="big-container">
     <NavBar />
     <router-view />
   </div>
@@ -36,5 +36,9 @@ body {
 }
 .hide {
   display: none;
+}
+.big-container {
+  margin: 0;
+  width: 100%;
 }
 </style>

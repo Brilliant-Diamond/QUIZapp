@@ -76,6 +76,9 @@ const getters = {
   userId(state, getters) {
     return getters.user.id
   },
+  userEmail(state, getters) {
+    return getters.user.email
+  },
 }
 
 const store = new Vuex.Store({
