@@ -22,6 +22,30 @@
         >マイページ</router-link
       >
     </div>
+    <div class="menu-icon  nav__link">
+      <i class="fas fa-bars" @click="displayMenuItems"></i>
+    </div>
+    <div
+      class="menu-items-container"
+      v-bind:class="{ hide: isMenuItemsHiding }"
+    >
+      <div class="menu-items">
+        <i class="fas fa-times menu-item" @click="displayMenuItems"></i>
+        <router-link to="/challengequiz" class="menu-item"
+          >クイズに挑戦</router-link
+        >
+        <router-link to="/quizpost" class="menu-item">投稿</router-link>
+        <div v-if="isSignedIn" class="menu-item">
+          <button @click="signOut" class="menu-item">
+            サインアウト
+          </button>
+        </div>
+        <div v-else class="menu-item">
+          <router-link to="/signin">サインイン</router-link>
+        </div>
+        <router-link to="/mypage" class="menu-item">マイページ</router-link>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -29,7 +53,9 @@
 import firebase from "firebase"
 export default {
   data() {
-    return {}
+    return {
+      isMenuItemsHiding: true,
+    }
   },
   computed: {
     isSignedIn() {
@@ -44,6 +70,13 @@ export default {
         .then(() => {
           this.$router.push("/signin")
         })
+    },
+    displayMenuItems() {
+      if (this.isMenuItemsHiding) {
+        this.isMenuItemsHiding = false
+      } else {
+        this.isMenuItemsHiding = true
+      }
     },
   },
   created() {},
@@ -88,5 +121,64 @@ export default {
 }
 button {
   background-color: #094067;
+}
+.menu-icon {
+  display: none;
+  font-size: 20px;
+  width: 100px;
+}
+.hide {
+  display: none;
+}
+.menu-item {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  height: 100px;
+  border-bottom: solid 1px white;
+}
+.fa-times {
+  font-size: 20px;
+}
+.menu-item:visited {
+  color: #fffffe;
+}
+.menu-item:hover {
+  font-weight: bold;
+  color: #3da9fc;
+}
+
+@media all and (max-width: 670px) {
+  .nav__items {
+    display: none;
+  }
+  .menu-icon {
+    display: flex;
+  }
+  .menu-items-container {
+    position: absolute;
+    /* width: 200px; */
+  }
+  .menu-items {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #094067;
+    -webkit-transition: 0.53s transform;
+    transition: 0.53s transform;
+    -webkit-transition-timing-function: cubic-bezier(0.38, 0.52, 0.23, 0.99);
+    transition-timing-function: cubic-bezier(0.38, 0.52, 0.23, 0.99);
+  }
+}
+@media all and (min-width: 670px) {
+  .menu-items-container {
+    display: none;
+  }
 }
 </style>

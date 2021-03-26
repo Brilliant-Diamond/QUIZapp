@@ -1,6 +1,7 @@
 <template>
   <div class="my-page">
     <div v-if="isSignedIn">
+      <h2 class="header">マイページ</h2>
       <div class="my-page-main">
         <div class="user-box">
           <div class="user_name_box">
@@ -615,20 +616,25 @@ export default {
 </script>
 
 <style scoped>
+.header {
+  text-align: center;
+  margin-top: 50px;
+}
 .my-page-main {
   display: flex;
   justify-content: center;
   margin-top: 50px;
+  flex-wrap: wrap;
 }
 .user-box {
-  width: 50%;
+  width: 300px;
 }
 .user_name {
   display: flex;
 }
 .introduce {
   display: flex;
-  width: 50%;
+  width: 80%;
   white-space: pre-wrap;
 }
 .edit {
