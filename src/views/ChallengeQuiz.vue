@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <h2 class="heading">クイズに挑戦</h2>
     <div class="search">
       <div class="follower-search">
         <input
@@ -14,7 +15,9 @@
           value="2"
           v-model="follow_range"
         />フォロー中のみ
-        <button @click="Search">絞り込む<i class="fas fa-search"></i></button>
+        <button @click="Search" class="search-btn">
+          絞り込む<i class="fas fa-search"></i>
+        </button>
       </div>
       <div class="category-search">
         <input
@@ -88,6 +91,9 @@
         v-bind:collectionId="collectionIds[index]"
       />
     </div>
+    <router-link to="/quizpost" class="fix-link"
+      ><i class="fas fa-pen"></i
+    ></router-link>
   </div>
 </template>
 
@@ -222,44 +228,90 @@ export default {
       })
       this.collections = collections
       this.collectionIds = collectionIds
-    })
+    }) //
+
+    //createdでvuexのstoreを使うとstoreが生成される前に処理が行われるためエラーが出るので修正しましたby谷
 
     //この人が何人をフォローしているのかを探索
-    firebase
-      .firestore()
-      .collection("follow")
-      .where("from", "==", this.userId)
-      .get()
-      .then((querySnapshot) => {
-        let followingByIdList = []
-        querySnapshot.forEach((doc) => {
-          followingByIdList.push(doc.data().to)
-        })
-        this.followingByIdList = followingByIdList
-        for (let i = 0; i < this.followingByIdList.length; i++) {
-          firebase
-            .firestore()
-            .collection("user_profiles")
-            .where("id", "==", this.followingByIdList[i])
-            .get()
-            .then((querySnapshot) => {
-              let followingBy = ""
-              querySnapshot.forEach((doc) => {
-                followingBy = {
-                  email: doc.data().email,
-                  id: followingByIdList[i],
-                }
-              })
-              this.followingByEmail.push(followingBy)
+    // firebase
+    //   .firestore()
+    //   .collection("follow")
+    //   .where("from", "==", this.userId)
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     let followingByIdList = []
+    //     querySnapshot.forEach((doc) => {
+    //       followingByIdList.push(doc.data().to)
+    //     })
+    //     this.followingByIdList = followingByIdList
+    //     for (let i = 0; i < this.followingByIdList.length; i++) {
+    //       firebase
+    //         .firestore()
+    //         .collection("user_profiles")
+    //         .where("id", "==", this.followingByIdList[i])
+    //         .get()
+    //         .then((querySnapshot) => {
+    //           let followingBy = ""
+    //           querySnapshot.forEach((doc) => {
+    //             followingBy = {
+    //               email: doc.data().email,
+    //               id: followingByIdList[i],
+    //             }
+    //           })
+    //           this.followingByEmail.push(followingBy)
+    //         })
+    //         .catch((error) => {
+    //           console.log("Error getting documents: ", error)
+    //         })
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.log("Error getting documents: ", error)
+    //   })
+
+    //上の内容を修正しただけ。storeを使わずにuser情報をとってきている。
+    firebase.auth().onAuthStateChanged((user) => {
+      if (user) {
+        // User is signed in.
+        firebase
+          .firestore()
+          .collection("follow")
+          .where("from", "==", user.uid)
+          .get()
+          .then((querySnapshot) => {
+            let followingByIdList = []
+            querySnapshot.forEach((doc) => {
+              followingByIdList.push(doc.data().to)
             })
-            .catch((error) => {
-              console.log("Error getting documents: ", error)
-            })
-        }
-      })
-      .catch((error) => {
-        console.log("Error getting documents: ", error)
-      })
+            this.followingByIdList = followingByIdList
+            for (let i = 0; i < this.followingByIdList.length; i++) {
+              firebase
+                .firestore()
+                .collection("user_profiles")
+                .where("id", "==", this.followingByIdList[i])
+                .get()
+                .then((querySnapshot) => {
+                  let followingBy = ""
+                  querySnapshot.forEach((doc) => {
+                    followingBy = {
+                      email: doc.data().email,
+                      id: followingByIdList[i],
+                    }
+                  })
+                  this.followingByEmail.push(followingBy)
+                })
+                .catch((error) => {
+                  console.log("Error getting documents: ", error)
+                })
+            }
+          })
+          .catch((error) => {
+            console.log("Error getting documents: ", error)
+          })
+      } else {
+        // No user is signed in.
+      }
+    })
   },
 }
 </script>
@@ -268,12 +320,20 @@ export default {
 #app {
   color: #2c3e50;
   margin: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   /* display: flex;
   flex-direction: column-reverse; */
 }
+.heading {
+  color: #094067;
+}
 .search {
-  text-align: center;
-  /* margin: 0 auto; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80%;
 }
 .search button i {
   margin-left: 3px;
@@ -283,5 +343,39 @@ export default {
   flex-direction: column-reverse;
   width: 100%;
   align-items: center;
+  margin: 30px;
+}
+.search-btn {
+  background-color: #ef4565;
+  color: #fffffe;
+  border-radius: 0.5rem;
+  padding: 8px;
+  border: none;
+  cursor: pointer;
+  margin: 5px;
+}
+.fix-link {
+  position: fixed;
+  bottom: 5%;
+  right: 5%;
+  display: inline-block;
+  background-color: #3da9fc;
+  color: #fffffe;
+  border-radius: 50%;
+  /* padding: 30px; */
+  border: none;
+  /* margin: 10px; */
+  cursor: pointer !important;
+  text-decoration: none;
+  /* font-size: 20px; */
+  /* max-width: 300px; */
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  line-height: 50px;
+  font-size: 25px;
+}
+.fix-link:hover {
+  background-color: #0990f7;
 }
 </style>

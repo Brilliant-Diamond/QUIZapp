@@ -1,57 +1,57 @@
 <template>
-  <div class="collection-container">
-    <router-link
-      v-if="autherId && userId !== autherId"
-      :to="{ name: 'Others', params: { id: autherId } }"
-      >{{ autherName }}</router-link
-    >
-    <div v-else>{{ autherName }}</div>
-    <h4 class="head">{{ collection.title }}</h4>
-    <div>
-      <i class="fas fa-check"></i> {{ this.collectionRate * 100 }}%
-      <i class="fas fa-eye"></i> {{ this.collection.tryCount }}
-    </div>
-    <div></div>
-    <!-- <vue-star v-bind:heart="collection.heart"></vue-star> -->
-
-    <div
-      class="categorry-box"
-      v-for="(categoryItem, index) in collection.category"
-      v-bind:key="`first-${index}`"
-    >
-      <div v-if="categoryItem">カテゴリー：{{ categoryItem }}</div>
-      <div v-else>カテゴリー：無し</div>
-    </div>
-
-    <div
-      class="tag-box"
-      v-for="(tagItem, index) in collection.tag"
-      v-bind:key="`second-${index}`"
-    >
-      #{{ tagItem.text }}
-    </div>
-    <button v-if="isQuizHiding" v-on:click="displayQuiz">
-      問題を解く
-    </button>
-    <button v-else v-on:click="hideQuiz">
-      閉じる
-    </button>
-
-    <quiz
-      v-for="(quiz, index) in collection.quizs"
-      v-bind:key="index"
-      v-bind:quiz="quiz"
-      v-bind:quizIndex="index"
-      v-bind:class="{ hide: isQuizHiding }"
-      @reportAns="makeRate"
-    ></quiz>
-    <div v-if="rate">
-      <div>
-        <i class="fas fa-check"></i>{{ score }}/{{ collection.quizs.length }}
+  <div class="display-container">
+    <div class="collection-container" v-on:click="displayQuiz">
+      <router-link
+        v-if="autherId && userId !== autherId"
+        :to="{ name: 'Others', params: { id: autherId } }"
+        class="auther-name"
+        >{{ autherName }}</router-link
+      >
+      <div v-else class="auther-name">
+        {{ autherName }}
       </div>
-      <div>{{ feedback }}</div>
+      <h3 class="collection-title">{{ collection.title }}</h3>
+      <div class="categorry-box">
+        <span>カテゴリー： </span>
+        <div
+          v-for="(categoryItem, index) in collection.category"
+          v-bind:key="`first-${index}`"
+        >
+          <span v-if="categoryItem"> {{ categoryItem }},</span>
+          <span v-else>無し</span>
+        </div>
+      </div>
+      <!-- <vue-star v-bind:heart="collection.heart"></vue-star> -->
+      <div class="tag-box">
+        <div
+          v-for="(tagItem, index) in collection.tag"
+          v-bind:key="`second-${index}`"
+        >
+          #{{ tagItem.text }},
+        </div>
+      </div>
+      <div class="rate-box">
+        <span
+          ><i class="fas fa-check"></i> {{ this.collectionRate * 100 }}%</span
+        >
+        <span><i class="fas fa-eye"></i> {{ this.collection.tryCount }}</span>
+      </div>
+      <quiz
+        v-for="(quiz, index) in collection.quizs"
+        v-bind:key="index"
+        v-bind:quiz="quiz"
+        v-bind:quizIndex="index"
+        v-bind:class="{ hide: isQuizHiding }"
+        @reportAns="makeRate"
+      ></quiz>
+      <div v-if="rate != null">
+        <div>
+          <i class="fas fa-check"></i>{{ score }}/{{ collection.quizs.length }}
+        </div>
+        <div>{{ feedback }}</div>
+      </div>
     </div>
-    <div>
+    <div class="fav-box">
       <span
         v-if="isFaved"
         v-on:click="disFav"
@@ -59,7 +59,15 @@
       ></span>
       <span v-else v-on:click="fav" class="fa fa-heart pointer"></span>
       <span> {{ howManyFaved }}</span>
+      <i
+        class="fas fa-trash-alt pointer"
+        v-on:click="deleteCollection"
+        v-if="collection.createdBy == userEmail"
+      ></i>
     </div>
+    <button v-if="!isQuizHiding" v-on:click="hideQuiz">
+      閉じる
+    </button>
   </div>
 </template>
 
@@ -99,7 +107,9 @@ export default {
   },
   methods: {
     displayQuiz() {
-      this.isQuizHiding = false
+      if (this.isQuizHiding) {
+        this.isQuizHiding = false
+      }
     },
     hideQuiz() {
       this.isQuizHiding = true
@@ -148,39 +158,55 @@ export default {
         } else {
           this.feedback = "いまいち"
         }
-        //solvedコレクションを追加
-        const solved = {
-          from: this.userId,
-          to: this.collectionId,
-          rate: this.rate,
-          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        if (this.isSignedIn) {
+          //solvedコレクションを追加
+          const solved = {
+            from: this.userId,
+            to: this.collectionId,
+            rate: this.rate,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          }
+          firebase
+            .firestore()
+            .collection("solved")
+            .add(solved)
+
+          //collectionのtryCountを１増やす
+          let tryCount = 1
+
+          if (this.collection.tryCount) {
+            console.log("tryCount is existing")
+            tryCount = this.collection.tryCount + 1
+          }
+
+          this.collection.tryCount = tryCount
+
+          firebase
+            .firestore()
+            .collection("collections")
+            .doc(this.collectionId)
+            .set(this.collection)
+            .then(function() {
+              console.log("Document successfully written!")
+            })
+            .catch(function(error) {
+              console.error("Error writing document: ", error)
+            })
         }
-        firebase
-          .firestore()
-          .collection("solved")
-          .add(solved)
-
-        //collectionのtryCountを１増やす
-        let tryCount = 1
-
-        if (this.collection.tryCount) {
-          console.log("tryCount is existing")
-          tryCount = this.collection.tryCount + 1
-        }
-
-        this.collection.tryCount = tryCount
-
+      }
+    },
+    deleteCollection() {
+      if (window.confirm("投稿を削除しますか？")) {
         firebase
           .firestore()
           .collection("collections")
           .doc(this.collectionId)
-          .set(this.collection)
-          .then(function() {
-            console.log("Document successfully written!")
+          .delete()
+          .then(() => {})
+          .catch((error) => {
+            console.error("Error removing document: ", error)
           })
-          .catch(function(error) {
-            console.error("Error writing document: ", error)
-          })
+        console.log("this quiz is deleted")
       }
     },
   },
@@ -188,6 +214,9 @@ export default {
   computed: {
     userId() {
       return this.$store.getters.userId
+    },
+    userEmail() {
+      return this.$store.getters.userEmail
     },
     isSignedIn() {
       return this.$store.getters.isSignedIn
@@ -352,76 +381,79 @@ export default {
 </script>
 
 <style scoped>
+.auther-name {
+  font-size: 15px;
+  font-weight: bold;
+  align-self: flex-start;
+  margin-left: 15%;
+  padding: 20px;
+  text-decoration: none;
+  color: #094067;
+}
 .collection-container {
-  display: flex;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 80%;
+  width: 100%;
   max-width: 800px;
-  border: solid 1px;
-  border-radius: 10px;
-  margin: 10px;
   color: #5f6c7b;
+  flex-wrap: wrap;
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+.display-container:hover {
+  background-color: #f5f9fc;
+  cursor: pointer;
+}
+.categorry-box {
+  display: flex;
+}
+.tag-box {
+  display: flex;
+}
+.rate-box span {
+  margin: 10px;
 }
 .hide {
   display: none;
 }
 .red {
-  color: red;
-}
-.btn,
-a.btn,
-button.btn {
-  font-size: 1.1rem;
-  font-weight: 500;
-  line-height: 1;
-  position: relative;
-  display: inline-block;
-  padding: 1rem 2rem;
-  cursor: pointer;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-  text-align: center;
-  vertical-align: middle;
-  text-decoration: none;
-  letter-spacing: 0.1em;
-  color: #fffffe;
-  border-radius: 0.5rem;
-  background-color: #3da9fc;
-}
-button.btn--red.btn--cubic {
-  border-bottom: 4px solid #9f000c;
+  color: #ef4565;
 }
 
-button.btn--red.btn--cubic:hover {
-  margin-top: 2px;
-  border-bottom: 2px solid #9f000c;
-}
-
-button.btn--radius {
-  border-radius: 100vh;
-}
-
-.fa-position-right {
-  position: absolute;
-  top: calc(50% - 0.5em);
-  right: 1rem;
-}
-.head {
+.collection-title {
   color: #094067;
+  width: 80%;
+  text-align: center;
 }
 button {
   background-color: #3da9fc;
   color: #fffffe;
   border-radius: 0.5rem;
   padding: 8px;
+  border: none;
+  cursor: pointer;
+  margin: 10px;
 }
 .pointer {
   cursor: pointer;
+}
+.display-container {
+  width: 80%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: solid 1px rgba(59, 87, 85, 0.425);
+  border-radius: 5px;
+  margin: 15px;
+  /* border: none; */
+  /* background-color: #d8eefe; */
+}
+.fa-trash-alt {
+  margin-left: 30px;
+}
+.fav-box {
+  color: #5f6c7b;
 }
 </style>

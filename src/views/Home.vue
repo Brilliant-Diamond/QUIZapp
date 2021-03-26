@@ -9,20 +9,15 @@
         クイズを簡単に投稿できて、挑戦することができるアプリです。Brilliant（才気あふれる）な君の投稿を待っています！
       </div>
       <div class="next-action">
-        <div>
-          <i class="fas fa-angle-double-right"></i>
-          <router-link to="/challengequiz" class="nav__item nav__link"
-            >すぐにクイズに挑戦</router-link
-          >
-        </div>
-        <div>
-          <i class="fas fa-angle-double-right"></i>
-          <router-link to="/signin" class="nav__item nav__link"
-            >サインインして利用する！</router-link
-          >
-        </div>
-        <i class="fas fa-angle-double-right"></i>
-        <button @click="nextPage">
+        <router-link to="/challengequiz" class="btn"
+          >すぐにクイズに挑戦</router-link
+        >
+
+        <router-link to="/signin" class="btn">
+          サインインして利用する！</router-link
+        >
+
+        <button @click="nextPage" class="btn next-page-btn">
           このサイトの使い方を見る
         </button>
       </div>
@@ -61,18 +56,13 @@
         </div>
       </div>
       <div class="next-action">
-        <div>
-          <i class="fas fa-angle-double-right"></i>
-          <router-link to="/challengequiz" class="nav__item nav__link"
-            >すぐにクイズに挑戦</router-link
-          >
-        </div>
-        <div>
-          <i class="fas fa-angle-double-right"></i>
-          <router-link to="/signin" class="nav__item nav__link"
-            >サインインして利用する！</router-link
-          >
-        </div>
+        <router-link to="/challengequiz" class="btn"
+          >すぐにクイズに挑戦</router-link
+        >
+
+        <router-link to="/signin" class="btn">
+          サインインして利用する！</router-link
+        >
       </div>
     </div>
   </div>
@@ -109,6 +99,9 @@ export default {
 }
 .next-action {
   margin-top: 3ex;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .fade {
   animation: fadeIn 1s ease 0s 1 normal;
@@ -147,5 +140,23 @@ export default {
 }
 .red {
   color: #ef4565;
+}
+.btn {
+  display: inline-block;
+  background-color: #ef4565;
+  color: #fffffe;
+  border-radius: 0.5rem;
+  padding: 30px;
+  border: none;
+  margin: 10px;
+  cursor: pointer !important;
+  text-decoration: none;
+  font-size: 20px;
+  max-width: 300px;
+  width: 90%;
+  text-align: center;
+}
+.next-page-btn {
+  background-color: #3da9fc;
 }
 </style>
