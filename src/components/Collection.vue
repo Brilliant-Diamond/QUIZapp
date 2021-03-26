@@ -441,6 +441,7 @@ button {
 .display-container {
   width: 80%;
   max-width: 800px;
+  min-width: 350px;
   display: flex;
   flex-direction: column;
   align-items: center;
