@@ -23,32 +23,27 @@
       </div>
     </div>
 
-    <div class="description fade" :class="{ hide: !descriptionOn }">
-      <div class="upper">
-        <div class="intro stage left">
+    <div :class="{ hide: !descriptionOn }">
+      <div class="description fade">
+        <div class="stage">
           <h2><i class="far fa-gem red"></i>このサイトの紹介</h2>
           <div>
             このサイトはクイズを気軽に投稿できたり、誰かが作ったクイズに挑戦できるサイトです。サインインしなくても投稿や挑戦はできますがサインインして利用するといいねを押せたりフォローをしてその人のクイズを捜しやすくなったり、このサイトを最大限に利用することができます。さあ、あなたも今すぐにクイズに挑戦･投稿してみましょう！
           </div>
         </div>
-
-        <div class="challenge-quiz stage right">
+        <div class="stage">
           <h2><i class="far fa-gem red"></i>クイズに挑戦</h2>
           <div class="challenge-quiz-text">
             投稿の新しい順から投稿が表示されています。絞り込み機能を使えばカテゴリーで表示するクイズを絞ることもできます。そして、タグを見て気になる題材のものがあれば気軽に挑戦してみてください。サインインしなくても、利用できますがいいね機能は使えません！サインインをして気に入ったクイズがあれば積極的にいいねを押してあげましょう！
           </div>
         </div>
-      </div>
-
-      <div class="lower">
-        <div class="post-quiz stage left">
+        <div class="stage">
           <h2><i class="far fa-gem red"></i>投稿</h2>
           <div class="post-quiz-text">
             投稿はパッケージ単位できます。一つのパッケージに入れられるクイズは１０個までです。できるだけ、カテゴリーとタグを付けてあげることで挑戦する人がクイズを探しやすくなったり、挑戦する人の興味を引いたりすることができます。各問題には問題文と選択肢（正解の選択肢にはチェックを）、フィードバックを書いて投稿しましょう！サインインしなくてもゲストとして投稿することも可能です！
           </div>
         </div>
-
-        <div class="mypage stage right">
+        <div class="stage">
           <h2><i class="far fa-gem red"></i>マイページ</h2>
           <div class="mypage-text">
             マイページでは自分の表示したい名前や自己紹介文などを編集することができます。ちゃんと設定してあなたがどんな人なのか訪問者に伝わるようにしましょう。また、フォロワーやフォロー中の人を確認することができます。そこから、その人のクイズに挑戦するのもありです◎<br />さらに、マイページでは自分が過去に作成したクイズの履歴が見れるのでいいねの数などをモチベーションにできます。また、自分がいいねした作品も振り返ることができるのでぜひ復習してみてください！
@@ -91,9 +86,6 @@ export default {
 #app {
   color: #2c3e50;
 }
-.hide {
-  display: none;
-}
 .first-page {
   text-align: center;
 }
@@ -119,24 +111,17 @@ export default {
   } /*アニメーション終了時は不透明度100%*/
 }
 .description {
-  margin-left: auto;
-  margin-right: auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 .stage {
   background-color: #d8eefe;
-  flex: 1;
+  min-width: 250px;
+  width: 40%;
   padding: 3ex;
   border-radius: 4px;
-}
-.upper {
-  margin-bottom: 3ex;
-  display: flex;
-}
-.lower {
-  display: flex;
-}
-.left {
-  margin-right: 3ex;
+  margin: 10px;
 }
 .red {
   color: #ef4565;
@@ -158,5 +143,8 @@ export default {
 }
 .next-page-btn {
   background-color: #3da9fc;
+}
+.hide {
+  display: none;
 }
 </style>
