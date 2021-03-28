@@ -115,7 +115,10 @@ body {
   color: #3da9fc;
 }
 .nav__logo {
-  width: 130px;
+  width: 140px;
+  font-family: "Cherry Swash", cursive;
+  font-size: 20px;
+  margin-left: 20px;
 }
 .nav__items {
   display: flex;
